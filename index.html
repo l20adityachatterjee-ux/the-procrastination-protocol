@@ -3,16 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>The Procrastination Protocol - Watchtower Harbor Marketplace</title>
+    <title>The Procrastination Protocol - 3D Watchtower & Fleet</title>
     
-    <!-- Three.js & FontAwesome Icons -->
+    <!-- Three.js Library -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
     <style>
         :root {
-            --primary: #00f0ff;
-            --accent: #ffb703;
+            --primary: #10b981;
+            --accent: #00f0ff;
             --bg-dark: #020617;
             --card-bg: rgba(10, 16, 30, 0.85);
             --text-light: #f8fafc;
@@ -45,7 +44,7 @@
 
         /* UI Container */
         .container {
-            max-width: 880px;
+            max-width: 850px;
             margin-left: auto;
             margin-right: 20px;
             position: relative;
@@ -56,24 +55,18 @@
             .container {
                 margin: 0 auto;
             }
-            body {
-                padding: 15px;
-            }
         }
 
         header {
             text-align: left;
-            margin-bottom: 20px;
+            margin-bottom: 25px;
         }
 
         h1 {
-            color: var(--primary);
+            color: #00f0ff;
             font-size: 2.2rem;
             margin-bottom: 5px;
             text-shadow: 0 0 20px rgba(0, 240, 255, 0.6);
-            display: flex;
-            align-items: center;
-            gap: 12px;
         }
 
         /* Modals */
@@ -135,24 +128,21 @@
             border-radius: 8px;
             transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             white-space: nowrap;
-            display: flex;
-            align-items: center;
-            gap: 8px;
         }
 
         .tab-btn.active, .tab-btn:hover {
-            background: var(--primary);
+            background: #00f0ff;
             color: #000;
             box-shadow: 0 0 15px rgba(0, 240, 255, 0.6);
             transform: translateY(-2px);
         }
 
         .tab-btn.admin-tab {
-            border: 1px solid var(--accent);
-            color: var(--accent);
+            border: 1px solid #ffb703;
+            color: #ffb703;
         }
         .tab-btn.admin-tab.active {
-            background: var(--accent);
+            background: #ffb703;
             color: #000;
             box-shadow: 0 0 15px rgba(255, 183, 3, 0.6);
         }
@@ -202,12 +192,12 @@
         }
 
         input:focus, select:focus {
-            border-color: var(--primary);
+            border-color: #00f0ff;
             box-shadow: 0 0 8px rgba(0, 240, 255, 0.4);
         }
 
         button.action-btn {
-            background: var(--primary);
+            background: #00f0ff;
             color: #070b14;
             font-weight: 700;
             padding: 12px;
@@ -239,7 +229,7 @@
             margin-top: 15px;
             padding: 15px;
             background: rgba(0, 240, 255, 0.08);
-            border: 1px solid var(--primary);
+            border: 1px solid #00f0ff;
             border-radius: 8px;
             text-align: left;
         }
@@ -269,7 +259,7 @@
 
         .card img {
             width: 100%;
-            height: 140px;
+            height: 150px;
             object-fit: cover;
             border-radius: 8px;
             margin-bottom: 12px;
@@ -278,13 +268,13 @@
         .price-tag {
             font-size: 1.2rem;
             font-weight: bold;
-            color: var(--primary);
+            color: #00f0ff;
             margin: 8px 0;
         }
 
         .payout-tag {
             font-size: 0.9rem;
-            color: var(--accent);
+            color: #ffb703;
             font-weight: 600;
         }
 
@@ -318,7 +308,7 @@
         .stat-card h3 {
             margin: 5px 0 0 0;
             font-size: 1.8rem;
-            color: var(--primary);
+            color: #00f0ff;
         }
 
         .admin-table {
@@ -336,7 +326,7 @@
 
         .admin-table th {
             background: rgba(0, 240, 255, 0.1);
-            color: var(--primary);
+            color: #00f0ff;
         }
 
         .admin-link {
@@ -348,7 +338,7 @@
             cursor: pointer;
         }
         .admin-link:hover {
-            color: var(--accent);
+            color: #ffb703;
         }
 
         .empty-msg {
@@ -367,15 +357,15 @@
 
     <div class="container">
         <header>
-            <h1><i class="fa-solid fa-tower-observation"></i> The Procrastination Protocol</h1>
-            <p style="color: #94a3b8; margin-top: -2px;"><i>Guiding Recycled Electronics Safely Home &bull; Sea Harbor Marketplace</i></p>
+            <h1>The Procrastination Protocol ♻️</h1>
+            <p style="color: #94a3b8; margin-top: -5px;"><i>Circular Electronics & E-Waste Recovery Marketplace</i></p>
         </header>
 
         <!-- Standard Login Modal -->
         <div id="login-modal" class="modal-overlay">
             <div class="modal-card">
-                <h2><i class="fa-solid fa-anchor"></i> Welcome Aboard</h2>
-                <p style="color: #94a3b8; font-size: 0.9rem;">Select your portal role to navigate</p>
+                <h2>Welcome Back</h2>
+                <p style="color: #94a3b8; font-size: 0.9rem;">Select your portal role</p>
                 <form onsubmit="handleLogin(event)">
                     <div class="form-group">
                         <label>Select Role</label>
@@ -385,10 +375,10 @@
                         </select>
                     </div>
                     <div class="form-group">
-                        <label>Username / Officer Name</label>
+                        <label>Username / Email</label>
                         <input type="text" id="username" required placeholder="Enter username">
                     </div>
-                    <button type="submit" class="action-btn">Enter Harbor Marketplace</button>
+                    <button type="submit" class="action-btn">Enter Marketplace</button>
                     <span class="admin-link" onclick="openAdminModal()">System Admin Portal Direct Access</span>
                 </form>
             </div>
@@ -396,9 +386,9 @@
 
         <!-- Dedicated Admin Login Modal -->
         <div id="admin-modal" class="modal-overlay" style="display:none;">
-            <div class="modal-card" style="border-color: var(--accent); box-shadow: 0 0 35px rgba(255, 183, 3, 0.3);">
-                <h2 style="color: var(--accent);"><i class="fa-solid fa-shield-halved"></i> System Admin Verification</h2>
-                <p style="color: #94a3b8; font-size: 0.9rem;">Restricted portal for harbor watch commanders</p>
+            <div class="modal-card" style="border-color: #ffb703; box-shadow: 0 0 35px rgba(255, 183, 3, 0.3);">
+                <h2 style="color: #ffb703;">🛡️ System Admin Verification</h2>
+                <p style="color: #94a3b8; font-size: 0.9rem;">Restricted portal for platform administrators</p>
                 <form onsubmit="handleAdminLogin(event)">
                     <div class="form-group">
                         <label>Admin ID</label>
@@ -408,7 +398,7 @@
                         <label>Secret Security Key</label>
                         <input type="password" id="admin-secret-pass" required placeholder="Enter Admin Password">
                     </div>
-                    <button type="submit" class="action-btn" style="background:var(--accent); color:#000;">Authenticate Admin</button>
+                    <button type="submit" class="action-btn" style="background:#ffb703; color:#000;">Authenticate Admin</button>
                     <br><br>
                     <button type="button" style="background:transparent; color:#94a3b8; border:none; cursor:pointer;" onclick="closeAdminModal()">Return to Standard Login</button>
                 </form>
@@ -418,9 +408,9 @@
         <!-- Payment Modal -->
         <div id="payment-modal" class="modal-overlay" style="display: none;">
             <div class="modal-card">
-                <h2><i class="fa-solid fa-credit-card"></i> Checkout & Payment</h2>
+                <h2>Checkout & Payment 💳</h2>
                 <p id="checkout-item-name" style="color: #94a3b8;">Item Name</p>
-                <h3 id="checkout-item-price" style="color: var(--primary); font-size: 1.8rem; margin: 5px 0 15px 0;">$0.00</h3>
+                <h3 id="checkout-item-price" style="color: #00f0ff; font-size: 1.8rem; margin: 5px 0 15px 0;">$0.00</h3>
                 <form onsubmit="processPayment(event)">
                     <div class="form-group">
                         <label>Cardholder Name</label>
@@ -454,22 +444,22 @@
         <!-- User Status Bar -->
         <div id="user-bar" class="user-bar" style="display:none;">
             <span id="user-display">Logged in as: -</span>
-            <button class="logout-btn" onclick="handleLogout()"><i class="fa-solid fa-right-from-bracket"></i> Logout</button>
+            <button class="logout-btn" onclick="handleLogout()">Logout</button>
         </div>
 
         <!-- Navigation Tabs -->
         <div class="nav-tabs">
-            <button id="btn-tab-buy" class="tab-btn" onclick="switchTab('buy')"><i class="fa-solid fa-store"></i> Marketplace (Buy)</button>
-            <button id="btn-tab-purchases" class="tab-btn" onclick="switchTab('purchases')"><i class="fa-solid fa-box"></i> My Orders</button>
-            <button id="btn-tab-sell" class="tab-btn" onclick="switchTab('sell')"><i class="fa-solid fa-upload"></i> Upload Device (Sell)</button>
-            <button id="btn-tab-dashboard" class="tab-btn" onclick="switchTab('dashboard')"><i class="fa-solid fa-chart-line"></i> Seller Dashboard</button>
-            <button id="btn-tab-assess" class="tab-btn" onclick="switchTab('assess')"><i class="fa-solid fa-clipboard-check"></i> Condition Assessment</button>
-            <button id="btn-tab-admin" class="tab-btn admin-tab" onclick="switchTab('admin')" style="display:none;"><i class="fa-solid fa-shield-halved"></i> Admin Portal</button>
+            <button id="btn-tab-buy" class="tab-btn" onclick="switchTab('buy')">Marketplace (Buy)</button>
+            <button id="btn-tab-purchases" class="tab-btn" onclick="switchTab('purchases')">My Orders</button>
+            <button id="btn-tab-sell" class="tab-btn" onclick="switchTab('sell')">Upload Device (Sell)</button>
+            <button id="btn-tab-dashboard" class="tab-btn" onclick="switchTab('dashboard')">Seller Dashboard</button>
+            <button id="btn-tab-assess" class="tab-btn" onclick="switchTab('assess')">Condition Assessment</button>
+            <button id="btn-tab-admin" class="tab-btn admin-tab" onclick="switchTab('admin')" style="display:none;">🛡️ Admin Portal</button>
         </div>
 
         <!-- Tab 1: Marketplace (Buy) -->
         <div id="tab-buy" class="section">
-            <h2>Available Hardware & Ships</h2>
+            <h2>Available Hardware & Components</h2>
             <div class="marketplace-grid" id="marketplace-list"></div>
         </div>
 
@@ -527,7 +517,7 @@
                 </div>
                 <div class="result-box">
                     <strong>Estimated Seller Cash Back:</strong> 
-                    <span id="seller-payout" style="font-size: 1.3rem; color: var(--primary); font-weight: bold;">$0.00</span>
+                    <span id="seller-payout" style="font-size: 1.3rem; color: #00f0ff; font-weight: bold;">$0.00</span>
                 </div>
                 <br>
                 <button type="submit" class="action-btn">Upload & Publish Listing</button>
@@ -573,21 +563,21 @@
 
         <!-- Tab 6: Admin Portal -->
         <div id="tab-admin" class="section">
-            <h2 style="color: var(--accent);"><i class="fa-solid fa-shield-halved"></i> System Administrator Portal</h2>
+            <h2 style="color: #ffb703;">🛡️ System Administrator Portal</h2>
             <p style="color: #94a3b8;">Overview of all registered platform buyers, sellers, and transactions.</p>
             
             <div class="dashboard-grid">
                 <div class="stat-card">
                     <p style="color:#94a3b8; margin:0;">Total Users</p>
-                    <h3 id="admin-total-users" style="color: var(--accent);">0</h3>
+                    <h3 id="admin-total-users" style="color: #ffb703;">0</h3>
                 </div>
                 <div class="stat-card">
                     <p style="color:#94a3b8; margin:0;">Total Transactions</p>
-                    <h3 id="admin-total-sales" style="color: var(--accent);">0</h3>
+                    <h3 id="admin-total-sales" style="color: #ffb703;">0</h3>
                 </div>
                 <div class="stat-card">
                     <p style="color:#94a3b8; margin:0;">Platform Volume</p>
-                    <h3 id="admin-total-volume" style="color: var(--accent);">$0.00</h3>
+                    <h3 id="admin-total-volume" style="color: #ffb703;">$0.00</h3>
                 </div>
             </div>
 
@@ -622,72 +612,49 @@
     </div>
 
     <script>
-        // --- 3D CANVAS & THREE.JS SETUP ---
+        // --- 3D CANVAS SETUP ---
         const canvas = document.getElementById('webgl-canvas');
-        const renderer = new THREE.WebGLRenderer({ canvas, antialias: true });
+        const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true });
         renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
         renderer.setSize(window.innerWidth, window.innerHeight);
-        renderer.shadowMap.enabled = true;
 
         const scene = new THREE.Scene();
-        scene.background = new THREE.Color(0x020617);
-        scene.fog = new THREE.FogExp2(0x020617, 0.025);
 
         const camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 1000);
-        let targetCameraPos = { x: -7, y: 3, z: 22 };
-        camera.position.set(-7, 3, 22);
+        let targetCameraPos = { x: -6, y: 2, z: 24 };
+        camera.position.set(-6, 2, 24);
 
-        // Ambient & Scene Directional Lighting
-        scene.add(new THREE.AmbientLight(0x0a192f, 1.8));
+        // Scene Lighting
+        scene.add(new THREE.AmbientLight(0x0a192f, 2.5));
         
-        const moonLight = new THREE.DirectionalLight(0x38bdf8, 1.2);
-        moonLight.position.set(20, 40, -10);
-        scene.add(moonLight);
+        const dirLight1 = new THREE.DirectionalLight(0x00f0ff, 2.0);
+        dirLight1.position.set(12, 18, 15);
+        scene.add(dirLight1);
 
-        // --- OCEAN WATER SURFACE WITH ANIMATED WAVES ---
-        const oceanGeo = new THREE.PlaneGeometry(160, 160, 64, 64);
+        const dirLight2 = new THREE.DirectionalLight(0x10b981, 1.5);
+        dirLight2.position.set(-12, -12, -10);
+        scene.add(dirLight2);
+
+        // --- OCEAN WATER SURFACE ---
+        const oceanGeo = new THREE.PlaneGeometry(60, 60, 40, 40);
         oceanGeo.rotateX(-Math.PI / 2);
-        
-        // Save initial vertex positions for wave calculations
-        const posAttr = oceanGeo.attributes.position;
-        const initialY = new Float32Array(posAttr.count);
-        for (let i = 0; i < posAttr.count; i++) {
-            initialY[i] = posAttr.getY(i);
-        }
-
-        const oceanMat = new THREE.MeshPhongMaterial({
-            color: 0x03254c,
-            emissive: 0x011627,
-            specular: 0x00f0ff,
-            shininess: 90,
+        const oceanMat = new THREE.MeshStandardMaterial({
+            color: 0x071528,
+            roughness: 0.2,
+            metalness: 0.8,
             flatShading: true,
             transparent: true,
-            opacity: 0.92
+            opacity: 0.9
         });
-
         const oceanMesh = new THREE.Mesh(oceanGeo, oceanMat);
         oceanMesh.position.set(-8, -4.5, 0);
         scene.add(oceanMesh);
 
-        // --- 3D WATCHTOWER & ROCKY ISLAND FOUNDATION ---
-        const islandGroup = new THREE.Group();
-        islandGroup.position.set(-8, -4.5, 0);
-        scene.add(islandGroup);
+        // --- 3D WATCHTOWER STRUCTURE GROUP ---
+        const towerGroup = new THREE.Group();
+        towerGroup.position.set(-8, -4, 0);
+        scene.add(towerGroup);
 
-        // Rocky Island Base
-        const rockGeo = new THREE.DodecahedronGeometry(3.8, 1);
-        const rockMat = new THREE.MeshStandardMaterial({
-            color: 0x1e293b,
-            roughness: 0.9,
-            metalness: 0.2,
-            flatShading: true
-        });
-        const rockMesh = new THREE.Mesh(rockGeo, rockMat);
-        rockMesh.scale.set(1.4, 0.7, 1.4);
-        rockMesh.position.y = 0.8;
-        islandGroup.add(rockMesh);
-
-        // Watchtower Metallic / Concrete Materials
         const towerMat = new THREE.MeshPhongMaterial({
             color: 0x0f172a,
             emissive: 0x020617,
@@ -702,35 +669,35 @@
             shininess: 90
         });
 
-        // 1. Tower Base Pedestal
-        const baseGeo = new THREE.CylinderGeometry(2.8, 3.4, 1.5, 12);
-        const baseMesh = new THREE.Mesh(baseGeo, towerMat);
-        baseMesh.position.y = 2.2;
-        islandGroup.add(baseMesh);
+        // 1. Rocky Island Base
+        const islandGeo = new THREE.CylinderGeometry(4.2, 5.0, 1.5, 8);
+        const islandMesh = new THREE.Mesh(islandGeo, towerMat);
+        islandMesh.position.y = 0.75;
+        towerGroup.add(islandMesh);
 
         // 2. Main Tower Shaft
-        const shaftGeo = new THREE.CylinderGeometry(1.6, 2.4, 8.5, 12);
+        const shaftGeo = new THREE.CylinderGeometry(1.8, 2.8, 8.5, 12);
         const shaftMesh = new THREE.Mesh(shaftGeo, towerMat);
-        shaftMesh.position.y = 7.2;
-        islandGroup.add(shaftMesh);
+        shaftMesh.position.y = 5.75;
+        towerGroup.add(shaftMesh);
 
-        // Accent Decorative Rings on Tower Shaft
-        for (let yPos of [4.5, 7.0, 9.5]) {
-            const ringGeo = new THREE.TorusGeometry(2.1 - (yPos * 0.06), 0.12, 12, 32);
+        // Accent Rings
+        for (let yPos of [2.8, 5.3, 7.8]) {
+            const ringGeo = new THREE.TorusGeometry(2.3 - (yPos * 0.08), 0.12, 12, 32);
             const ringMesh = new THREE.Mesh(ringGeo, accentMat);
             ringMesh.rotation.x = Math.PI / 2;
             ringMesh.position.y = yPos;
-            islandGroup.add(ringMesh);
+            towerGroup.add(ringMesh);
         }
 
-        // 3. Observation Deck Platform & Railing
-        const deckBaseGeo = new THREE.CylinderGeometry(2.8, 1.6, 0.8, 12);
+        // 3. Observation Deck
+        const deckBaseGeo = new THREE.CylinderGeometry(3.2, 1.8, 1.0, 12);
         const deckBaseMesh = new THREE.Mesh(deckBaseGeo, towerMat);
-        deckBaseMesh.position.y = 11.85;
-        islandGroup.add(deckBaseMesh);
+        deckBaseMesh.position.y = 10.5;
+        towerGroup.add(deckBaseMesh);
 
-        // 4. Observation Cabin / Lantern Room Glass Window Ring
-        const cabinGeo = new THREE.CylinderGeometry(2.2, 2.2, 1.6, 12);
+        // 4. Cabin Lantern Room
+        const cabinGeo = new THREE.CylinderGeometry(2.8, 2.8, 1.5, 12);
         const cabinMat = new THREE.MeshPhongMaterial({
             color: 0xffb703,
             emissive: 0xff9100,
@@ -739,161 +706,137 @@
             shininess: 100
         });
         const cabinMesh = new THREE.Mesh(cabinGeo, cabinMat);
-        cabinMesh.position.y = 13.05;
-        islandGroup.add(cabinMesh);
+        cabinMesh.position.y = 11.75;
+        towerGroup.add(cabinMesh);
 
-        // Cabin Roof Cap / Dome
-        const domeGeo = new THREE.ConeGeometry(2.7, 1.4, 12);
+        // Dome Roof
+        const domeGeo = new THREE.ConeGeometry(3.3, 1.5, 12);
         const domeMesh = new THREE.Mesh(domeGeo, towerMat);
-        domeMesh.position.y = 14.5;
-        islandGroup.add(domeMesh);
+        domeMesh.position.y = 13.25;
+        towerGroup.add(domeMesh);
 
-        // --- DYNAMIC ROTATING LIGHTHOUSE / WATCHTOWER LIGHT ---
+        // --- ROTATING YELLOW LIGHTHOUSE HEAD & BEAM ---
         const lightHousingGroup = new THREE.Group();
-        lightHousingGroup.position.set(0, 13.05, 0);
-        islandGroup.add(lightHousingGroup);
+        lightHousingGroup.position.set(0, 11.75, 0);
+        towerGroup.add(lightHousingGroup);
 
-        // Glowing Lamp Bulb Core
         const lampGeo = new THREE.SphereGeometry(0.6, 16, 16);
         const lampMat = new THREE.MeshBasicMaterial({ color: 0xffea00 });
         const lampMesh = new THREE.Mesh(lampGeo, lampMat);
         lightHousingGroup.add(lampMesh);
 
-        // Volumetric Transparent Yellow Light Beam Cone
-        const beamLength = 28;
-        const beamGeo = new THREE.ConeGeometry(5.2, beamLength, 32, 1, true);
-        beamGeo.translate(0, -beamLength / 2, 0); // Origin at top apex
+        const beamLength = 25;
+        const beamGeo = new THREE.ConeGeometry(5.0, beamLength, 32, 1, true);
+        beamGeo.translate(0, -beamLength / 2, 0);
 
         const beamMat = new THREE.MeshBasicMaterial({
             color: 0xffd700,
             transparent: true,
-            opacity: 0.38,
+            opacity: 0.35,
             side: THREE.DoubleSide,
             depthWrite: false,
             blending: THREE.AdditiveBlending
         });
-
         const lightBeamMesh = new THREE.Mesh(beamGeo, beamMat);
-        lightBeamMesh.rotation.x = Math.PI / 2.25; // Tilt outward across sea level
+        lightBeamMesh.rotation.x = Math.PI / 2.3;
         lightHousingGroup.add(lightBeamMesh);
 
-        // Real Spotlight casting illumination across floating ships
-        const towerSpotlight = new THREE.SpotLight(0xffd700, 5.0, 45, Math.PI / 5, 0.4, 1);
+        const towerSpotlight = new THREE.SpotLight(0xffd700, 5.0, 40, Math.PI / 4, 0.4, 1);
         towerSpotlight.position.set(0, 0, 0);
-        
         const spotTarget = new THREE.Object3D();
-        spotTarget.position.set(0, -4, 25);
+        spotTarget.position.set(0, -2, 22);
         lightHousingGroup.add(spotTarget);
         towerSpotlight.target = spotTarget;
         lightHousingGroup.add(towerSpotlight);
 
 
-        // --- PROCEDURAL 3D SHIPS / BOATS FLOATING & SAILING AT SEA ---
-        const shipGroup = new THREE.Group();
-        scene.add(shipGroup);
+        // --- PROPER 3D SHIP STRUCTURES (FLEET SAILING THE SEA) ---
+        function createCargoShipModel() {
+            const shipGroup = new THREE.Group();
 
-        function createShipMesh(color, textLabel) {
-            const ship = new THREE.Group();
+            const hullMat = new THREE.MeshStandardMaterial({ color: 0x1e293b, roughness: 0.4, metalness: 0.6 });
+            const deckMat = new THREE.MeshStandardMaterial({ color: 0x334155, roughness: 0.5 });
+            const containerMat1 = new THREE.MeshStandardMaterial({ color: 0x00f0ff, roughness: 0.3 });
+            const containerMat2 = new THREE.MeshStandardMaterial({ color: 0x10b981, roughness: 0.3 });
+            const superstructureMat = new THREE.MeshStandardMaterial({ color: 0xf8fafc, roughness: 0.2 });
 
-            // Ship Hull
-            const hullGeo = new THREE.ConeGeometry(0.8, 2.4, 4);
-            hullGeo.rotateX(Math.PI / 2);
-            hullGeo.scale(1, 0.6, 1);
-            const hullMat = new THREE.MeshStandardMaterial({
-                color: color,
-                roughness: 0.4,
-                metalness: 0.6,
-                flatShading: true
-            });
+            // Hull
+            const hullGeo = new THREE.BoxGeometry(2.6, 0.8, 5.2);
             const hull = new THREE.Mesh(hullGeo, hullMat);
-            hull.position.y = 0.2;
-            ship.add(hull);
+            hull.position.y = 0.4;
+            shipGroup.add(hull);
 
-            // Deck Cabin
-            const cabinGeo = new THREE.BoxGeometry(0.7, 0.5, 0.9);
-            const cabinMat = new THREE.MeshStandardMaterial({ color: 0x0f172a, roughness: 0.2 });
-            const cabin = new THREE.Mesh(cabinGeo, cabinMat);
-            cabin.position.set(0, 0.5, -0.2);
-            ship.add(cabin);
+            // Deck
+            const deckGeo = new THREE.BoxGeometry(2.4, 0.2, 4.8);
+            const deck = new THREE.Mesh(deckGeo, deckMat);
+            deck.position.y = 0.9;
+            shipGroup.add(deck);
 
-            // Glowing Navigation Antenna / Beacon Light
-            const beaconGeo = new THREE.SphereGeometry(0.12, 8, 8);
-            const beaconMat = new THREE.MeshBasicMaterial({ color: 0x00f0ff });
-            const beacon = new THREE.Mesh(beaconGeo, beaconMat);
-            beacon.position.set(0, 0.9, -0.2);
-            ship.add(beacon);
+            // Cargo Containers
+            for (let x of [-0.6, 0.6]) {
+                for (let z of [-1.2, 0, 1.2]) {
+                    const cGeo = new THREE.BoxGeometry(1.0, 0.9, 1.0);
+                    const cMesh = new THREE.Mesh(cGeo, (Math.random() > 0.5 ? containerMat1 : containerMat2));
+                    cMesh.position.set(x, 1.45, z);
+                    shipGroup.add(cMesh);
+                }
+            }
 
-            // Floating Hardware Component Banner / Sprite Label
-            const canvas = document.createElement('canvas');
-            canvas.width = 256;
-            canvas.height = 64;
-            const ctx = canvas.getContext('2d');
-            ctx.fillStyle = 'rgba(10, 20, 35, 0.9)';
-            ctx.fillRect(0, 0, 256, 64);
-            ctx.strokeStyle = '#00f0ff';
-            ctx.lineWidth = 3;
-            ctx.strokeRect(2, 2, 252, 60);
-            ctx.fillStyle = '#00f0ff';
-            ctx.font = 'Bold 18px Segoe UI, sans-serif';
-            ctx.textAlign = 'center';
-            ctx.textBaseline = 'middle';
-            ctx.fillText(textLabel, 128, 32);
+            // Bridge / Superstructure (Aft)
+            const bridgeBaseGeo = new THREE.BoxGeometry(1.8, 1.2, 1.4);
+            const bridgeBase = new THREE.Mesh(bridgeBaseGeo, superstructureMat);
+            bridgeBase.position.set(0, 1.6, -1.8);
+            shipGroup.add(bridgeBase);
 
-            const texture = new THREE.CanvasTexture(canvas);
-            const spriteMat = new THREE.SpriteMaterial({ map: texture, transparent: true, opacity: 0.95 });
-            const sprite = new THREE.Sprite(spriteMat);
-            sprite.scale.set(2.4, 0.6, 1);
-            sprite.position.set(0, 1.7, 0);
-            ship.add(sprite);
+            const bridgeTopGeo = new THREE.BoxGeometry(1.4, 0.8, 1.0);
+            const bridgeTop = new THREE.Mesh(bridgeTopGeo, containerMat1);
+            bridgeTop.position.set(0, 2.5, -1.8);
+            shipGroup.add(bridgeTop);
 
-            return ship;
+            // Mast & Radar
+            const mastGeo = new THREE.CylinderGeometry(0.05, 0.05, 1.5);
+            const mast = new THREE.Mesh(mastGeo, hullMat);
+            mast.position.set(0, 3.25, -1.8);
+            shipGroup.add(mast);
+
+            shipGroup.scale.set(0.8, 0.8, 0.8);
+            return shipGroup;
         }
 
-        const componentShips = [
-            { name: "💻 LAPTOP", color: 0x3b82f6 },
-            { name: "🔳 CPU SHIP", color: 0x10b981 },
-            { name: "📟 MOTHERBOARD", color: 0x8b5cf6 },
-            { name: "🎮 RTX GPU", color: 0xf59e0b },
-            { name: "⚡ IC CIRCUIT", color: 0xef4444 },
-            { name: "🎴 RAM VESSEL", color: 0x06b6d4 },
-            { name: "💾 SSD CARRIER", color: 0xec4899 },
-            { name: "📱 TABLET", color: 0x6366f1 }
-        ];
+        const fleetGroup = new THREE.Group();
+        scene.add(fleetGroup);
 
-        const activeShips = [];
+        const ships = [];
+        const numShips = 7;
 
-        componentShips.forEach((item, idx) => {
-            const shipMesh = createShipMesh(item.color, item.name);
-            shipGroup.add(shipMesh);
+        for (let i = 0; i < numShips; i++) {
+            const ship = createCargoShipModel();
+            fleetGroup.add(ship);
 
-            const radius = 8.5 + (idx % 3) * 3.2; // Orbit radii around Watchtower
-            const angle = (idx / componentShips.length) * Math.PI * 2;
-            const speed = 0.003 + (idx % 2) * 0.002;
-
-            activeShips.push({
-                mesh: shipMesh,
-                radius: radius,
-                angle: angle,
-                speed: speed,
-                bobFreq: 1.5 + Math.random() * 1.5
+            ships.push({
+                mesh: ship,
+                orbitRadius: 10 + Math.random() * 12,
+                angle: (i / numShips) * Math.PI * 2,
+                speed: 0.002 + Math.random() * 0.002,
+                bobFreq: 2.0 + Math.random() * 1.5,
+                bobOffset: Math.random() * Math.PI
             });
-        });
+        }
 
-        // Parallax Interactive Mouse Movement
+        // Parallax Mouse Motion
         let mouseX = 0, mouseY = 0;
         window.addEventListener('mousemove', (e) => {
             mouseX = (e.clientX / window.innerWidth - 0.5) * 2;
             mouseY = (e.clientY / window.innerHeight - 0.5) * 2;
         });
 
-        // Preset Camera Angles for Navigation Tabs
         const cameraPresets = {
-            buy: { x: -7, y: 3, z: 22 },
-            purchases: { x: -4, y: 4, z: 18 },
-            sell: { x: -9, y: 1, z: 24 },
-            dashboard: { x: -5, y: 5, z: 16 },
-            assess: { x: -7, y: 2, z: 20 },
-            admin: { x: -2, y: 6, z: 15 }
+            buy: { x: -6, y: 2, z: 24 },
+            purchases: { x: -4, y: 2.5, z: 20 },
+            sell: { x: -8, y: 1, z: 24 },
+            dashboard: { x: -5, y: 3, z: 18 },
+            assess: { x: -6, y: 1, z: 22 },
+            admin: { x: -2, y: 4, z: 16 }
         };
 
         function update3DCamera(tabName) {
@@ -902,60 +845,51 @@
             }
         }
 
-        // Continuous Real-Time Animation Loop
+        // Continuous Animation Loop
         const clock = new THREE.Clock();
-
         function animate3D() {
             requestAnimationFrame(animate3D);
 
             const elapsedTime = clock.getElapsedTime();
 
-            // 1. Animate Sea Water Surface Waves
-            const pos = oceanGeo.attributes.position;
-            for (let i = 0; i < pos.count; i++) {
-                const u = pos.getX(i);
-                const v = pos.getZ(i);
-                const z = Math.sin(u * 0.3 + elapsedTime * 1.5) * 0.18 + 
-                          Math.cos(v * 0.4 + elapsedTime * 1.2) * 0.18;
-                pos.setY(i, z);
+            // 1. Rotate Watchtower Light
+            lightHousingGroup.rotation.y = elapsedTime * 0.8;
+            towerGroup.rotation.y = Math.sin(elapsedTime * 0.15) * 0.04;
+
+            // 2. Animate Ocean Waves Vertex Displacements
+            const positions = oceanGeo.attributes.position;
+            for (let i = 0; i < positions.count; i++) {
+                const u = positions.getX(i);
+                const v = getY = positions.getY(i);
+                // Simple sine wave displacement on water vertices
+                const zDist = Math.sin(u * 0.3 + elapsedTime * 1.5) * Math.cos(v * 0.3 + elapsedTime * 1.2) * 0.25;
+                // keep base flat at edges, wavy in center
             }
-            pos.needsUpdate = true;
+            oceanGeo.computeVertexNormals();
 
-            // 2. Rotate the Watchtower Yellow Light continuously
-            lightHousingGroup.rotation.y = elapsedTime * 0.85;
-
-            // 3. Orbit Ships / Boats around Watchtower & Float with Water Waves
-            activeShips.forEach(ship => {
-                ship.angle += ship.speed;
-
-                // X & Z position orbiting around island at (-8, 0)
-                const targetX = Math.cos(ship.angle) * ship.radius - 8;
-                const targetZ = Math.sin(ship.angle) * ship.radius;
-
-                ship.mesh.position.x = targetX;
-                ship.mesh.position.z = targetZ;
-
-                // Y water wave buoyant float motion
-                const waveY = Math.sin(targetX * 0.3 + elapsedTime * 1.5) * 0.18 + 
-                              Math.cos(targetZ * 0.4 + elapsedTime * 1.2) * 0.18;
-                ship.mesh.position.y = -4.3 + waveY;
-
-                // Orient Ship facing tangential direction of movement
-                const nextAngle = ship.angle + 0.05;
-                const nextX = Math.cos(nextAngle) * ship.radius - 8;
-                const nextZ = Math.sin(nextAngle) * ship.radius;
-                ship.mesh.lookAt(nextX, ship.mesh.position.y, nextZ);
-
-                // Gentle Pitch/Roll rocking on waves
-                ship.mesh.rotation.z += Math.sin(elapsedTime * ship.bobFreq) * 0.06;
+            // 3. Sail & Buoyancy Animation for Ships across the Sea
+            ships.forEach(s => {
+                s.angle += s.speed;
+                const x = Math.cos(s.angle) * s.orbitRadius - 8;
+                const z = Math.sin(s.angle) * s.orbitRadius;
+                
+                // Bobbing up and down on waves
+                const waveY = -4.3 + Math.sin(elapsedTime * s.bobFreq + s.bobOffset) * 0.18;
+                
+                s.mesh.position.set(x, waveY, z);
+                
+                // Face direction of travel along circle with tilt rocking
+                s.mesh.rotation.y = -s.angle + Math.PI / 2;
+                s.mesh.rotation.z = Math.cos(elapsedTime * s.bobFreq + s.bobOffset) * 0.05;
+                s.mesh.rotation.x = Math.sin(elapsedTime * (s.bobFreq * 0.8)) * 0.04;
             });
 
             // Smooth Camera Interpolation
-            camera.position.x += (targetCameraPos.x + mouseX * 1.5 - camera.position.x) * 0.04;
-            camera.position.y += (targetCameraPos.y - mouseY * 1.5 - camera.position.y) * 0.04;
+            camera.position.x += (targetCameraPos.x + mouseX * 1.2 - camera.position.x) * 0.04;
+            camera.position.y += (targetCameraPos.y - mouseY * 1.2 - camera.position.y) * 0.04;
             camera.position.z += (targetCameraPos.z - camera.position.z) * 0.04;
 
-            camera.lookAt(-4, 0, 0);
+            camera.lookAt(-4, -1, 0);
             renderer.render(scene, camera);
         }
 
@@ -967,7 +901,7 @@
             renderer.setSize(window.innerWidth, window.innerHeight);
         });
 
-        // --- LOCAL STORAGE STATE MANAGEMENT & MARKETPLACE CONTROLLERS ---
+        // Local Storage & State Management
         let listings = JSON.parse(localStorage.getItem('market_listings')) || [];
         let salesHistory = JSON.parse(localStorage.getItem('sales_history')) || [];
         let userRegistry = JSON.parse(localStorage.getItem('user_registry')) || [];
@@ -1041,20 +975,20 @@
             if (currentUser.role === 'Buyer') {
                 document.getElementById('btn-tab-sell').style.display = 'none';
                 document.getElementById('btn-tab-dashboard').style.display = 'none';
-                document.getElementById('btn-tab-purchases').style.display = 'flex';
+                document.getElementById('btn-tab-purchases').style.display = 'block';
                 btnAdmin.style.display = 'none';
                 switchTab('buy');
             } else if (currentUser.role === 'Seller') {
-                document.getElementById('btn-tab-sell').style.display = 'flex';
-                document.getElementById('btn-tab-dashboard').style.display = 'flex';
+                document.getElementById('btn-tab-sell').style.display = 'block';
+                document.getElementById('btn-tab-dashboard').style.display = 'block';
                 document.getElementById('btn-tab-purchases').style.display = 'none';
                 btnAdmin.style.display = 'none';
                 switchTab('dashboard');
             } else if (currentUser.role === 'Admin') {
-                document.getElementById('btn-tab-sell').style.display = 'flex';
-                document.getElementById('btn-tab-dashboard').style.display = 'flex';
-                document.getElementById('btn-tab-purchases').style.display = 'flex';
-                btnAdmin.style.display = 'flex';
+                document.getElementById('btn-tab-sell').style.display = 'block';
+                document.getElementById('btn-tab-dashboard').style.display = 'block';
+                document.getElementById('btn-tab-purchases').style.display = 'block';
+                btnAdmin.style.display = 'block';
                 switchTab('admin');
             }
         }
@@ -1123,7 +1057,7 @@
                     listings.push(newItem);
                     localStorage.setItem('market_listings', JSON.stringify(listings));
 
-                    alert("Listing successfully created and dispatched!");
+                    alert("Listing successfully created!");
                     document.getElementById('sell-form').reset();
                     document.getElementById('custom-cat-group').style.display = 'none';
                     document.getElementById('seller-payout').innerText = "$0.00";
@@ -1139,7 +1073,7 @@
             const activeItems = listings.filter(item => item.status === 'Active');
 
             if (activeItems.length === 0) {
-                grid.innerHTML = `<div class="empty-msg">No active hardware components listed yet. Upload a device to dispatch a vessel!</div>`;
+                grid.innerHTML = `<div class="empty-msg">No active hardware components listed yet.</div>`;
                 return;
             }
 
@@ -1152,7 +1086,7 @@
                         <p style="margin: 0; font-size:0.85rem; color:#94a3b8;">Seller: ${item.seller}</p>
                         <p style="margin: 5px 0; font-size:0.9rem;">Condition: ${item.condition}</p>
                         <div class="price-tag">$${item.price}</div>
-                        <button class="action-btn" onclick="openPaymentModal(${item.id})"><i class="fa-solid fa-cart-shopping"></i> Buy Now</button>
+                        <button class="action-btn" onclick="openPaymentModal(${item.id})">Buy Now</button>
                     </div>
                 `;
             });
@@ -1190,7 +1124,7 @@
                 localStorage.setItem('market_listings', JSON.stringify(listings));
                 localStorage.setItem('sales_history', JSON.stringify(salesHistory));
 
-                alert(`Payment successful! Order confirmed for ${boughtItem.name}. Guided safely into harbor.`);
+                alert(`Payment successful! Order confirmed for ${boughtItem.name}.`);
                 closePaymentModal();
                 renderMarketplace();
             }
@@ -1210,7 +1144,7 @@
                 grid.innerHTML += `
                     <div class="card">
                         <img src="${item.image}" alt="${item.name}">
-                        <span class="badge" style="background:rgba(0, 240, 255, 0.2); color:#00f0ff;"><i class="fa-solid fa-circle-check"></i> Arrived in Harbor</span>
+                        <span class="badge" style="background:rgba(0, 240, 255, 0.2); color:#00f0ff;">Order Confirmed</span>
                         <h4 style="margin: 5px 0;">${item.name}</h4>
                         <p style="margin: 0; font-size:0.85rem; color:#94a3b8;">Category: ${item.category}</p>
                         <div class="price-tag">Paid: $${item.price}</div>
@@ -1232,7 +1166,7 @@
             grid.innerHTML = "";
 
             if (myItems.length === 0) {
-                grid.innerHTML = `<div class="empty-msg">No hardware listings found for your account.</div>`;
+                grid.innerHTML = `<div class="empty-msg">No hardware listings found.</div>`;
                 return;
             }
 
@@ -1284,7 +1218,7 @@
             buyersTable.innerHTML = "";
 
             if (salesHistory.length === 0) {
-                buyersTable.innerHTML = `<tr><td colspan="5" style="text-align:center; color:#64748b;">No completed harbor transactions yet.</td></tr>`;
+                buyersTable.innerHTML = `<tr><td colspan="5" style="text-align:center; color:#64748b;">No completed transactions yet.</td></tr>`;
             } else {
                 salesHistory.forEach(sh => {
                     buyersTable.innerHTML += `
@@ -1305,7 +1239,7 @@
             const isReusable = document.getElementById('reusable').checked;
             const isRefurbishable = document.getElementById('refurbishable').checked;
 
-            let pathway = isRepairable ? "Repair & Refurbish" : isReusable ? "Direct Reuse / Resale" : isRefurbishable ? "Component Harvesting" : "Safe E-Waste Recycling";
+            let pathway = isRepairable ? "Repair" : isReusable ? "Reuse / Resale" : isRefurbishable ? "Refurbishment" : "Responsible Recycling";
 
             const resultDiv = document.getElementById('assess-result');
             resultDiv.style.display = 'block';
