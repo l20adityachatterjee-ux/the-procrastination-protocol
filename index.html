@@ -8,9 +8,9 @@
         :root {
             --primary: #10b981;
             --primary-dark: #059669;
-            --accent: #00f0ff;
+            --accent: #00ffcc;
             --bg-dark: #070b14;
-            --card-bg: rgba(15, 23, 42, 0.75);
+            --card-bg: rgba(15, 23, 42, 0.8);
             --text-light: #f8fafc;
         }
 
@@ -24,7 +24,7 @@
             overflow-x: hidden;
         }
 
-        /* Vibrant Dynamic Background Canvas */
+        /* Optimized Dynamic Canvas */
         #bg-canvas {
             position: fixed;
             top: 0;
@@ -51,10 +51,10 @@
             color: #00ffcc;
             font-size: 2.5rem;
             margin-bottom: 5px;
-            text-shadow: 0 0 20px rgba(0, 255, 204, 0.6);
+            text-shadow: 0 0 15px rgba(0, 255, 204, 0.4);
         }
 
-        /* Glassmorphism Modals */
+        /* Modals */
         .modal-overlay {
             position: fixed;
             top: 0;
@@ -70,14 +70,14 @@
         }
 
         .modal-card {
-            background: rgba(15, 23, 42, 0.9);
+            background: rgba(15, 23, 42, 0.95);
             border: 1px solid rgba(0, 255, 204, 0.3);
             padding: 30px;
             border-radius: 16px;
             text-align: center;
             max-width: 450px;
             width: 90%;
-            box-shadow: 0 0 30px rgba(0, 255, 204, 0.2);
+            box-shadow: 0 0 25px rgba(0, 255, 204, 0.2);
         }
 
         .user-bar {
@@ -90,7 +90,6 @@
             border-radius: 10px;
             margin-bottom: 20px;
             font-weight: 600;
-            box-shadow: 0 0 15px rgba(0, 255, 204, 0.1);
         }
 
         /* Navigation Tabs */
@@ -111,29 +110,27 @@
             background: rgba(255, 255, 255, 0.05);
             color: #94a3b8;
             border-radius: 8px;
-            transition: all 0.2s ease;
+            transition: background 0.2s;
             white-space: nowrap;
         }
 
         .tab-btn.active, .tab-btn:hover {
             background: #00ffcc;
             color: #000;
-            box-shadow: 0 0 15px rgba(0, 255, 204, 0.5);
         }
 
         .section {
             display: none;
             background: var(--card-bg);
-            backdrop-filter: blur(12px);
+            backdrop-filter: blur(10px);
             padding: 25px;
             border-radius: 16px;
             border: 1px solid rgba(0, 255, 204, 0.2);
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
         }
 
         .section.active { display: block; }
 
-        /* Form Inputs */
+        /* Forms */
         .form-group {
             margin-bottom: 16px;
             text-align: left;
@@ -156,12 +153,10 @@
             border-radius: 8px;
             color: #fff;
             outline: none;
-            transition: border 0.2s;
         }
 
         input:focus, select:focus {
             border-color: #00ffcc;
-            box-shadow: 0 0 10px rgba(0, 255, 204, 0.3);
         }
 
         button.action-btn {
@@ -174,13 +169,10 @@
             border-radius: 8px;
             font-size: 1rem;
             width: 100%;
-            transition: transform 0.1s, background 0.2s, box-shadow 0.2s;
         }
 
         button.action-btn:hover {
             background: #00cc99;
-            transform: translateY(-1px);
-            box-shadow: 0 0 15px rgba(0, 255, 204, 0.4);
         }
 
         button.logout-btn {
@@ -215,14 +207,7 @@
             border: 1px solid rgba(255, 255, 255, 0.1);
             border-radius: 12px;
             padding: 16px;
-            transition: transform 0.2s, box-shadow 0.2s;
             text-align: left;
-        }
-
-        .card:hover {
-            transform: translateY(-4px);
-            box-shadow: 0 0 20px rgba(0, 255, 204, 0.3);
-            border-color: rgba(0, 255, 204, 0.5);
         }
 
         .card img {
@@ -290,7 +275,7 @@
 </head>
 <body>
 
-    <!-- Dynamic Canvas Background (Tech Tree + Floating Electronics + Cursor Tracer) -->
+    <!-- Dynamic Canvas -->
     <canvas id="bg-canvas"></canvas>
 
     <div class="container">
@@ -321,7 +306,7 @@
             </div>
         </div>
 
-        <!-- Payment Checkout Modal -->
+        <!-- Payment Modal -->
         <div id="payment-modal" class="modal-overlay" style="display: none;">
             <div class="modal-card">
                 <h2>Checkout & Payment 💳</h2>
@@ -378,7 +363,7 @@
             <div class="marketplace-grid" id="marketplace-list"></div>
         </div>
 
-        <!-- Tab 2: Buyer Purchase History -->
+        <!-- Tab 2: Buyer Orders -->
         <div id="tab-purchases" class="section">
             <h2>My Purchase History</h2>
             <div class="marketplace-grid" id="buyer-orders-list"></div>
@@ -398,7 +383,6 @@
                     </select>
                 </div>
 
-                <!-- Custom Category Description Input -->
                 <div class="form-group" id="custom-cat-group" style="display: none;">
                     <label>Specify Custom Item Type</label>
                     <input type="text" id="dev-custom-cat" placeholder="e.g. RTX 3080 GPU, CPU, Silicon Diode, Motherboard">
@@ -455,7 +439,7 @@
             <div class="marketplace-grid" id="seller-items-list"></div>
         </div>
 
-        <!-- Tab 5: Condition Assessment Engine -->
+        <!-- Tab 5: Assessment -->
         <div id="tab-assess" class="section">
             <h2>Pathway Assessment Matrix</h2>
             <div class="form-group">
@@ -473,121 +457,123 @@
     </div>
 
     <script>
-        // --- VIBRANT ANIMATED CANVAS: TECH TREE + FLOATING ELECTRONICS + CURSOR TRACER ---
+        // --- HIGH-PERFORMANCE OPTIMIZED CANVAS ---
         const canvas = document.getElementById('bg-canvas');
         const ctx = canvas.getContext('2d');
+
+        // Offscreen canvas to pre-render the static tree once
+        const offscreenCanvas = document.createElement('canvas');
+        const offCtx = offscreenCanvas.getContext('2d');
 
         function resizeCanvas() {
             canvas.width = window.innerWidth;
             canvas.height = window.innerHeight;
-        }
-        window.addEventListener('resize', resizeCanvas);
-        resizeCanvas();
-
-        // 1. Cursor Tracer
-        let trail = [];
-        window.addEventListener('mousemove', (e) => {
-            trail.push({ x: e.clientX, y: e.clientY, size: 10, alpha: 1 });
-        });
-
-        // 2. Tech Tree Electronics Generator
-        const electronicIcons = ['💻 Laptop', '📱 Phone', '🔲 CPU', '🎮 RTX GPU', '📟 Diode', '📟 Motherboard', '📲 Tablet'];
-        let floatingElectronics = [];
-
-        class FloatingDevice {
-            constructor(startX, startY) {
-                this.x = startX;
-                this.y = startY;
-                this.text = electronicIcons[Math.floor(Math.random() * electronicIcons.length)];
-                this.vx = (Math.random() - 0.2) * 2 + 1; // Float rightwards
-                this.vy = (Math.random() - 0.5) * 1.5;
-                this.alpha = 1;
-                this.size = Math.random() * 12 + 14;
-            }
-
-            update() {
-                this.x += this.vx;
-                this.y += this.vy;
-                this.alpha -= 0.005;
-            }
-
-            draw() {
-                ctx.save();
-                ctx.globalAlpha = Math.max(0, this.alpha);
-                ctx.font = `${this.size}px Segoe UI, sans-serif`;
-                ctx.fillStyle = "#00ffcc";
-                ctx.shadowColor = "#00ffcc";
-                ctx.shadowBlur = 10;
-                ctx.fillText(this.text, this.x, this.y);
-                ctx.restore();
-            }
+            offscreenCanvas.width = window.innerWidth;
+            offscreenCanvas.height = window.innerHeight;
+            renderStaticTree();
         }
 
-        // Draw Glowing Tech Tree Structure
-        function drawTree(startX, startY, len, angle, branchWidth) {
-            ctx.beginPath();
-            ctx.save();
-            ctx.strokeStyle = '#10b981';
-            ctx.shadowColor = '#00ffcc';
-            ctx.shadowBlur = 12;
-            ctx.lineWidth = branchWidth;
-            ctx.translate(startX, startY);
-            ctx.rotate(angle * Math.PI / 180);
-            ctx.moveTo(0, 0);
-            ctx.lineTo(0, -len);
-            ctx.stroke();
+        // Draw Tree ONCE to offscreen buffer
+        function drawTreeBranch(x, y, len, angle, branchWidth) {
+            offCtx.beginPath();
+            offCtx.save();
+            offCtx.strokeStyle = '#10b981';
+            offCtx.lineWidth = branchWidth;
+            offCtx.translate(x, y);
+            offCtx.rotate(angle * Math.PI / 180);
+            offCtx.moveTo(0, 0);
+            offCtx.lineTo(0, -len);
+            offCtx.stroke();
 
-            if (len < 12) {
-                // Emit floating device from branch tip
-                if (Math.random() < 0.03) {
-                    const pos = ctx.getTransform();
-                    floatingElectronics.push(new FloatingDevice(pos.e, pos.f));
-                }
-                ctx.restore();
+            if (len < 15) {
+                offCtx.restore();
                 return;
             }
 
-            drawTree(0, -len, len * 0.75, angle + 22, branchWidth * 0.7);
-            drawTree(0, -len, len * 0.75, angle - 22, branchWidth * 0.7);
-            ctx.restore();
+            drawTreeBranch(0, -len, len * 0.72, angle + 22, branchWidth * 0.7);
+            drawTreeBranch(0, -len, len * 0.72, angle - 22, branchWidth * 0.7);
+            offCtx.restore();
         }
+
+        function renderStaticTree() {
+            offCtx.clearRect(0, 0, offscreenCanvas.width, offscreenCanvas.height);
+            drawTreeBranch(offscreenCanvas.width * 0.1, offscreenCanvas.height, offscreenCanvas.height * 0.2, 0, 8);
+        }
+
+        window.addEventListener('resize', resizeCanvas);
+
+        // Lightweight Trail Particle System
+        let trail = [];
+        window.addEventListener('mousemove', (e) => {
+            if (trail.length < 15) { // Cap trail particles for high FPS
+                trail.push({ x: e.clientX, y: e.clientY, size: 8, alpha: 1 });
+            }
+        });
+
+        // Floating Items System
+        const electronicIcons = ['💻 Laptop', '📱 Phone', '🔲 CPU', '🎮 GPU', '📟 Diode', '📲 Tablet'];
+        let floatingElectronics = [];
+
+        function spawnFloatingDevice() {
+            if (floatingElectronics.length < 6) { // Max 6 active floating items
+                floatingElectronics.push({
+                    x: canvas.width * 0.12,
+                    y: canvas.height * 0.7 + (Math.random() * 100 - 50),
+                    text: electronicIcons[Math.floor(Math.random() * electronicIcons.length)],
+                    vx: Math.random() * 1.5 + 1,
+                    vy: (Math.random() - 0.5) * 1,
+                    alpha: 1
+                });
+            }
+        }
+        setInterval(spawnFloatingDevice, 1500);
 
         function animateCanvas() {
             ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-            // Draw Dynamic Cyber Tree on Left
-            drawTree(canvas.width * 0.1, canvas.height, canvas.height * 0.22, 0, 10);
+            // 1. Fast Blit Offscreen Tree (Zero Recursion Lag)
+            ctx.drawImage(offscreenCanvas, 0, 0);
 
-            // Update & Render Floating Electronic Components
+            // 2. Render Floating Components
+            ctx.font = '14px Segoe UI, sans-serif';
+            ctx.fillStyle = '#00ffcc';
             for (let i = floatingElectronics.length - 1; i >= 0; i--) {
                 const dev = floatingElectronics[i];
-                dev.update();
-                dev.draw();
-                if (dev.alpha <= 0 || dev.x > canvas.width || dev.y < 0 || dev.y > canvas.height) {
+                dev.x += dev.vx;
+                dev.y += dev.vy;
+                dev.alpha -= 0.003;
+
+                ctx.globalAlpha = Math.max(0, dev.alpha);
+                ctx.fillText(dev.text, dev.x, dev.y);
+
+                if (dev.alpha <= 0 || dev.x > canvas.width) {
                     floatingElectronics.splice(i, 1);
                 }
             }
 
-            // Update & Render Glowing Cursor Tracer
+            // 3. Render Cursor Tracer
+            ctx.fillStyle = '#00ffcc';
             for (let i = trail.length - 1; i >= 0; i--) {
                 const p = trail[i];
-                p.alpha -= 0.03;
-                p.size *= 0.95;
+                p.alpha -= 0.05;
+                p.size *= 0.9;
 
+                ctx.globalAlpha = Math.max(0, p.alpha);
                 ctx.beginPath();
                 ctx.arc(p.x, p.y, Math.max(1, p.size), 0, Math.PI * 2);
-                ctx.fillStyle = `rgba(0, 255, 204, ${Math.max(0, p.alpha)})`;
-                ctx.shadowColor = '#00ffcc';
-                ctx.shadowBlur = 15;
                 ctx.fill();
 
                 if (p.alpha <= 0) {
                     trail.splice(i, 1);
                 }
             }
+            ctx.globalAlpha = 1.0;
 
             requestAnimationFrame(animateCanvas);
         }
+
+        // Initialize Canvas
+        resizeCanvas();
         animateCanvas();
 
         // Local Storage State
