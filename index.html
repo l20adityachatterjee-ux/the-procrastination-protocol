@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>The Procrastination Protocol - 3D Globe Marketplace</title>
+    <title>The Procrastination Protocol - 3D Watchtower Marketplace</title>
     
     <!-- Three.js Library -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
@@ -357,8 +357,8 @@
 
     <div class="container">
         <header>
-            <h1>The Procrastination Protocol ♻️</h1>
-            <p style="color: #94a3b8; margin-top: -5px;"><i>Circular Electronics & E-Waste Recovery Marketplace</i></p>
+            <h1>The Procrastination Protocol 📡</h1>
+            <p style="color: #94a3b8; margin-top: -5px;"><i>Circular Electronics & Watchtower Monitoring Marketplace</i></p>
         </header>
 
         <!-- Standard Login Modal -->
@@ -624,89 +624,146 @@
         let targetCameraPos = { x: -6, y: 0, z: 24 };
         camera.position.set(-6, 0, 24);
 
-        // Ambient and Directional Lighting
-        scene.add(new THREE.AmbientLight(0x0088ff, 0.8));
-        const dirLight = new THREE.DirectionalLight(0x00ffff, 2.5);
-        dirLight.position.set(0, 10, 20);
-        scene.add(dirLight);
-
-        // --- 3D ROTATING GLOBE (EARTH WIREFRAME) ---
-        const globeGroup = new THREE.Group();
-        globeGroup.position.set(-8, 0, 0);
-        scene.add(globeGroup);
-
-        const globeRadius = 6;
-
-        // Globe Sphere Wireframe
-        const globeGeo = new THREE.IcosahedronGeometry(globeRadius, 4);
-        const globeMat = new THREE.MeshBasicMaterial({
-            color: 0x00f0ff,
-            wireframe: true,
-            transparent: true,
-            opacity: 0.18
-        });
-        const globeMesh = new THREE.Mesh(globeGeo, globeMat);
-        globeGroup.add(globeMesh);
-
-        // Latitudinal & Longitudinal Circuit Rings
-        for (let i = 0; i < 5; i++) {
-            const ringGeo = new THREE.RingGeometry(globeRadius + 0.05, globeRadius + 0.1, 64);
-            const ringMat = new THREE.MeshBasicMaterial({ color: 0x00f0ff, side: THREE.DoubleSide, transparent: true, opacity: 0.25 });
-            const ring = new THREE.Mesh(ringGeo, ringMat);
-            ring.rotation.x = Math.PI / 2;
-            ring.position.y = (i - 2) * 2;
-            ring.scale.setScalar(Math.cos((i - 2) * 0.35));
-            globeGroup.add(ring);
-        }
-
-        // Glowing Surface Nodes (Cities/Circuits)
-        const nodePositions = [];
-        const numNodes = 120;
-        for (let i = 0; i < numNodes; i++) {
-            const phi = Math.acos(-1 + (2 * i) / numNodes);
-            const theta = Math.sqrt(numNodes * Math.PI) * phi;
-            nodePositions.push(
-                globeRadius * Math.cos(theta) * Math.sin(phi),
-                globeRadius * Math.sin(theta) * Math.sin(phi),
-                globeRadius * Math.cos(phi)
-            );
-        }
-
-        const nodeGeo = new THREE.BufferGeometry();
-        nodeGeo.setAttribute('position', new THREE.Float32BufferAttribute(nodePositions, 3));
+        // Lighting
+        scene.add(new THREE.AmbientLight(0x0a192f, 1.5));
         
-        const nodeMat = new THREE.PointsMaterial({
+        const dirLight1 = new THREE.DirectionalLight(0x00f0ff, 2.5);
+        dirLight1.position.set(12, 18, 15);
+        scene.add(dirLight1);
+
+        const dirLight2 = new THREE.DirectionalLight(0x10b981, 1.8);
+        dirLight2.position.set(-12, -12, -10);
+        scene.add(dirLight2);
+
+        // --- 3D DYNAMIC WATCHTOWER GROUP ---
+        const watchtowerGroup = new THREE.Group();
+        watchtowerGroup.position.set(-8, -4, 0);
+        scene.add(watchtowerGroup);
+
+        // Tower Metallic Material
+        const towerMat = new THREE.MeshPhongMaterial({
+            color: 0x0f172a,
+            emissive: 0x020617,
+            specular: 0x00f0ff,
+            shininess: 90,
+            flatShading: true
+        });
+
+        const metallicDetailsMat = new THREE.MeshPhongMaterial({
+            color: 0x1e293b,
+            specular: 0x10b981,
+            shininess: 60
+        });
+
+        // 1. Tower Base Foundation
+        const baseGeo = new THREE.CylinderGeometry(3.2, 4.0, 1.2, 8);
+        const baseMesh = new THREE.Mesh(baseGeo, towerMat);
+        baseMesh.position.y = 0.6;
+        watchtowerGroup.add(baseMesh);
+
+        // 2. Main Tapered Shaft
+        const shaftGeo = new THREE.CylinderGeometry(1.5, 2.8, 8.0, 12);
+        const shaftMesh = new THREE.Mesh(shaftGeo, towerMat);
+        shaftMesh.position.y = 5.2;
+        watchtowerGroup.add(shaftMesh);
+
+        // Structural Support Ring Balconies
+        const ringGeo1 = new THREE.CylinderGeometry(2.2, 2.2, 0.3, 12);
+        const ringMesh1 = new THREE.Mesh(ringGeo1, metallicDetailsMat);
+        ringMesh1.position.y = 3.5;
+        watchtowerGroup.add(ringMesh1);
+
+        // 3. Upper Observation Deck Platform
+        const deckGeo = new THREE.CylinderGeometry(3.0, 2.0, 0.8, 12);
+        const deckMesh = new THREE.Mesh(deckGeo, metallicDetailsMat);
+        deckMesh.position.y = 9.6;
+        watchtowerGroup.add(deckMesh);
+
+        // 4. Glass Observation Housing
+        const glassGeo = new THREE.CylinderGeometry(2.0, 2.2, 1.8, 12);
+        const glassMat = new THREE.MeshBasicMaterial({
             color: 0x00f0ff,
-            size: 0.25,
             transparent: true,
-            opacity: 0.85,
+            opacity: 0.35,
+            wireframe: true
+        });
+        const glassMesh = new THREE.Mesh(glassGeo, glassMat);
+        glassMesh.position.y = 10.9;
+        watchtowerGroup.add(glassMesh);
+
+        // 5. Watchtower Roof Dome / Cap
+        const roofGeo = new THREE.ConeGeometry(2.6, 1.5, 12);
+        const roofMesh = new THREE.Mesh(roofGeo, towerMat);
+        roofMesh.position.y = 12.35;
+        watchtowerGroup.add(roofMesh);
+
+        // Top Antenna
+        const antennaGeo = new THREE.CylinderGeometry(0.05, 0.1, 2.5, 8);
+        const antennaMesh = new THREE.Mesh(antennaGeo, metallicDetailsMat);
+        antennaMesh.position.y = 14.2;
+        watchtowerGroup.add(antennaMesh);
+
+        // Beacon Light at Top Antenna
+        const beaconGeo = new THREE.SphereGeometry(0.25, 16, 16);
+        const beaconMat = new THREE.MeshBasicMaterial({ color: 0xff0055 });
+        const beaconMesh = new THREE.Mesh(beaconGeo, beaconMat);
+        beaconMesh.position.y = 15.4;
+        watchtowerGroup.add(beaconMesh);
+
+        const beaconPointLight = new THREE.PointLight(0xff0055, 3, 10);
+        beaconPointLight.position.y = 15.4;
+        watchtowerGroup.add(beaconPointLight);
+
+        // --- ROTATING SPOTLIGHT BEAM SYSTEM ---
+        const spotlightGroup = new THREE.Group();
+        spotlightGroup.position.set(0, 10.9, 0); // Position at glass deck height
+        watchtowerGroup.add(spotlightGroup);
+
+        // Dual Spotlight Beams (Cone Geometries)
+        const beamGeo = new THREE.ConeGeometry(3.5, 12, 32, 1, true);
+        beamGeo.translate(0, -6, 0); // Origin at top tip
+        beamGeo.rotateX(-Math.PI / 2.3);
+
+        const beamMat = new THREE.MeshBasicMaterial({
+            color: 0x00f0ff,
+            transparent: true,
+            opacity: 0.35,
+            side: THREE.DoubleSide,
             blending: THREE.AdditiveBlending
         });
 
-        const globeNodes = new THREE.Points(nodeGeo, nodeMat);
-        globeGroup.add(globeNodes);
+        const beamMesh1 = new THREE.Mesh(beamGeo, beamMat);
+        spotlightGroup.add(beamMesh1);
 
-        // Ambient Floating Particles
-        const particleCount = 100;
-        const particlePositions = [];
-        for (let i = 0; i < particleCount; i++) {
-            particlePositions.push(
-                (Math.random() - 0.5) * 35,
-                (Math.random() - 0.5) * 20,
-                (Math.random() - 0.5) * 20
-            );
-        }
-        const pGeo = new THREE.BufferGeometry();
-        pGeo.setAttribute('position', new THREE.Float32BufferAttribute(particlePositions, 3));
-        const pMat = new THREE.PointsMaterial({
-            color: 0x00f0ff,
-            size: 0.2,
-            transparent: true,
-            opacity: 0.5,
-            blending: THREE.AdditiveBlending
-        });
-        const particles = new THREE.Points(pGeo, pMat);
-        scene.add(particles);
+        const beamMesh2 = new THREE.Mesh(beamGeo, beamMat);
+        beamMesh2.rotation.y = Math.PI; // Opposite direction
+        spotlightGroup.add(beamMesh2);
+
+        // Active Spotlights Source
+        const spotLightSource1 = new THREE.SpotLight(0x00f0ff, 5, 25, Math.PI / 6, 0.4, 1);
+        spotLightSource1.position.set(0, 0, 0);
+        spotlightGroup.add(spotLightSource1);
+
+        // --- TWO ROTATING DYNAMIC RINGS AROUND TOWER ---
+        const ring1Group = new THREE.Group();
+        ring1Group.position.set(0, 8, 0);
+        ring1Group.rotation.x = Math.PI / 4;
+        watchtowerGroup.add(ring1Group);
+
+        const ring1Geo = new THREE.TorusGeometry(6.5, 0.08, 16, 120);
+        const ring1Mat = new THREE.MeshBasicMaterial({ color: 0x00f0ff, transparent: true, opacity: 0.85 });
+        const ring1 = new THREE.Mesh(ring1Geo, ring1Mat);
+        ring1Group.add(ring1);
+
+        const ring2Group = new THREE.Group();
+        ring2Group.position.set(0, 6, 0);
+        ring2Group.rotation.x = -Math.PI / 5;
+        watchtowerGroup.add(ring2Group);
+
+        const ring2Geo = new THREE.TorusGeometry(7.5, 0.06, 16, 120);
+        const ring2Mat = new THREE.MeshBasicMaterial({ color: 0x10b981, transparent: true, opacity: 0.75 });
+        const ring2 = new THREE.Mesh(ring2Geo, ring2Mat);
+        ring2Group.add(ring2);
 
         // --- REVOLVING HARDWARE COMPONENT SPRITES ---
         const componentNames = [
@@ -745,9 +802,9 @@
 
             sprite.scale.set(2.8, 0.7, 1);
             
-            const radius = 8.5 + Math.random() * 4;
+            const radius = 8.5 + Math.random() * 4.5;
             const angle = Math.random() * Math.PI * 2;
-            const y = (Math.random() - 0.5) * 8;
+            const y = (Math.random() - 0.5) * 10;
 
             sprite.position.set(
                 Math.cos(angle) * radius - 8,
@@ -790,18 +847,24 @@
             }
         }
 
-        // Animation Loop
+        // Continuous Dynamic Animation Loop
         const clock = new THREE.Clock();
         function animate3D() {
             requestAnimationFrame(animate3D);
 
             const elapsedTime = clock.getElapsedTime();
 
-            // Rotate Globe
-            globeGroup.rotation.y = elapsedTime * 0.15;
-            globeGroup.rotation.x = Math.sin(elapsedTime * 0.05) * 0.1;
+            // 1. Rotate Watchtower Spotlight Beam Continuously
+            spotlightGroup.rotation.y = elapsedTime * 0.8;
 
-            // Rotating Hardware Orbiters
+            // 2. Pulse Beacon Light
+            beaconPointLight.intensity = 2 + Math.sin(elapsedTime * 6) * 1.5;
+
+            // 3. Ring Rotations (Clockwise / Counter-Clockwise)
+            ring1.rotation.z = -elapsedTime * 0.6;
+            ring2.rotation.z = elapsedTime * 0.6;
+
+            // 4. Orbiting Hardware Component Nodes
             particleNodes.forEach(p => {
                 p.angle += p.speed;
                 p.mesh.position.x = Math.cos(p.angle) * p.radius - 8;
