@@ -612,7 +612,7 @@
     </div>
 
     <script>
-        // --- REALISTIC BANYAN / MANGO TECH TREE ENGINE ---
+        // --- ORIGINAL 3D CYBER TREE ENGINE ---
         const canvas = document.getElementById('webgl-canvas');
         const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true });
         renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
@@ -625,82 +625,73 @@
         camera.position.set(-8, 2, 26);
 
         // Lighting
-        scene.add(new THREE.AmbientLight(0xffffff, 1.0));
-        const dirLight = new THREE.DirectionalLight(0x00ffcc, 1.5);
+        scene.add(new THREE.AmbientLight(0xffffff, 1.2));
+        const dirLight = new THREE.DirectionalLight(0x00ffcc, 1.8);
         dirLight.position.set(10, 20, 15);
         scene.add(dirLight);
 
-        const pointLight = new THREE.PointLight(0x10b981, 2.0, 60);
+        const pointLight = new THREE.PointLight(0x10b981, 2.5, 60);
         pointLight.position.set(-8, 5, 5);
         scene.add(pointLight);
 
-        // Realistic Banyan Organic Tree Group
+        // Original Procedural Cyber Tree Structure Group
         const treeGroup = new THREE.Group();
-        treeGroup.position.set(-9, -11, 0);
+        treeGroup.position.set(-9, -8, 0);
         scene.add(treeGroup);
 
-        const barkMaterial = new THREE.MeshStandardMaterial({
-            color: 0x1f2923,
-            roughness: 0.85,
-            metalness: 0.1,
-            emissive: 0x071a13,
-            emissiveIntensity: 0.3
+        const trunkMaterial = new THREE.MeshStandardMaterial({
+            color: 0x111827,
+            roughness: 0.4,
+            metalness: 0.8,
+            wireframe: false
         });
 
-        const canopyMaterial = new THREE.MeshStandardMaterial({
+        const foliageMaterial = new THREE.MeshStandardMaterial({
             color: 0x00ffcc,
-            roughness: 0.3,
+            roughness: 0.2,
             emissive: 0x00b386,
             emissiveIntensity: 0.6,
-            transparent: true,
-            opacity: 0.88
+            wireframe: true
         });
 
-        // Banyan Trunk with Wide Roots
-        function createBanyanTree() {
-            // Main Central Thick Trunk
-            const trunkGeo = new THREE.CylinderGeometry(1.2, 2.2, 8, 16);
-            trunkGeo.translate(0, 4, 0);
-            const mainTrunk = new THREE.Mesh(trunkGeo, barkMaterial);
+        function buildOriginalCyberTree() {
+            // Main Central Trunk
+            const trunkGeo = new THREE.CylinderGeometry(0.8, 1.6, 12, 12);
+            trunkGeo.translate(0, 6, 0);
+            const mainTrunk = new THREE.Mesh(trunkGeo, trunkMaterial);
             treeGroup.add(mainTrunk);
 
-            // Wide Horizontal Limb Branches (Mango/Banyan style wide canopy)
-            const branchAngles = [0, 1.2, 2.4, 3.6, 4.8];
-            branchAngles.forEach((angle, idx) => {
-                const limbGroup = new THREE.Group();
-                limbGroup.position.set(0, 7.2, 0);
-                limbGroup.rotation.y = angle;
-                limbGroup.rotation.z = 0.65; // Wide horizontal spreading limb
+            // Cyber Canopy Node Clusters
+            const canopyGeo = new THREE.DodecahedronGeometry(3.5, 1);
+            const mainCanopy = new THREE.Mesh(canopyGeo, foliageMaterial);
+            mainCanopy.position.set(0, 13, 0);
+            treeGroup.add(mainCanopy);
 
-                const limbGeo = new THREE.CylinderGeometry(0.45, 0.85, 6, 12);
-                limbGeo.translate(0, 3, 0);
-                const limb = new THREE.Mesh(limbGeo, barkMaterial);
-                limbGroup.add(limb);
+            // Sub-branches and foliage pods
+            const branchAngles = [0, 1.57, 3.14, 4.71];
+            branchAngles.forEach((angle) => {
+                const branchGroup = new THREE.Group();
+                branchGroup.position.set(0, 9, 0);
+                branchGroup.rotation.y = angle;
+                branchGroup.rotation.z = 0.5;
 
-                // Dense Foliage Canopy Clusters (Leaves)
-                const leafSphere = new THREE.Mesh(
-                    new THREE.DodecahedronGeometry(2.2 + (idx % 2) * 0.5, 2),
-                    canopyMaterial
-                );
-                leafSphere.position.set(0, 6, 0);
-                limbGroup.add(leafSphere);
+                const branchGeo = new THREE.CylinderGeometry(0.3, 0.5, 5, 8);
+                branchGeo.translate(0, 2.5, 0);
+                const branch = new THREE.Mesh(branchGeo, trunkMaterial);
+                branchGroup.add(branch);
 
-                // Hanging Aerial Prop Roots (Classic Banyan Feature)
-                const propRoot = new THREE.Mesh(
-                    new THREE.CylinderGeometry(0.08, 0.05, 7, 8),
-                    barkMaterial
-                );
-                propRoot.position.set(0.8, 2.5, 0);
-                propRoot.rotation.z = -0.65; // Hanging straight down
-                limbGroup.add(propRoot);
+                const podGeo = new THREE.DodecahedronGeometry(1.6, 1);
+                const pod = new THREE.Mesh(podGeo, foliageMaterial);
+                pod.position.set(0, 5, 0);
+                branchGroup.add(pod);
 
-                treeGroup.add(limbGroup);
+                treeGroup.add(branchGroup);
             });
         }
 
-        createBanyanTree();
+        buildOriginalCyberTree();
 
-        // --- SLOWED DOWN FLYING HARDWARE PARTICLES SYSTEM ---
+        // --- REVOLVING FLYING HARDWARE PARTICLES SYSTEM ---
         const componentNames = [
             "💻 LAPTOP", "🔳 CPU", "📟 MOTHERBOARD", "🎮 RTX GPU", 
             "⚡ IC CIRCUIT", "🎴 RAM STICK", "💾 SSD / MEMORY", "📱 TABLET", "📲 SMARTPHONE"
@@ -739,26 +730,26 @@
 
             sprite.scale.set(3.0, 0.75, 1);
             
-            const radius = 7 + Math.random() * 9;
+            const radius = 6 + Math.random() * 8;
             const angle = Math.random() * Math.PI * 2;
-            const y = Math.random() * 15 - 6;
+            const y = Math.random() * 14 - 4;
 
             sprite.position.set(
-                Math.cos(angle) * radius - 8,
+                Math.cos(angle) * radius - 9,
                 y,
                 Math.sin(angle) * radius
             );
 
             hardwareParticlesGroup.add(sprite);
 
-            // SIGNIFICANTLY REDUCED SPEED (Gentle, smooth glide)
+            // ACTIVE REVOLVING SPEED
             particleNodes.push({
                 mesh: sprite,
                 angle: angle,
                 radius: radius,
-                speed: 0.0012 + Math.random() * 0.0018, // Slowed down by 70%
+                speed: 0.005 + Math.random() * 0.006, // Restored dynamic orbiting revolution
                 yBase: y,
-                yFreq: 0.2 + Math.random() * 0.3
+                yFreq: 0.5 + Math.random() * 0.5
             });
         }
 
@@ -792,15 +783,15 @@
 
             const elapsedTime = clock.getElapsedTime();
 
-            // Very slow ambient tree sway
-            treeGroup.rotation.y = Math.sin(elapsedTime * 0.15) * 0.08 + (mouseX * 0.15);
+            // Tree Slow Rotation
+            treeGroup.rotation.y = elapsedTime * 0.2 + (mouseX * 0.2);
 
-            // Smooth & Slow Orbiting Hardware Components
+            // Revolving Hardware Components Orbiting Tree
             particleNodes.forEach(p => {
                 p.angle += p.speed;
-                p.mesh.position.x = Math.cos(p.angle) * p.radius - 8;
+                p.mesh.position.x = Math.cos(p.angle) * p.radius - 9;
                 p.mesh.position.z = Math.sin(p.angle) * p.radius;
-                p.mesh.position.y = p.yBase + Math.sin(elapsedTime * p.yFreq) * 0.5;
+                p.mesh.position.y = p.yBase + Math.sin(elapsedTime * p.yFreq) * 0.6;
             });
 
             // Smooth Interpolated Camera Panning
