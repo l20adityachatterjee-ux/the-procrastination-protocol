@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>The Procrastination Protocol</title>
+    <style>
+        body { font-family: Arial, sans-serif; max-width: 500px; margin: 40px auto; padding: 20px; border: 1px solid #ccc; border-radius: 8px; }
+        .result { margin-top: 20px; padding: 15px; background-color: #e8f5e9; font-weight: bold; }
+        button { background-color: #2e7d32; color: white; padding: 10px 15px; border: none; cursor: pointer; border-radius: 4px; }
+    </style>
+</head>
+<body>
+    <h2>The Procrastination Protocol ♻️</h2>
+    <p>Circular Electronics Marketplace</p>
+    <hr>
+    
+    <label><input type="checkbox" id="repairable"> Device is repairable (minor fault)?</label><br><br>
+    <label><input type="checkbox" id="reusable"> Device is working / good condition?</label><br><br>
+    <label><input type="checkbox" id="refurbishable"> Device has recoverable damage?</label><br><br>
+    
+    <button onclick="assessDevice()">Get Pathway</button>
+
+    <div id="result" class="result" style="display:none;"></div>
+
+    <script>
+        async function assessDevice() {
+            const body = {
+                is_repairable: document.getElementById('repairable').checked,
+                is_reusable: document.getElementById('reusable').checked,
+                is_refurbishable: document.getElementById('refurbishable').checked
+            };
+
+            const res = await fetch('http://127.0.0.1:8000/api/assess', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(body)
+            });
+
+            const data = await res.json();
+            const resultDiv = document.getElementById('result');
+            resultDiv.style.display = 'block';
+            resultDiv.innerText = "Recommended Pathway: " + data.recommended_pathway;
+        }
+    </script>
+</body>
+</html>
