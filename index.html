@@ -8,9 +8,9 @@
         :root {
             --primary: #10b981;
             --primary-dark: #059669;
-            --accent: #f59e0b;
-            --bg-dark: #0f172a;
-            --card-bg: rgba(30, 41, 59, 0.7);
+            --accent: #00f0ff;
+            --bg-dark: #070b14;
+            --card-bg: rgba(15, 23, 42, 0.75);
             --text-light: #f8fafc;
         }
 
@@ -24,7 +24,7 @@
             overflow-x: hidden;
         }
 
-        /* Interactive Dynamic Canvas */
+        /* Vibrant Dynamic Background Canvas */
         #bg-canvas {
             position: fixed;
             top: 0;
@@ -48,10 +48,10 @@
         }
 
         h1 {
-            color: var(--primary);
-            font-size: 2.2rem;
+            color: #00ffcc;
+            font-size: 2.5rem;
             margin-bottom: 5px;
-            text-shadow: 0 0 15px rgba(16, 185, 129, 0.3);
+            text-shadow: 0 0 20px rgba(0, 255, 204, 0.6);
         }
 
         /* Glassmorphism Modals */
@@ -61,7 +61,7 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(15, 23, 42, 0.85);
+            background: rgba(7, 11, 20, 0.85);
             backdrop-filter: blur(8px);
             display: flex;
             justify-content: center;
@@ -70,14 +70,14 @@
         }
 
         .modal-card {
-            background: rgba(30, 41, 59, 0.9);
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            background: rgba(15, 23, 42, 0.9);
+            border: 1px solid rgba(0, 255, 204, 0.3);
             padding: 30px;
             border-radius: 16px;
             text-align: center;
             max-width: 450px;
             width: 90%;
-            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.5);
+            box-shadow: 0 0 30px rgba(0, 255, 204, 0.2);
         }
 
         .user-bar {
@@ -85,11 +85,12 @@
             justify-content: space-between;
             align-items: center;
             background: rgba(16, 185, 129, 0.15);
-            border: 1px solid rgba(16, 185, 129, 0.3);
+            border: 1px solid rgba(0, 255, 204, 0.4);
             padding: 12px 20px;
             border-radius: 10px;
             margin-bottom: 20px;
             font-weight: 600;
+            box-shadow: 0 0 15px rgba(0, 255, 204, 0.1);
         }
 
         /* Navigation Tabs */
@@ -115,9 +116,9 @@
         }
 
         .tab-btn.active, .tab-btn:hover {
-            background: var(--primary);
+            background: #00ffcc;
             color: #000;
-            box-shadow: 0 0 10px rgba(16, 185, 129, 0.4);
+            box-shadow: 0 0 15px rgba(0, 255, 204, 0.5);
         }
 
         .section {
@@ -126,8 +127,8 @@
             backdrop-filter: blur(12px);
             padding: 25px;
             border-radius: 16px;
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(0, 255, 204, 0.2);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
         }
 
         .section.active { display: block; }
@@ -150,8 +151,8 @@
             width: 100%;
             padding: 10px 12px;
             box-sizing: border-box;
-            background: rgba(15, 23, 42, 0.6);
-            border: 1px solid rgba(255, 255, 255, 0.15);
+            background: rgba(7, 11, 20, 0.8);
+            border: 1px solid rgba(0, 255, 204, 0.3);
             border-radius: 8px;
             color: #fff;
             outline: none;
@@ -159,12 +160,13 @@
         }
 
         input:focus, select:focus {
-            border-color: var(--primary);
+            border-color: #00ffcc;
+            box-shadow: 0 0 10px rgba(0, 255, 204, 0.3);
         }
 
         button.action-btn {
-            background: var(--primary);
-            color: #0f172a;
+            background: #00ffcc;
+            color: #070b14;
             font-weight: 700;
             padding: 12px;
             border: none;
@@ -172,12 +174,13 @@
             border-radius: 8px;
             font-size: 1rem;
             width: 100%;
-            transition: transform 0.1s, background 0.2s;
+            transition: transform 0.1s, background 0.2s, box-shadow 0.2s;
         }
 
         button.action-btn:hover {
-            background: var(--primary-dark);
+            background: #00cc99;
             transform: translateY(-1px);
+            box-shadow: 0 0 15px rgba(0, 255, 204, 0.4);
         }
 
         button.logout-btn {
@@ -193,8 +196,8 @@
         .result-box {
             margin-top: 15px;
             padding: 15px;
-            background: rgba(16, 185, 129, 0.1);
-            border: 1px solid var(--primary);
+            background: rgba(0, 255, 204, 0.08);
+            border: 1px solid #00ffcc;
             border-radius: 8px;
             text-align: left;
         }
@@ -208,8 +211,8 @@
         }
 
         .card {
-            background: rgba(15, 23, 42, 0.8);
-            border: 1px solid rgba(255, 255, 255, 0.08);
+            background: rgba(15, 23, 42, 0.85);
+            border: 1px solid rgba(255, 255, 255, 0.1);
             border-radius: 12px;
             padding: 16px;
             transition: transform 0.2s, box-shadow 0.2s;
@@ -218,8 +221,8 @@
 
         .card:hover {
             transform: translateY(-4px);
-            box-shadow: 0 12px 20px -5px rgba(0, 0, 0, 0.5);
-            border-color: rgba(16, 185, 129, 0.4);
+            box-shadow: 0 0 20px rgba(0, 255, 204, 0.3);
+            border-color: rgba(0, 255, 204, 0.5);
         }
 
         .card img {
@@ -233,13 +236,13 @@
         .price-tag {
             font-size: 1.2rem;
             font-weight: bold;
-            color: var(--primary);
+            color: #00ffcc;
             margin: 8px 0;
         }
 
         .payout-tag {
             font-size: 0.9rem;
-            color: var(--accent);
+            color: #ffb703;
             font-weight: 600;
         }
 
@@ -263,17 +266,17 @@
         }
 
         .stat-card {
-            background: rgba(15, 23, 42, 0.6);
+            background: rgba(15, 23, 42, 0.7);
             padding: 15px;
             border-radius: 10px;
-            border: 1px solid rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(0, 255, 204, 0.2);
             text-align: center;
         }
 
         .stat-card h3 {
             margin: 5px 0 0 0;
             font-size: 1.8rem;
-            color: var(--primary);
+            color: #00ffcc;
         }
 
         .empty-msg {
@@ -287,7 +290,7 @@
 </head>
 <body>
 
-    <!-- Dynamic Cursor Light Canvas -->
+    <!-- Dynamic Canvas Background (Tech Tree + Floating Electronics + Cursor Tracer) -->
     <canvas id="bg-canvas"></canvas>
 
     <div class="container">
@@ -323,7 +326,7 @@
             <div class="modal-card">
                 <h2>Checkout & Payment 💳</h2>
                 <p id="checkout-item-name" style="color: #94a3b8;">Item Name</p>
-                <h3 id="checkout-item-price" style="color: var(--primary); font-size: 1.8rem; margin: 5px 0 15px 0;">$0.00</h3>
+                <h3 id="checkout-item-price" style="color: #00ffcc; font-size: 1.8rem; margin: 5px 0 15px 0;">$0.00</h3>
                 <form onsubmit="processPayment(event)">
                     <div class="form-group">
                         <label>Cardholder Name</label>
@@ -424,7 +427,7 @@
                 </div>
                 <div class="result-box">
                     <strong>Estimated Seller Cash Back:</strong> 
-                    <span id="seller-payout" style="font-size: 1.3rem; color: var(--primary); font-weight: bold;">$0.00</span>
+                    <span id="seller-payout" style="font-size: 1.3rem; color: #00ffcc; font-weight: bold;">$0.00</span>
                 </div>
                 <br>
                 <button type="submit" class="action-btn">Upload & Publish Listing</button>
@@ -470,10 +473,9 @@
     </div>
 
     <script>
-        // Interactive Cursor Canvas Background
+        // --- VIBRANT ANIMATED CANVAS: TECH TREE + FLOATING ELECTRONICS + CURSOR TRACER ---
         const canvas = document.getElementById('bg-canvas');
         const ctx = canvas.getContext('2d');
-        let mouse = { x: window.innerWidth / 2, y: window.innerHeight / 2 };
 
         function resizeCanvas() {
             canvas.width = window.innerWidth;
@@ -482,18 +484,108 @@
         window.addEventListener('resize', resizeCanvas);
         resizeCanvas();
 
+        // 1. Cursor Tracer
+        let trail = [];
         window.addEventListener('mousemove', (e) => {
-            mouse.x = e.clientX;
-            mouse.y = e.clientY;
+            trail.push({ x: e.clientX, y: e.clientY, size: 10, alpha: 1 });
         });
+
+        // 2. Tech Tree Electronics Generator
+        const electronicIcons = ['💻 Laptop', '📱 Phone', '🔲 CPU', '🎮 RTX GPU', '📟 Diode', '📟 Motherboard', '📲 Tablet'];
+        let floatingElectronics = [];
+
+        class FloatingDevice {
+            constructor(startX, startY) {
+                this.x = startX;
+                this.y = startY;
+                this.text = electronicIcons[Math.floor(Math.random() * electronicIcons.length)];
+                this.vx = (Math.random() - 0.2) * 2 + 1; // Float rightwards
+                this.vy = (Math.random() - 0.5) * 1.5;
+                this.alpha = 1;
+                this.size = Math.random() * 12 + 14;
+            }
+
+            update() {
+                this.x += this.vx;
+                this.y += this.vy;
+                this.alpha -= 0.005;
+            }
+
+            draw() {
+                ctx.save();
+                ctx.globalAlpha = Math.max(0, this.alpha);
+                ctx.font = `${this.size}px Segoe UI, sans-serif`;
+                ctx.fillStyle = "#00ffcc";
+                ctx.shadowColor = "#00ffcc";
+                ctx.shadowBlur = 10;
+                ctx.fillText(this.text, this.x, this.y);
+                ctx.restore();
+            }
+        }
+
+        // Draw Glowing Tech Tree Structure
+        function drawTree(startX, startY, len, angle, branchWidth) {
+            ctx.beginPath();
+            ctx.save();
+            ctx.strokeStyle = '#10b981';
+            ctx.shadowColor = '#00ffcc';
+            ctx.shadowBlur = 12;
+            ctx.lineWidth = branchWidth;
+            ctx.translate(startX, startY);
+            ctx.rotate(angle * Math.PI / 180);
+            ctx.moveTo(0, 0);
+            ctx.lineTo(0, -len);
+            ctx.stroke();
+
+            if (len < 12) {
+                // Emit floating device from branch tip
+                if (Math.random() < 0.03) {
+                    const pos = ctx.getTransform();
+                    floatingElectronics.push(new FloatingDevice(pos.e, pos.f));
+                }
+                ctx.restore();
+                return;
+            }
+
+            drawTree(0, -len, len * 0.75, angle + 22, branchWidth * 0.7);
+            drawTree(0, -len, len * 0.75, angle - 22, branchWidth * 0.7);
+            ctx.restore();
+        }
 
         function animateCanvas() {
             ctx.clearRect(0, 0, canvas.width, canvas.height);
-            let gradient = ctx.createRadialGradient(mouse.x, mouse.y, 10, mouse.x, mouse.y, 350);
-            gradient.addColorStop(0, 'rgba(16, 185, 129, 0.15)');
-            gradient.addColorStop(1, 'rgba(15, 23, 42, 0)');
-            ctx.fillStyle = gradient;
-            ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            // Draw Dynamic Cyber Tree on Left
+            drawTree(canvas.width * 0.1, canvas.height, canvas.height * 0.22, 0, 10);
+
+            // Update & Render Floating Electronic Components
+            for (let i = floatingElectronics.length - 1; i >= 0; i--) {
+                const dev = floatingElectronics[i];
+                dev.update();
+                dev.draw();
+                if (dev.alpha <= 0 || dev.x > canvas.width || dev.y < 0 || dev.y > canvas.height) {
+                    floatingElectronics.splice(i, 1);
+                }
+            }
+
+            // Update & Render Glowing Cursor Tracer
+            for (let i = trail.length - 1; i >= 0; i--) {
+                const p = trail[i];
+                p.alpha -= 0.03;
+                p.size *= 0.95;
+
+                ctx.beginPath();
+                ctx.arc(p.x, p.y, Math.max(1, p.size), 0, Math.PI * 2);
+                ctx.fillStyle = `rgba(0, 255, 204, ${Math.max(0, p.alpha)})`;
+                ctx.shadowColor = '#00ffcc';
+                ctx.shadowBlur = 15;
+                ctx.fill();
+
+                if (p.alpha <= 0) {
+                    trail.splice(i, 1);
+                }
+            }
+
             requestAnimationFrame(animateCanvas);
         }
         animateCanvas();
@@ -660,7 +752,6 @@
             e.preventDefault();
             const email = document.getElementById('pay-email').value.toLowerCase().trim();
 
-            // Strict Gmail or Yahoo Email Verification
             if (!email.endsWith('@gmail.com') && !email.endsWith('@yahoo.com')) {
                 alert("Please provide a valid Gmail (@gmail.com) or Yahoo (@yahoo.com) address.");
                 return;
@@ -697,7 +788,7 @@
                 grid.innerHTML += `
                     <div class="card">
                         <img src="${item.image}" alt="${item.name}">
-                        <span class="badge" style="background:rgba(16, 185, 129, 0.2); color:var(--primary);">Order Confirmed</span>
+                        <span class="badge" style="background:rgba(0, 255, 204, 0.2); color:#00ffcc;">Order Confirmed</span>
                         <h4 style="margin: 5px 0;">${item.name}</h4>
                         <p style="margin: 0; font-size:0.85rem; color:#94a3b8;">Category: ${item.category}</p>
                         <div class="price-tag">Amount Paid: $${item.price}</div>
@@ -727,7 +818,7 @@
                 grid.innerHTML += `
                     <div class="card">
                         <img src="${item.image}" alt="${item.name}">
-                        <span class="badge" style="background:${item.status === 'Active' ? 'rgba(16, 185, 129, 0.2)' : 'rgba(239, 68, 68, 0.2)'}">${item.status}</span>
+                        <span class="badge" style="background:${item.status === 'Active' ? 'rgba(0, 255, 204, 0.2)' : 'rgba(239, 68, 68, 0.2)'}">${item.status}</span>
                         <h4 style="margin: 5px 0;">${item.name}</h4>
                         <p style="margin:0; font-size:0.85rem; color:#94a3b8;">${item.category}</p>
                         <div class="price-tag">$${item.price}</div>
