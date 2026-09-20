@@ -12,8 +12,8 @@
         :root {
             --primary: #10b981;
             --accent: #00ffcc;
-            --bg-dark: #050811;
-            --card-bg: rgba(10, 16, 30, 0.82);
+            --bg-dark: #030712;
+            --card-bg: rgba(10, 16, 30, 0.85);
             --text-light: #f8fafc;
         }
 
@@ -42,9 +42,9 @@
             pointer-events: none;
         }
 
-        /* UI Container (Right-aligned so 3D Tree is clear) */
+        /* UI Container */
         .container {
-            max-width: 820px;
+            max-width: 850px;
             margin-left: auto;
             margin-right: 20px;
             position: relative;
@@ -64,7 +64,7 @@
 
         h1 {
             color: #00ffcc;
-            font-size: 2.3rem;
+            font-size: 2.2rem;
             margin-bottom: 5px;
             text-shadow: 0 0 20px rgba(0, 255, 204, 0.6);
         }
@@ -76,8 +76,8 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(5, 8, 17, 0.88);
-            backdrop-filter: blur(12px);
+            background: rgba(3, 7, 18, 0.90);
+            backdrop-filter: blur(14px);
             display: flex;
             justify-content: center;
             align-items: center;
@@ -92,7 +92,7 @@
             text-align: center;
             max-width: 450px;
             width: 90%;
-            box-shadow: 0 0 30px rgba(0, 255, 204, 0.3);
+            box-shadow: 0 0 35px rgba(0, 255, 204, 0.3);
         }
 
         .user-bar {
@@ -137,7 +137,17 @@
             transform: translateY(-2px);
         }
 
-        /* 3D Dynamic Card Sections */
+        .tab-btn.admin-tab {
+            border: 1px solid #ffb703;
+            color: #ffb703;
+        }
+        .tab-btn.admin-tab.active {
+            background: #ffb703;
+            color: #000;
+            box-shadow: 0 0 15px rgba(255, 183, 3, 0.6);
+        }
+
+        /* Card Sections */
         .section {
             display: none;
             background: var(--card-bg);
@@ -157,7 +167,7 @@
             transform: translateY(0) scale(1);
         }
 
-        /* Forms */
+        /* Forms & Inputs */
         .form-group {
             margin-bottom: 16px;
             text-align: left;
@@ -279,7 +289,7 @@
             margin-bottom: 8px;
         }
 
-        /* Dashboard Stats */
+        /* Dashboard & Admin Tables */
         .dashboard-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
@@ -298,6 +308,24 @@
         .stat-card h3 {
             margin: 5px 0 0 0;
             font-size: 1.8rem;
+            color: #00ffcc;
+        }
+
+        .admin-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+            font-size: 0.9rem;
+        }
+
+        .admin-table th, .admin-table td {
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 10px;
+            text-align: left;
+        }
+
+        .admin-table th {
+            background: rgba(0, 255, 204, 0.1);
             color: #00ffcc;
         }
 
@@ -325,18 +353,23 @@
         <div id="login-modal" class="modal-overlay">
             <div class="modal-card">
                 <h2>Welcome Back</h2>
-                <p style="color: #94a3b8; font-size: 0.9rem;">Select your role to access the portal</p>
+                <p style="color: #94a3b8; font-size: 0.9rem;">Select your portal role</p>
                 <form onsubmit="handleLogin(event)">
                     <div class="form-group">
                         <label>Select Role</label>
-                        <select id="user-role">
+                        <select id="user-role" onchange="toggleAdminPasskey()">
                             <option value="Buyer">Buyer</option>
                             <option value="Seller">Seller</option>
+                            <option value="Admin">System Administrator</option>
                         </select>
                     </div>
                     <div class="form-group">
                         <label>Username / Email</label>
                         <input type="text" id="username" required placeholder="Enter username">
+                    </div>
+                    <div class="form-group" id="admin-pass-group" style="display:none;">
+                        <label>Admin Passkey</label>
+                        <input type="password" id="admin-passkey" placeholder="Enter admin passkey (default: admin123)">
                     </div>
                     <button type="submit" class="action-btn">Enter Marketplace</button>
                 </form>
@@ -392,6 +425,7 @@
             <button id="btn-tab-sell" class="tab-btn" onclick="switchTab('sell')">Upload Device (Sell)</button>
             <button id="btn-tab-dashboard" class="tab-btn" onclick="switchTab('dashboard')">Seller Dashboard</button>
             <button id="btn-tab-assess" class="tab-btn" onclick="switchTab('assess')">Condition Assessment</button>
+            <button id="btn-tab-admin" class="tab-btn admin-tab" onclick="switchTab('admin')" style="display:none;">🛡️ Admin Portal</button>
         </div>
 
         <!-- Tab 1: Marketplace (Buy) -->
@@ -416,18 +450,24 @@
                         <option value="Laptop">Laptop</option>
                         <option value="Smartphone">Smartphone</option>
                         <option value="Tablet">Tablet</option>
+                        <option value="CPU / Processor">CPU / Processor</option>
+                        <option value="GPU / RTX Card">GPU / RTX Card</option>
+                        <option value="Motherboard">Motherboard</option>
+                        <option value="RAM Stick">RAM Stick</option>
+                        <option value="Secondary Memory (SSD/HDD)">Secondary Memory (SSD/HDD)</option>
+                        <option value="Integrated Circuits">Integrated Circuits</option>
                         <option value="Others">Others (Custom Component)</option>
                     </select>
                 </div>
 
                 <div class="form-group" id="custom-cat-group" style="display: none;">
                     <label>Specify Custom Item Type</label>
-                    <input type="text" id="dev-custom-cat" placeholder="e.g. RTX 3080 GPU, CPU, Silicon Diode, Motherboard">
+                    <input type="text" id="dev-custom-cat" placeholder="e.g. Diode array, Power Supply">
                 </div>
 
                 <div class="form-group">
                     <label>Device / Component Name</label>
-                    <input type="text" id="dev-name" placeholder="e.g. Dell G15 / Nvidia RTX 3060" required>
+                    <input type="text" id="dev-name" placeholder="e.g. Dell G15 / Nvidia RTX 3060 / i7 12700K" required>
                 </div>
                 <div class="form-group">
                     <label>Product Picture</label>
@@ -491,10 +531,59 @@
             <button class="action-btn" onclick="assessDevice()">Evaluate Pathway</button>
             <div id="assess-result" class="result-box" style="display:none;"></div>
         </div>
+
+        <!-- Tab 6: Admin Portal (Restricted) -->
+        <div id="tab-admin" class="section">
+            <h2 style="color: #ffb703;">🛡️ System Administrator Portal</h2>
+            <p style="color: #94a3b8;">Overview of all registered platform buyers, sellers, and transactions.</p>
+            
+            <div class="dashboard-grid">
+                <div class="stat-card">
+                    <p style="color:#94a3b8; margin:0;">Total Users</p>
+                    <h3 id="admin-total-users" style="color: #ffb703;">0</h3>
+                </div>
+                <div class="stat-card">
+                    <p style="color:#94a3b8; margin:0;">Total Transactions</p>
+                    <h3 id="admin-total-sales" style="color: #ffb703;">0</h3>
+                </div>
+                <div class="stat-card">
+                    <p style="color:#94a3b8; margin:0;">Platform Volume</p>
+                    <h3 id="admin-total-volume" style="color: #ffb703;">$0.00</h3>
+                </div>
+            </div>
+
+            <h3>Sellers Directory</h3>
+            <table class="admin-table">
+                <thead>
+                    <tr>
+                        <th>Seller Name</th>
+                        <th>Listings Created</th>
+                        <th>Items Sold</th>
+                        <th>Total Payout Earned</th>
+                    </tr>
+                </thead>
+                <tbody id="admin-sellers-table"></tbody>
+            </table>
+
+            <br>
+            <h3>Buyers & Orders Directory</h3>
+            <table class="admin-table">
+                <thead>
+                    <tr>
+                        <th>Buyer Name</th>
+                        <th>Email</th>
+                        <th>Purchased Component</th>
+                        <th>Price Paid</th>
+                        <th>Seller</th>
+                    </tr>
+                </thead>
+                <tbody id="admin-buyers-table"></tbody>
+            </table>
+        </div>
     </div>
 
     <script>
-        // --- HIGH-PERFORMANCE 3D ENGINE (THREE.JS) ---
+        // --- 3D ENGINE & REALISTIC HARDWARE COMPONENT PARTICLES ---
         const canvas = document.getElementById('webgl-canvas');
         const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true });
         renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
@@ -502,118 +591,167 @@
 
         const scene = new THREE.Scene();
 
-        // 3D Camera Setup
         const camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 1000);
         let targetCameraPos = { x: -8, y: 1, z: 24 };
         camera.position.set(-8, 1, 24);
 
-        // Lighting
-        const ambientLight = new THREE.AmbientLight(0xffffff, 0.8);
-        scene.add(ambientLight);
-
-        const dirLight = new THREE.DirectionalLight(0x00ffcc, 1.5);
+        // Lights
+        scene.add(new THREE.AmbientLight(0xffffff, 0.9));
+        const dirLight = new THREE.DirectionalLight(0x00ffcc, 1.8);
         dirLight.position.set(10, 20, 15);
         scene.add(dirLight);
 
-        const pointLight = new THREE.PointLight(0x10b981, 2, 50);
+        const pointLight = new THREE.PointLight(0x10b981, 2.5, 60);
         pointLight.position.set(-8, 5, 5);
         scene.add(pointLight);
 
-        // Tech Tree Group
+        // Realistic Organic Tech Tree Group
         const treeGroup = new THREE.Group();
-        treeGroup.position.set(-9, -10, 0);
+        treeGroup.position.set(-9, -11, 0);
         scene.add(treeGroup);
 
-        // Materials
-        const branchMaterial = new THREE.MeshStandardMaterial({
-            color: 0x10b981,
-            roughness: 0.3,
-            metalness: 0.8,
-            emissive: 0x059669,
-            emissiveIntensity: 0.4
+        const barkMaterial = new THREE.MeshStandardMaterial({
+            color: 0x0a2e23,
+            roughness: 0.7,
+            metalness: 0.3,
+            emissive: 0x031c15,
+            emissiveIntensity: 0.5
         });
 
         const leafMaterial = new THREE.MeshStandardMaterial({
             color: 0x00ffcc,
-            roughness: 0.1,
+            roughness: 0.2,
             emissive: 0x00ffcc,
-            emissiveIntensity: 0.8
+            emissiveIntensity: 0.9,
+            side: THREE.DoubleSide,
+            transparent: true,
+            opacity: 0.85
         });
 
-        // Procedural 3D Recursive Tree Generation
-        function build3DBranch(parent, length, radius, depth) {
-            if (depth > 6) return;
+        // Organic Recursive Tree Construction
+        function createRealisticBranch(parent, length, radius, depth) {
+            if (depth > 5) return;
 
-            const geometry = new THREE.CylinderGeometry(radius * 0.7, radius, length, 8);
+            const geometry = new THREE.CylinderGeometry(radius * 0.68, radius, length, 12);
             geometry.translate(0, length / 2, 0);
-            const branch = new THREE.Mesh(geometry, branchMaterial);
+            const branch = new THREE.Mesh(geometry, barkMaterial);
 
             parent.add(branch);
 
-            if (depth === 6) {
-                // Add glowing 3D circuit node sphere at branch tip
-                const nodeGeo = new THREE.SphereGeometry(0.35, 12, 12);
-                const nodeMesh = new THREE.Mesh(nodeGeo, leafMaterial);
-                nodeMesh.position.set(0, length, 0);
-                branch.add(nodeMesh);
-                return;
+            if (depth >= 4) {
+                // Add foliage leaves around upper branches
+                const leafCount = 4;
+                for (let j = 0; j < leafCount; j++) {
+                    const leafGeo = new THREE.PlaneGeometry(0.6, 1.2);
+                    const leaf = new THREE.Mesh(leafGeo, leafMaterial);
+                    leaf.position.set(
+                        (Math.random() - 0.5) * 0.8,
+                        length + (Math.random() - 0.5) * 0.5,
+                        (Math.random() - 0.5) * 0.8
+                    );
+                    leaf.rotation.set(Math.random() * Math.PI, Math.random() * Math.PI, 0);
+                    branch.add(leaf);
+                }
             }
 
-            // Split into 2-3 child branches in 3D Space
-            const branchCount = 2;
+            if (depth === 5) return;
+
+            const branchCount = 2 + Math.floor(Math.random() * 2);
             for (let i = 0; i < branchCount; i++) {
                 const subGroup = new THREE.Group();
-                subGroup.position.set(0, length, 0);
-                
-                const angleX = (Math.random() - 0.5) * 0.8 + (i === 0 ? 0.4 : -0.4);
-                const angleZ = (Math.random() - 0.5) * 0.8 + (i === 1 ? 0.4 : -0.4);
-                
+                subGroup.position.set(0, length * 0.92, 0);
+
+                const angleX = (Math.random() - 0.5) * 0.7 + (i % 2 === 0 ? 0.35 : -0.35);
+                const angleZ = (Math.random() - 0.5) * 0.7 + (i > 1 ? 0.35 : -0.35);
+
                 subGroup.rotation.x = angleX;
                 subGroup.rotation.z = angleZ;
 
                 branch.add(subGroup);
-                build3DBranch(subGroup, length * 0.75, radius * 0.7, depth + 1);
+                createRealisticBranch(subGroup, length * 0.72, radius * 0.65, depth + 1);
             }
         }
 
-        build3DBranch(treeGroup, 6, 0.6, 0);
+        createRealisticBranch(treeGroup, 6.5, 0.75, 0);
 
-        // 3D Floating Particle Cloud around tree
-        const particleCount = 120;
-        const particleGeo = new THREE.BufferGeometry();
-        const positions = new Float32Array(particleCount * 3);
+        // --- FLYING HARDWARE PARTICLES SYSTEM ---
+        // (Laptop, CPU, Motherboard, RTX, IC Circuits, RAM, Secondary Memory, Tablet, Phone)
+        const componentNames = [
+            "💻 LAPTOP", "🔳 CPU", "📟 MOTHERBOARD", "🎮 RTX GPU", 
+            "⚡ IC CIRCUIT", "🎴 RAM STICK", "💾 SSD / MEMORY", "📱 TABLET", "📲 SMARTPHONE"
+        ];
 
-        for (let i = 0; i < particleCount * 3; i += 3) {
-            positions[i] = (Math.random() - 0.5) * 15 - 9;
-            positions[i + 1] = Math.random() * 18 - 8;
-            positions[i + 2] = (Math.random() - 0.5) * 15;
+        function createComponentTexture(text) {
+            const canvas = document.createElement('canvas');
+            canvas.width = 256;
+            canvas.height = 64;
+            const ctx = canvas.getContext('2d');
+            ctx.fillStyle = 'rgba(10, 20, 35, 0.85)';
+            ctx.fillRect(0, 0, 256, 64);
+            ctx.strokeStyle = '#00ffcc';
+            ctx.lineWidth = 3;
+            ctx.strokeRect(2, 2, 252, 60);
+            ctx.fillStyle = '#00ffcc';
+            ctx.font = 'Bold 18px Segoe UI, sans-serif';
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+            ctx.fillText(text, 128, 32);
+
+            const texture = new THREE.CanvasTexture(canvas);
+            return texture;
         }
 
-        particleGeo.setAttribute('position', new THREE.BufferAttribute(positions, 3));
-        const particleMat = new THREE.PointsMaterial({
-            color: 0x00ffcc,
-            size: 0.25,
-            transparent: true,
-            opacity: 0.8
-        });
+        const hardwareParticlesGroup = new THREE.Group();
+        scene.add(hardwareParticlesGroup);
 
-        const particleSystem = new THREE.Points(particleGeo, particleMat);
-        scene.add(particleSystem);
+        const hardwareParticleCount = 28;
+        const particleNodes = [];
 
-        // Mouse Parallax Effect
+        for (let i = 0; i < hardwareParticleCount; i++) {
+            const name = componentNames[i % componentNames.length];
+            const texture = createComponentTexture(name);
+            const mat = new THREE.SpriteMaterial({ map: texture, transparent: true, opacity: 0.9 });
+            const sprite = new THREE.Sprite(mat);
+
+            sprite.scale.set(3.2, 0.8, 1);
+            
+            const radius = 6 + Math.random() * 10;
+            const angle = Math.random() * Math.PI * 2;
+            const y = Math.random() * 16 - 8;
+
+            sprite.position.set(
+                Math.cos(angle) * radius - 8,
+                y,
+                Math.sin(angle) * radius
+            );
+
+            hardwareParticlesGroup.add(sprite);
+
+            particleNodes.push({
+                mesh: sprite,
+                angle: angle,
+                radius: radius,
+                speed: 0.005 + Math.random() * 0.01,
+                yBase: y,
+                yFreq: 0.5 + Math.random()
+            });
+        }
+
+        // Parallax Mouse Interaction
         let mouseX = 0, mouseY = 0;
         window.addEventListener('mousemove', (e) => {
             mouseX = (e.clientX / window.innerWidth - 0.5) * 2;
             mouseY = (e.clientY / window.innerHeight - 0.5) * 2;
         });
 
-        // Smooth Camera Transition on Tab Switch
+        // 3D Camera Nav Preset Views
         const cameraPresets = {
             buy: { x: -8, y: 1, z: 24 },
             purchases: { x: -6, y: 3, z: 22 },
             sell: { x: -10, y: -1, z: 26 },
             dashboard: { x: -7, y: 4, z: 20 },
-            assess: { x: -8, y: 0, z: 25 }
+            assess: { x: -8, y: 0, z: 25 },
+            admin: { x: -4, y: 5, z: 18 }
         };
 
         function update3DCamera(tabName) {
@@ -623,23 +761,29 @@
         }
 
         // Render Loop
-        let clock = new THREE.Clock();
+        const clock = new THREE.Clock();
         function animate3D() {
             requestAnimationFrame(animate3D);
 
             const elapsedTime = clock.getElapsedTime();
 
-            // Rotate Tree & Particles smoothly
-            treeGroup.rotation.y = Math.sin(elapsedTime * 0.3) * 0.15 + (mouseX * 0.2);
-            particleSystem.rotation.y = elapsedTime * 0.05;
+            // Rotate Main Tree
+            treeGroup.rotation.y = Math.sin(elapsedTime * 0.25) * 0.12 + (mouseX * 0.2);
 
-            // Smooth Interpolation for Camera Transitions
+            // Animate Flying Hardware Particles
+            particleNodes.forEach(p => {
+                p.angle += p.speed;
+                p.mesh.position.x = Math.cos(p.angle) * p.radius - 8;
+                p.mesh.position.z = Math.sin(p.angle) * p.radius;
+                p.mesh.position.y = p.yBase + Math.sin(elapsedTime * p.yFreq) * 0.8;
+            });
+
+            // Smooth Interpolated Camera Panning
             camera.position.x += (targetCameraPos.x + mouseX * 1.5 - camera.position.x) * 0.05;
             camera.position.y += (targetCameraPos.y - mouseY * 1.5 - camera.position.y) * 0.05;
             camera.position.z += (targetCameraPos.z - camera.position.z) * 0.05;
-            
-            camera.lookAt(-5, 1, 0);
 
+            camera.lookAt(-5, 1, 0);
             renderer.render(scene, camera);
         }
 
@@ -651,9 +795,10 @@
             renderer.setSize(window.innerWidth, window.innerHeight);
         });
 
-        // Local Storage State
+        // Local Storage State Management
         let listings = JSON.parse(localStorage.getItem('market_listings')) || [];
         let salesHistory = JSON.parse(localStorage.getItem('sales_history')) || [];
+        let userRegistry = JSON.parse(localStorage.getItem('user_registry')) || [];
         let currentUser = JSON.parse(localStorage.getItem('current_user')) || null;
         let selectedProductIndex = null;
 
@@ -665,12 +810,31 @@
             }
         };
 
+        function toggleAdminPasskey() {
+            const role = document.getElementById('user-role').value;
+            document.getElementById('admin-pass-group').style.display = role === 'Admin' ? 'block' : 'none';
+        }
+
         function handleLogin(e) {
             e.preventDefault();
             const role = document.getElementById('user-role').value;
             const name = document.getElementById('username').value;
+            const pass = document.getElementById('admin-passkey').value;
+
+            if (role === 'Admin' && pass !== 'admin123' && pass !== '') {
+                alert("Incorrect Admin Passkey! Use default passkey: admin123");
+                return;
+            }
+
             currentUser = { name, role };
             localStorage.setItem('current_user', JSON.stringify(currentUser));
+
+            // Register user in global user registry
+            if (!userRegistry.some(u => u.name === name && u.role === role)) {
+                userRegistry.push({ name, role, dateJoined: new Date().toLocaleDateString() });
+                localStorage.setItem('user_registry', JSON.stringify(userRegistry));
+            }
+
             document.getElementById('login-modal').style.display = 'none';
             applyUserRolePermissions();
         }
@@ -685,16 +849,26 @@
             document.getElementById('user-bar').style.display = 'flex';
             document.getElementById('user-display').innerText = `Logged in as: ${currentUser.name} (${currentUser.role})`;
             
+            const btnAdmin = document.getElementById('btn-tab-admin');
+            
             if (currentUser.role === 'Buyer') {
                 document.getElementById('btn-tab-sell').style.display = 'none';
                 document.getElementById('btn-tab-dashboard').style.display = 'none';
                 document.getElementById('btn-tab-purchases').style.display = 'block';
+                btnAdmin.style.display = 'none';
                 switchTab('buy');
-            } else {
+            } else if (currentUser.role === 'Seller') {
                 document.getElementById('btn-tab-sell').style.display = 'block';
                 document.getElementById('btn-tab-dashboard').style.display = 'block';
                 document.getElementById('btn-tab-purchases').style.display = 'none';
+                btnAdmin.style.display = 'none';
                 switchTab('dashboard');
+            } else if (currentUser.role === 'Admin') {
+                document.getElementById('btn-tab-sell').style.display = 'block';
+                document.getElementById('btn-tab-dashboard').style.display = 'block';
+                document.getElementById('btn-tab-purchases').style.display = 'block';
+                btnAdmin.style.display = 'block';
+                switchTab('admin');
             }
         }
 
@@ -711,16 +885,13 @@
             if (tabName === 'buy') renderMarketplace();
             if (tabName === 'dashboard') renderDashboard();
             if (tabName === 'purchases') renderBuyerOrders();
+            if (tabName === 'admin') renderAdminPortal();
         }
 
         function toggleCustomCategoryInput() {
             const cat = document.getElementById('dev-category').value;
             const customGroup = document.getElementById('custom-cat-group');
-            if (cat === 'Others') {
-                customGroup.style.display = 'block';
-            } else {
-                customGroup.style.display = 'none';
-            }
+            customGroup.style.display = (cat === 'Others') ? 'block' : 'none';
         }
 
         function calculatePayout() {
@@ -781,7 +952,7 @@
             const activeItems = listings.filter(item => item.status === 'Active');
 
             if (activeItems.length === 0) {
-                grid.innerHTML = `<div class="empty-msg">No active items listed.</div>`;
+                grid.innerHTML = `<div class="empty-msg">No active hardware components listed yet.</div>`;
                 return;
             }
 
@@ -844,7 +1015,7 @@
             const myOrders = salesHistory.filter(i => i.buyer === currentUser.name);
 
             if (myOrders.length === 0) {
-                grid.innerHTML = `<div class="empty-msg">You have not purchased any items yet.</div>`;
+                grid.innerHTML = `<div class="empty-msg">You have not purchased any hardware components yet.</div>`;
                 return;
             }
 
@@ -855,7 +1026,7 @@
                         <span class="badge" style="background:rgba(0, 255, 204, 0.2); color:#00ffcc;">Order Confirmed</span>
                         <h4 style="margin: 5px 0;">${item.name}</h4>
                         <p style="margin: 0; font-size:0.85rem; color:#94a3b8;">Category: ${item.category}</p>
-                        <div class="price-tag">Amount Paid: $${item.price}</div>
+                        <div class="price-tag">Paid: $${item.price}</div>
                     </div>
                 `;
             });
@@ -874,7 +1045,7 @@
             grid.innerHTML = "";
 
             if (myItems.length === 0) {
-                grid.innerHTML = `<div class="empty-msg">No listings found.</div>`;
+                grid.innerHTML = `<div class="empty-msg">No hardware listings found.</div>`;
                 return;
             }
 
@@ -890,6 +1061,59 @@
                     </div>
                 `;
             });
+        }
+
+        // --- ADMIN PORTAL RENDERING ---
+        function renderAdminPortal() {
+            document.getElementById('admin-total-users').innerText = userRegistry.length;
+            document.getElementById('admin-total-sales').innerText = salesHistory.length;
+            
+            const totalVolume = salesHistory.reduce((sum, item) => sum + parseFloat(item.price), 0);
+            document.getElementById('admin-total-volume').innerText = "$" + totalVolume.toFixed(2);
+
+            // Populate Sellers Directory Table
+            const sellersTable = document.getElementById('admin-sellers-table');
+            sellersTable.innerHTML = "";
+            const sellers = userRegistry.filter(u => u.role === 'Seller');
+
+            if (sellers.length === 0) {
+                sellersTable.innerHTML = `<tr><td colspan="4" style="text-align:center; color:#64748b;">No registered sellers yet.</td></tr>`;
+            } else {
+                sellers.forEach(s => {
+                    const sellerListings = listings.filter(l => l.seller === s.name);
+                    const sellerSales = salesHistory.filter(sh => sh.seller === s.name);
+                    const totalPayout = sellerSales.reduce((sum, item) => sum + parseFloat(item.payout), 0);
+
+                    sellersTable.innerHTML += `
+                        <tr>
+                            <td><strong>${s.name}</strong></td>
+                            <td>${sellerListings.length}</td>
+                            <td>${sellerSales.length}</td>
+                            <td>$${totalPayout.toFixed(2)}</td>
+                        </tr>
+                    `;
+                });
+            }
+
+            // Populate Buyers Directory Table
+            const buyersTable = document.getElementById('admin-buyers-table');
+            buyersTable.innerHTML = "";
+
+            if (salesHistory.length === 0) {
+                buyersTable.innerHTML = `<tr><td colspan="5" style="text-align:center; color:#64748b;">No completed transactions yet.</td></tr>`;
+            } else {
+                salesHistory.forEach(sh => {
+                    buyersTable.innerHTML += `
+                        <tr>
+                            <td><strong>${sh.buyer}</strong></td>
+                            <td>${sh.buyerEmail}</td>
+                            <td>${sh.name} (${sh.category})</td>
+                            <td>$${sh.price}</td>
+                            <td>${sh.seller}</td>
+                        </tr>
+                    `;
+                });
+            }
         }
 
         function assessDevice() {
