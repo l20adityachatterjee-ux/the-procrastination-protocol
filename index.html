@@ -624,70 +624,102 @@
         let targetCameraPos = { x: -6, y: 0, z: 24 };
         camera.position.set(-6, 0, 24);
 
-        // Ambient and Directional Lighting
-        scene.add(new THREE.AmbientLight(0x0088ff, 0.8));
-        const dirLight = new THREE.DirectionalLight(0x00ffff, 2.5);
-        dirLight.position.set(0, 10, 20);
-        scene.add(dirLight);
+        // Lighting
+        scene.add(new THREE.AmbientLight(0x021124, 1.2));
+        
+        const dirLight1 = new THREE.DirectionalLight(0x00f0ff, 2.5);
+        dirLight1.position.set(10, 15, 15);
+        scene.add(dirLight1);
 
-        // --- 3D ROTATING GLOBE (EARTH WIREFRAME) ---
+        const dirLight2 = new THREE.DirectionalLight(0x10b981, 1.2);
+        dirLight2.position.set(-10, -10, -10);
+        scene.add(dirLight2);
+
+        // --- 3D SOLID GLOBE & OUTER RINGS GROUP ---
         const globeGroup = new THREE.Group();
         globeGroup.position.set(-8, 0, 0);
         scene.add(globeGroup);
 
-        const globeRadius = 6;
+        const globeRadius = 5.5;
 
-        // Globe Sphere Wireframe
-        const globeGeo = new THREE.IcosahedronGeometry(globeRadius, 4);
-        const globeMat = new THREE.MeshBasicMaterial({
+        // 1. Solid Earth Sphere
+        const globeGeo = new THREE.SphereGeometry(globeRadius, 64, 64);
+        const globeMat = new THREE.MeshPhongMaterial({
+            color: 0x031d38,
+            emissive: 0x011326,
+            specular: 0x00f0ff,
+            shininess: 35,
+            flatShading: false
+        });
+        const solidGlobeMesh = new THREE.Mesh(globeGeo, globeMat);
+        globeGroup.add(solidGlobeMesh);
+
+        // Solid Globe Landmass/Circuit Surface Grid Overlay
+        const gridGeo = new THREE.IcosahedronGeometry(globeRadius + 0.03, 3);
+        const gridMat = new THREE.MeshBasicMaterial({
             color: 0x00f0ff,
             wireframe: true,
             transparent: true,
-            opacity: 0.18
+            opacity: 0.15
         });
-        const globeMesh = new THREE.Mesh(globeGeo, globeMat);
-        globeGroup.add(globeMesh);
+        const gridMesh = new THREE.Mesh(gridGeo, gridMat);
+        globeGroup.add(gridMesh);
 
-        // Latitudinal & Longitudinal Circuit Rings
-        for (let i = 0; i < 5; i++) {
-            const ringGeo = new THREE.RingGeometry(globeRadius + 0.05, globeRadius + 0.1, 64);
-            const ringMat = new THREE.MeshBasicMaterial({ color: 0x00f0ff, side: THREE.DoubleSide, transparent: true, opacity: 0.25 });
-            const ring = new THREE.Mesh(ringGeo, ringMat);
-            ring.rotation.x = Math.PI / 2;
-            ring.position.y = (i - 2) * 2;
-            ring.scale.setScalar(Math.cos((i - 2) * 0.35));
-            globeGroup.add(ring);
-        }
-
-        // Glowing Surface Nodes (Cities/Circuits)
+        // Surface Nodes (Glow Dots on Globe Surface)
         const nodePositions = [];
-        const numNodes = 120;
+        const numNodes = 90;
         for (let i = 0; i < numNodes; i++) {
             const phi = Math.acos(-1 + (2 * i) / numNodes);
             const theta = Math.sqrt(numNodes * Math.PI) * phi;
             nodePositions.push(
-                globeRadius * Math.cos(theta) * Math.sin(phi),
-                globeRadius * Math.sin(theta) * Math.sin(phi),
-                globeRadius * Math.cos(phi)
+                (globeRadius + 0.05) * Math.cos(theta) * Math.sin(phi),
+                (globeRadius + 0.05) * Math.sin(theta) * Math.sin(phi),
+                (globeRadius + 0.05) * Math.cos(phi)
             );
         }
 
         const nodeGeo = new THREE.BufferGeometry();
         nodeGeo.setAttribute('position', new THREE.Float32BufferAttribute(nodePositions, 3));
-        
         const nodeMat = new THREE.PointsMaterial({
             color: 0x00f0ff,
-            size: 0.25,
+            size: 0.22,
             transparent: true,
-            opacity: 0.85,
+            opacity: 0.9,
             blending: THREE.AdditiveBlending
         });
-
         const globeNodes = new THREE.Points(nodeGeo, nodeMat);
         globeGroup.add(globeNodes);
 
-        // Ambient Floating Particles
-        const particleCount = 100;
+        // 2. TWO INDEPENDENT ROTATING CIRCULAR RINGS (GLOBE INSIDE)
+        const ringOuterGroup = new THREE.Group();
+        globeGroup.add(ringOuterGroup);
+
+        // Ring 1 Material & Mesh
+        const ring1Geo = new THREE.TorusGeometry(globeRadius + 1.8, 0.06, 16, 100);
+        const ring1Mat = new THREE.MeshBasicMaterial({
+            color: 0x00f0ff,
+            transparent: true,
+            opacity: 0.8
+        });
+        const ring1 = new THREE.Mesh(ring1Geo, ring1Mat);
+        ring1.rotation.x = Math.PI / 3;
+        ring1.rotation.y = Math.PI / 6;
+        ringOuterGroup.add(ring1);
+
+        // Ring 2 Material & Mesh (Intersecting Angle)
+        const ring2Geo = new THREE.TorusGeometry(globeRadius + 2.5, 0.04, 16, 100);
+        const ring2Mat = new THREE.MeshBasicMaterial({
+            color: 0x10b981,
+            transparent: true,
+            opacity: 0.65
+        });
+        const ring2 = new THREE.Mesh(ring2Geo, ring2Mat);
+        ring2.rotation.x = -Math.PI / 4;
+        ring2.rotation.y = -Math.PI / 3;
+        ringOuterGroup.add(ring2);
+
+        // Ambient Background Particles
+        const particleCount = 80;
         const particlePositions = [];
         for (let i = 0; i < particleCount; i++) {
             particlePositions.push(
@@ -700,9 +732,9 @@
         pGeo.setAttribute('position', new THREE.Float32BufferAttribute(particlePositions, 3));
         const pMat = new THREE.PointsMaterial({
             color: 0x00f0ff,
-            size: 0.2,
+            size: 0.18,
             transparent: true,
-            opacity: 0.5,
+            opacity: 0.4,
             blending: THREE.AdditiveBlending
         });
         const particles = new THREE.Points(pGeo, pMat);
@@ -745,7 +777,7 @@
 
             sprite.scale.set(2.8, 0.7, 1);
             
-            const radius = 8.5 + Math.random() * 4;
+            const radius = 9.2 + Math.random() * 4;
             const angle = Math.random() * Math.PI * 2;
             const y = (Math.random() - 0.5) * 8;
 
@@ -797,9 +829,17 @@
 
             const elapsedTime = clock.getElapsedTime();
 
-            // Rotate Globe
-            globeGroup.rotation.y = elapsedTime * 0.15;
-            globeGroup.rotation.x = Math.sin(elapsedTime * 0.05) * 0.1;
+            // Solid Globe Rotation
+            solidGlobeMesh.rotation.y = elapsedTime * 0.2;
+            gridMesh.rotation.y = elapsedTime * 0.2;
+            globeNodes.rotation.y = elapsedTime * 0.2;
+
+            // Dual Outer Rings Dynamic Counter-Rotations
+            ring1.rotation.z = elapsedTime * 0.35;
+            ring1.rotation.y = elapsedTime * 0.15;
+
+            ring2.rotation.z = -elapsedTime * 0.25;
+            ring2.rotation.x = Math.sin(elapsedTime * 0.2) * 0.3;
 
             // Rotating Hardware Orbiters
             particleNodes.forEach(p => {
