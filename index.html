@@ -642,7 +642,7 @@
 
         const globeRadius = 5.5;
 
-        // 1. Sleek & High-Gloss Metallic Globe Sphere
+        // 1. Solid Globe Sphere
         const globeGeo = new THREE.SphereGeometry(globeRadius, 64, 64);
         const globeMat = new THREE.MeshPhongMaterial({
             color: 0x051b30,
@@ -654,7 +654,7 @@
         const solidGlobeMesh = new THREE.Mesh(globeGeo, globeMat);
         globeGroup.add(solidGlobeMesh);
 
-        // Subtle Outer Atmosphere Glow Layer
+        // Outer Atmosphere Glow
         const atmosGeo = new THREE.SphereGeometry(globeRadius + 0.1, 64, 64);
         const atmosMat = new THREE.MeshBasicMaterial({
             color: 0x00f0ff,
@@ -666,7 +666,12 @@
         globeGroup.add(atmosMesh);
 
         // 2. TWO CLOCKWISE / ANTI-CLOCKWISE ROTATING RINGS
-        // Ring 1 (Cyan Ring - Moves Clockwise)
+        // Ring 1 Group (Cyan Ring - Clockwise)
+        const ring1Group = new THREE.Group();
+        ring1Group.rotation.x = Math.PI / 3;
+        ring1Group.rotation.y = Math.PI / 6;
+        globeGroup.add(ring1Group);
+
         const ring1Geo = new THREE.TorusGeometry(globeRadius + 1.8, 0.07, 16, 120);
         const ring1Mat = new THREE.MeshBasicMaterial({
             color: 0x00f0ff,
@@ -674,11 +679,14 @@
             opacity: 0.85
         });
         const ring1 = new THREE.Mesh(ring1Geo, ring1Mat);
-        ring1.rotation.x = Math.PI / 3;
-        ring1.rotation.y = Math.PI / 6;
-        globeGroup.add(ring1);
+        ring1Group.add(ring1);
 
-        // Ring 2 (Emerald Ring - Moves Anti-Clockwise)
+        // Ring 2 Group (Emerald Ring - Anti-Clockwise)
+        const ring2Group = new THREE.Group();
+        ring2Group.rotation.x = -Math.PI / 4;
+        ring2Group.rotation.y = -Math.PI / 3;
+        globeGroup.add(ring2Group);
+
         const ring2Geo = new THREE.TorusGeometry(globeRadius + 2.5, 0.05, 16, 120);
         const ring2Mat = new THREE.MeshBasicMaterial({
             color: 0x10b981,
@@ -686,9 +694,7 @@
             opacity: 0.75
         });
         const ring2 = new THREE.Mesh(ring2Geo, ring2Mat);
-        ring2.rotation.x = -Math.PI / 4;
-        ring2.rotation.y = -Math.PI / 3;
-        globeGroup.add(ring2);
+        ring2Group.add(ring2);
 
         // --- REVOLVING HARDWARE COMPONENT SPRITES ---
         const componentNames = [
@@ -772,23 +778,24 @@
             }
         }
 
-        // Animation Loop
+        // Continuous Dynamic Animation Loop
         const clock = new THREE.Clock();
         function animate3D() {
             requestAnimationFrame(animate3D);
 
             const elapsedTime = clock.getElapsedTime();
 
-            // Globe Rotation
-            solidGlobeMesh.rotation.y = elapsedTime * 0.15;
+            // 1. Globe Rotation around its vertical axis
+            solidGlobeMesh.rotation.y = elapsedTime * 0.25;
+            atmosMesh.rotation.y = elapsedTime * 0.25;
 
-            // Ring 1: Clockwise Rotation
-            ring1.rotation.z = -elapsedTime * 0.35;
+            // 2. Ring 1: Clockwise Rotation
+            ring1.rotation.z = -elapsedTime * 0.6;
 
-            // Ring 2: Anti-Clockwise Rotation
-            ring2.rotation.z = elapsedTime * 0.35;
+            // 3. Ring 2: Anti-Clockwise Rotation
+            ring2.rotation.z = elapsedTime * 0.6;
 
-            // Rotating Hardware Orbiters
+            // 4. Orbiting Hardware Nodes
             particleNodes.forEach(p => {
                 p.angle += p.speed;
                 p.mesh.position.x = Math.cos(p.angle) * p.radius - 8;
