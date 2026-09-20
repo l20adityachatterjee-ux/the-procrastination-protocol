@@ -612,7 +612,7 @@
     </div>
 
     <script>
-        // --- ORIGINAL 3D CYBER TREE ENGINE ---
+        // --- 3D CANVAS SETUP ---
         const canvas = document.getElementById('webgl-canvas');
         const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true });
         renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
@@ -626,70 +626,104 @@
 
         // Lighting
         scene.add(new THREE.AmbientLight(0xffffff, 1.2));
-        const dirLight = new THREE.DirectionalLight(0x00ffcc, 1.8);
+        const dirLight = new THREE.DirectionalLight(0x00ffcc, 2.0);
         dirLight.position.set(10, 20, 15);
         scene.add(dirLight);
 
-        const pointLight = new THREE.PointLight(0x10b981, 2.5, 60);
+        const pointLight = new THREE.PointLight(0x00e5ff, 3, 60);
         pointLight.position.set(-8, 5, 5);
         scene.add(pointLight);
 
-        // Original Procedural Cyber Tree Structure Group
+        // Digital Neural Circuit Tree Group
         const treeGroup = new THREE.Group();
-        treeGroup.position.set(-9, -8, 0);
+        treeGroup.position.set(-9, -6, 0);
         scene.add(treeGroup);
 
-        const trunkMaterial = new THREE.MeshStandardMaterial({
-            color: 0x111827,
-            roughness: 0.4,
-            metalness: 0.8,
-            wireframe: false
-        });
+        // --- GLOWING DIGITAL NEURAL TREE GENERATOR ---
+        function createCircuitTree() {
+            const linePositions = [];
+            const nodePositions = [];
 
-        const foliageMaterial = new THREE.MeshStandardMaterial({
-            color: 0x00ffcc,
-            roughness: 0.2,
-            emissive: 0x00b386,
-            emissiveIntensity: 0.6,
-            wireframe: true
-        });
+            // Helper to recursively generate glowing circuit lines & nodes
+            function addBranch(startX, startY, startZ, length, angleY, angleZ, depth) {
+                if (depth <= 0) return;
 
-        function buildOriginalCyberTree() {
-            // Main Central Trunk
-            const trunkGeo = new THREE.CylinderGeometry(0.8, 1.6, 12, 12);
-            trunkGeo.translate(0, 6, 0);
-            const mainTrunk = new THREE.Mesh(trunkGeo, trunkMaterial);
-            treeGroup.add(mainTrunk);
+                const endX = startX + Math.sin(angleZ) * Math.sin(angleY) * length;
+                const endY = startY + Math.cos(angleZ) * length;
+                const endZ = startZ + Math.sin(angleZ) * Math.cos(angleY) * length;
 
-            // Cyber Canopy Node Clusters
-            const canopyGeo = new THREE.DodecahedronGeometry(3.5, 1);
-            const mainCanopy = new THREE.Mesh(canopyGeo, foliageMaterial);
-            mainCanopy.position.set(0, 13, 0);
-            treeGroup.add(mainCanopy);
+                // Add line segment
+                linePositions.push(startX, startY, startZ);
+                linePositions.push(endX, endY, endZ);
 
-            // Sub-branches and foliage pods
-            const branchAngles = [0, 1.57, 3.14, 4.71];
-            branchAngles.forEach((angle) => {
-                const branchGroup = new THREE.Group();
-                branchGroup.position.set(0, 9, 0);
-                branchGroup.rotation.y = angle;
-                branchGroup.rotation.z = 0.5;
+                // Add node at junction
+                nodePositions.push(endX, endY, endZ);
 
-                const branchGeo = new THREE.CylinderGeometry(0.3, 0.5, 5, 8);
-                branchGeo.translate(0, 2.5, 0);
-                const branch = new THREE.Mesh(branchGeo, trunkMaterial);
-                branchGroup.add(branch);
+                // Split into sub-branches
+                const numSplits = depth > 3 ? 2 : Math.floor(Math.random() * 2) + 2;
+                for (let i = 0; i < numSplits; i++) {
+                    const nextAngleY = angleY + (Math.random() - 0.5) * 1.2;
+                    const nextAngleZ = angleZ + (Math.random() * 0.4 + 0.2);
+                    addBranch(endX, endY, endZ, length * 0.75, nextAngleY, nextAngleZ, depth - 1);
+                }
+            }
 
-                const podGeo = new THREE.DodecahedronGeometry(1.6, 1);
-                const pod = new THREE.Mesh(podGeo, foliageMaterial);
-                pod.position.set(0, 5, 0);
-                branchGroup.add(pod);
+            // Central Trunk Bundles
+            const trunkCount = 8;
+            for (let i = 0; i < trunkCount; i++) {
+                const angle = (i / trunkCount) * Math.PI * 2;
+                const r = 0.4;
+                const startX = Math.cos(angle) * r;
+                const startZ = Math.sin(angle) * r;
+                
+                // Root strands spreading down
+                linePositions.push(startX, 0, startZ);
+                linePositions.push(startX * 3.5, -3.5, startZ * 3.5);
+                nodePositions.push(startX * 3.5, -3.5, startZ * 3.5);
 
-                treeGroup.add(branchGroup);
+                // Upper trunk & canopy branching up
+                addBranch(startX, 0, startZ, 3.2, angle, 0.25, 5);
+            }
+
+            // Create Glowing Lines Geometry
+            const lineGeo = new THREE.BufferGeometry();
+            lineGeo.setAttribute('position', new THREE.Float32BufferAttribute(linePositions, 3));
+            const lineMat = new THREE.LineBasicMaterial({ color: 0x00e5ff, opacity: 0.85, transparent: true });
+            const lines = new THREE.LineSegments(lineGeo, lineMat);
+            treeGroup.add(lines);
+
+            // Create Glowing Junction Points
+            const nodeGeo = new THREE.BufferGeometry();
+            nodeGeo.setAttribute('position', new THREE.Float32BufferAttribute(nodePositions, 3));
+            const nodeMat = new THREE.PointsMaterial({
+                color: 0x00ffcc,
+                size: 0.35,
+                transparent: true,
+                opacity: 0.9
             });
+            const nodes = new THREE.Points(nodeGeo, nodeMat);
+            treeGroup.add(nodes);
+
+            // Canopy Digital Dust Particles
+            const dustPositions = [];
+            for (let i = 0; i < 400; i++) {
+                const r = Math.random() * 8;
+                const theta = Math.random() * Math.PI * 2;
+                const phi = Math.random() * Math.PI;
+                dustPositions.push(
+                    r * Math.sin(phi) * Math.cos(theta),
+                    r * Math.cos(phi) + 7,
+                    r * Math.sin(phi) * Math.sin(theta)
+                );
+            }
+            const dustGeo = new THREE.BufferGeometry();
+            dustGeo.setAttribute('position', new THREE.Float32BufferAttribute(dustPositions, 3));
+            const dustMat = new THREE.PointsMaterial({ color: 0x00ffcc, size: 0.15, transparent: true, opacity: 0.6 });
+            const dust = new THREE.Points(dustGeo, dustMat);
+            treeGroup.add(dust);
         }
 
-        buildOriginalCyberTree();
+        createCircuitTree();
 
         // --- REVOLVING FLYING HARDWARE PARTICLES SYSTEM ---
         const componentNames = [
@@ -742,12 +776,11 @@
 
             hardwareParticlesGroup.add(sprite);
 
-            // ACTIVE REVOLVING SPEED
             particleNodes.push({
                 mesh: sprite,
                 angle: angle,
                 radius: radius,
-                speed: 0.005 + Math.random() * 0.006, // Restored dynamic orbiting revolution
+                speed: 0.005 + Math.random() * 0.006,
                 yBase: y,
                 yFreq: 0.5 + Math.random() * 0.5
             });
@@ -784,7 +817,7 @@
             const elapsedTime = clock.getElapsedTime();
 
             // Tree Slow Rotation
-            treeGroup.rotation.y = elapsedTime * 0.2 + (mouseX * 0.2);
+            treeGroup.rotation.y = elapsedTime * 0.15 + (mouseX * 0.2);
 
             // Revolving Hardware Components Orbiting Tree
             particleNodes.forEach(p => {
