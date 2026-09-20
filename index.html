@@ -10,48 +10,60 @@
             --primary-dark: #059669;
             --accent: #00ffcc;
             --bg-dark: #070b14;
-            --card-bg: rgba(15, 23, 42, 0.8);
+            --card-bg: rgba(15, 23, 42, 0.88);
             --text-light: #f8fafc;
+        }
+
+        * {
+            box-sizing: border-box;
         }
 
         body {
             font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
             margin: 0;
-            padding: 20px;
+            padding: 20px 40px;
             color: var(--text-light);
             background-color: var(--bg-dark);
             min-height: 100vh;
             overflow-x: hidden;
         }
 
-        /* Optimized Dynamic Canvas */
+        /* Fixed Fullscreen Background Canvas */
         #bg-canvas {
             position: fixed;
             top: 0;
             left: 0;
             width: 100vw;
             height: 100vh;
-            z-index: -1;
+            z-index: 0;
             pointer-events: none;
         }
 
+        /* Non-overlapping Container Layout */
         .container {
-            max-width: 1000px;
-            margin: 0 auto;
+            max-width: 850px;
+            margin-left: auto; /* Pushes content container to the right side */
+            margin-right: 20px;
             position: relative;
-            z-index: 1;
+            z-index: 2;
+        }
+
+        @media (max-width: 1024px) {
+            .container {
+                margin: 0 auto; /* Center on smaller screens/tablets */
+            }
         }
 
         header {
-            text-align: center;
+            text-align: left;
             margin-bottom: 25px;
         }
 
         h1 {
             color: #00ffcc;
-            font-size: 2.5rem;
+            font-size: 2.3rem;
             margin-bottom: 5px;
-            text-shadow: 0 0 15px rgba(0, 255, 204, 0.6);
+            text-shadow: 0 0 15px rgba(0, 255, 204, 0.5);
         }
 
         /* Modals */
@@ -90,6 +102,7 @@
             border-radius: 10px;
             margin-bottom: 20px;
             font-weight: 600;
+            backdrop-filter: blur(10px);
         }
 
         /* Navigation Tabs */
@@ -123,10 +136,11 @@
         .section {
             display: none;
             background: var(--card-bg);
-            backdrop-filter: blur(10px);
+            backdrop-filter: blur(12px);
             padding: 25px;
             border-radius: 16px;
-            border: 1px solid rgba(0, 255, 204, 0.2);
+            border: 1px solid rgba(0, 255, 204, 0.25);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
         }
 
         .section.active { display: block; }
@@ -148,7 +162,6 @@
         input[type="text"], input[type="number"], input[type="email"], input[type="password"], input[type="file"], select {
             width: 100%;
             padding: 10px 12px;
-            box-sizing: border-box;
             background: rgba(7, 11, 20, 0.8);
             border: 1px solid rgba(0, 255, 204, 0.3);
             border-radius: 8px;
@@ -198,10 +211,10 @@
             text-align: left;
         }
 
-        /* Product Cards */
+        /* Product Cards Grid */
         .marketplace-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+            grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
             gap: 20px;
             margin-top: 20px;
         }
@@ -222,7 +235,7 @@
 
         .card img {
             width: 100%;
-            height: 180px;
+            height: 160px;
             object-fit: cover;
             border-radius: 8px;
             margin-bottom: 12px;
@@ -255,7 +268,7 @@
         /* Dashboard Stats */
         .dashboard-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
             gap: 15px;
             margin-bottom: 20px;
         }
@@ -285,13 +298,13 @@
 </head>
 <body>
 
-    <!-- Dynamic Canvas -->
+    <!-- Dynamic Canvas (Left Aligned for Clear Visibility) -->
     <canvas id="bg-canvas"></canvas>
 
     <div class="container">
         <header>
             <h1>The Procrastination Protocol ♻️</h1>
-            <p style="color: #94a3b8;"><i>Circular Electronics & E-Waste Recovery Marketplace</i></p>
+            <p style="color: #94a3b8; margin-top: -5px;"><i>Circular Electronics & E-Waste Recovery Marketplace</i></p>
         </header>
 
         <!-- Login Modal -->
@@ -467,36 +480,38 @@
     </div>
 
     <script>
-        // --- HIGH-PERFORMANCE VIBRANT CANVAS ---
+        // --- ULTRA-OPTIMIZED & CLEAR-VISIBILITY CANVAS ---
         const canvas = document.getElementById('bg-canvas');
         const ctx = canvas.getContext('2d');
 
         const offscreenCanvas = document.createElement('canvas');
         const offCtx = offscreenCanvas.getContext('2d');
 
+        let treeTipNodes = []; // Store terminal positions for pulsing data dots
+
         function resizeCanvas() {
             canvas.width = window.innerWidth;
             canvas.height = window.innerHeight;
             offscreenCanvas.width = window.innerWidth;
             offscreenCanvas.height = window.innerHeight;
-            renderVibrantStaticTree();
+            treeTipNodes = [];
+            renderStaticTree();
         }
 
-        // Draw Pre-rendered Radiant Tech Tree
+        // Draw Tree Offscreen once to guarantee 60+ FPS
         function drawTreeBranch(x, y, len, angle, branchWidth, depth) {
             offCtx.beginPath();
             offCtx.save();
 
-            // Dynamic Gradient for Branches
             const grad = offCtx.createLinearGradient(0, 0, 0, -len);
-            grad.addColorStop(0, '#10b981');
-            grad.addColorStop(0.7, '#00ffcc');
+            grad.addColorStop(0, '#059669');
+            grad.addColorStop(0.6, '#00ffcc');
             grad.addColorStop(1, '#3b82f6');
 
             offCtx.strokeStyle = grad;
             offCtx.lineWidth = branchWidth;
             offCtx.shadowColor = '#00ffcc';
-            offCtx.shadowBlur = depth > 2 ? 8 : 15;
+            offCtx.shadowBlur = depth > 2 ? 6 : 12;
 
             offCtx.translate(x, y);
             offCtx.rotate(angle * Math.PI / 180);
@@ -504,12 +519,15 @@
             offCtx.lineTo(0, -len);
             offCtx.stroke();
 
-            // Terminal tips receive glowing node leaves
             if (len < 14) {
+                // Collect tip coordinates relative to canvas
+                const currentTransform = offCtx.getTransform();
+                treeTipNodes.push({ x: currentTransform.e, y: currentTransform.f });
+
                 offCtx.beginPath();
                 offCtx.arc(0, -len, 4, 0, Math.PI * 2);
                 offCtx.fillStyle = '#00ffcc';
-                offCtx.shadowBlur = 12;
+                offCtx.shadowBlur = 10;
                 offCtx.shadowColor = '#00ffcc';
                 offCtx.fill();
                 offCtx.restore();
@@ -521,61 +539,102 @@
             offCtx.restore();
         }
 
-        function renderVibrantStaticTree() {
+        function renderStaticTree() {
             offCtx.clearRect(0, 0, offscreenCanvas.width, offscreenCanvas.height);
-            drawTreeBranch(offscreenCanvas.width * 0.1, offscreenCanvas.height, offscreenCanvas.height * 0.22, 0, 9, 0);
+            // Position tree clearly on the left third of the viewport
+            const rootX = window.innerWidth > 1024 ? window.innerWidth * 0.22 : window.innerWidth * 0.15;
+            drawTreeBranch(rootX, offscreenCanvas.height, offscreenCanvas.height * 0.23, 0, 9, 0);
         }
 
         window.addEventListener('resize', resizeCanvas);
 
-        // Enhanced Glowing Particle Trail
-        let trail = [];
-        window.addEventListener('mousemove', (e) => {
-            if (trail.length < 18) {
-                trail.push({
-                    x: e.clientX,
-                    y: e.clientY,
-                    size: Math.random() * 6 + 4,
-                    alpha: 1,
-                    color: Math.random() > 0.5 ? '#00ffcc' : '#10b981'
+        // Animated Energy Data Pulses traveling across branches
+        let dataPulses = [];
+        function spawnDataPulse() {
+            if (treeTipNodes.length > 0 && dataPulses.length < 8) {
+                const targetNode = treeTipNodes[Math.floor(Math.random() * treeTipNodes.length)];
+                const startX = window.innerWidth > 1024 ? window.innerWidth * 0.22 : window.innerWidth * 0.15;
+                dataPulses.push({
+                    x: startX,
+                    y: canvas.height,
+                    targetX: targetNode.x,
+                    targetY: targetNode.y,
+                    progress: 0,
+                    speed: Math.random() * 0.015 + 0.01
                 });
             }
-        });
+        }
+        setInterval(spawnDataPulse, 800);
 
         // Floating Circuit Hardware Elements
         const electronicIcons = ['💻 Laptop', '📱 Phone', '🔲 CPU', '🎮 GPU', '📟 Diode', '📲 Tablet'];
         let floatingElectronics = [];
 
         function spawnFloatingDevice() {
-            if (floatingElectronics.length < 7) {
+            if (floatingElectronics.length < 6) {
+                const startX = window.innerWidth > 1024 ? window.innerWidth * 0.22 : window.innerWidth * 0.15;
                 floatingElectronics.push({
-                    x: canvas.width * 0.1,
-                    y: canvas.height * 0.7 + (Math.random() * 80 - 40),
+                    x: startX,
+                    y: canvas.height * 0.65 + (Math.random() * 80 - 40),
                     text: electronicIcons[Math.floor(Math.random() * electronicIcons.length)],
-                    vx: Math.random() * 1.5 + 1.2,
+                    vx: Math.random() * 1.2 + 0.8,
                     vy: (Math.random() - 0.5) * 1.2,
-                    alpha: 1,
-                    scale: Math.random() * 0.3 + 0.9
+                    alpha: 1
                 });
             }
         }
         setInterval(spawnFloatingDevice, 1200);
+
+        // Cursor Sparkle Trail
+        let trail = [];
+        window.addEventListener('mousemove', (e) => {
+            if (trail.length < 15) {
+                trail.push({
+                    x: e.clientX,
+                    y: e.clientY,
+                    size: Math.random() * 5 + 3,
+                    alpha: 1,
+                    color: Math.random() > 0.5 ? '#00ffcc' : '#10b981'
+                });
+            }
+        });
 
         let pulseAngle = 0;
 
         function animateCanvas() {
             ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-            // Ambient Pulsing Glow for Pre-rendered Tree
+            // 1. Render Pre-rendered Tree with Gentle Ambient Glow
             pulseAngle += 0.02;
-            const glowIntensity = Math.sin(pulseAngle) * 0.15 + 0.85;
-
+            const glowIntensity = Math.sin(pulseAngle) * 0.12 + 0.88;
             ctx.globalAlpha = glowIntensity;
             ctx.drawImage(offscreenCanvas, 0, 0);
             ctx.globalAlpha = 1.0;
 
-            // Render Floating Elements with Glow
-            ctx.font = '600 15px Segoe UI, sans-serif';
+            // 2. Render Circuit Data Pulses
+            for (let i = dataPulses.length - 1; i >= 0; i--) {
+                const p = dataPulses[i];
+                p.progress += p.speed;
+
+                const currentX = p.x + (p.targetX - p.x) * p.progress;
+                const currentY = p.y + (p.targetY - p.y) * p.progress;
+
+                ctx.save();
+                ctx.beginPath();
+                ctx.arc(currentX, currentY, 3.5, 0, Math.PI * 2);
+                ctx.fillStyle = '#ffffff';
+                ctx.shadowColor = '#00ffcc';
+                ctx.shadowBlur = 12;
+                ctx.fill();
+                ctx.restore();
+
+                if (p.progress >= 1) {
+                    dataPulses.splice(i, 1);
+                }
+            }
+
+            // 3. Render Floating Elements
+            ctx.font = '600 14px Segoe UI, sans-serif';
             for (let i = floatingElectronics.length - 1; i >= 0; i--) {
                 const dev = floatingElectronics[i];
                 dev.x += dev.vx;
@@ -585,7 +644,7 @@
                 ctx.save();
                 ctx.globalAlpha = Math.max(0, dev.alpha);
                 ctx.shadowColor = '#00ffcc';
-                ctx.shadowBlur = 10;
+                ctx.shadowBlur = 8;
                 ctx.fillStyle = '#00ffcc';
                 ctx.fillText(dev.text, dev.x, dev.y);
                 ctx.restore();
@@ -595,16 +654,16 @@
                 }
             }
 
-            // Render Particle Trail
+            // 4. Render Sparkle Trail
             for (let i = trail.length - 1; i >= 0; i--) {
                 const p = trail[i];
-                p.alpha -= 0.04;
+                p.alpha -= 0.05;
                 p.size *= 0.92;
 
                 ctx.save();
                 ctx.globalAlpha = Math.max(0, p.alpha);
                 ctx.shadowColor = p.color;
-                ctx.shadowBlur = 10;
+                ctx.shadowBlur = 8;
                 ctx.fillStyle = p.color;
                 ctx.beginPath();
                 ctx.arc(p.x, p.y, Math.max(1, p.size), 0, Math.PI * 2);
