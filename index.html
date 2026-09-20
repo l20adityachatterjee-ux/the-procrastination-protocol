@@ -2,44 +2,50 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>The Procrastination Protocol</title>
     <style>
         body { font-family: Arial, sans-serif; max-width: 500px; margin: 40px auto; padding: 20px; border: 1px solid #ccc; border-radius: 8px; }
-        .result { margin-top: 20px; padding: 15px; background-color: #e8f5e9; font-weight: bold; }
-        button { background-color: #2e7d32; color: white; padding: 10px 15px; border: none; cursor: pointer; border-radius: 4px; }
+        .result { margin-top: 20px; padding: 15px; background-color: #e8f5e9; font-weight: bold; border-radius: 4px; }
+        button { background-color: #2e7d32; color: white; padding: 10px 15px; border: none; cursor: pointer; border-radius: 4px; width: 100%; font-size: 16px; }
+        button:hover { background-color: #1b5e20; }
     </style>
 </head>
 <body>
     <h2>The Procrastination Protocol ♻️</h2>
-    <p>Circular Electronics Marketplace</p>
-    <hr>
+    <p><i>Circular Electronics Marketplace</i></p>
+    <hr><br>
     
-    <label><input type="checkbox" id="repairable"> Device is repairable (minor fault)?</label><br><br>
-    <label><input type="checkbox" id="reusable"> Device is working / good condition?</label><br><br>
-    <label><input type="checkbox" id="refurbishable"> Device has recoverable damage?</label><br><br>
+    <label><input type="checkbox" id="repairable"> Device is repairable (minor/moderate fault)?</label><br><br>
+    <label><input type="checkbox" id="reusable"> Device is working / good condition (reusable)?</label><br><br>
+    <label><input type="checkbox" id="refurbishable"> Device has recoverable damage (refurbishable)?</label><br><br>
     
     <button onclick="assessDevice()">Get Pathway</button>
 
     <div id="result" class="result" style="display:none;"></div>
 
     <script>
-        async function assessDevice() {
-            const body = {
-                is_repairable: document.getElementById('repairable').checked,
-                is_reusable: document.getElementById('reusable').checked,
-                is_refurbishable: document.getElementById('refurbishable').checked
-            };
+        function assessDevice() {
+            const isRepairable = document.getElementById('repairable').checked;
+            const isReusable = document.getElementById('reusable').checked;
+            const isRefurbishable = document.getElementById('refurbishable').checked;
 
-            const res = await fetch('http://127.0.0.1:8000/api/assess', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(body)
-            });
+            let pathway = "";
 
-            const data = await res.json();
+            // Decision Tree Logic
+            if (isRepairable) {
+                pathway = "Repair";
+            } else if (isReusable) {
+                pathway = "Reuse / Resale";
+            } else if (isRefurbishable) {
+                pathway = "Refurbishment";
+            } else {
+                pathway = "Responsible Recycling";
+            }
+
             const resultDiv = document.getElementById('result');
             resultDiv.style.display = 'block';
-            resultDiv.innerText = "Recommended Pathway: " + data.recommended_pathway;
+            resultDiv.innerText = "Recommended Pathway: " + pathway;
         }
     </script>
 </body>
