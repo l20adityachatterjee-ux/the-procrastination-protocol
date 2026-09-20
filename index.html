@@ -3,15 +3,16 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>The Procrastination Protocol - Fleet & Watchtower</title>
+    <title>The Procrastination Protocol - Watchtower Harbor Marketplace</title>
     
-    <!-- Three.js Library -->
+    <!-- Three.js & FontAwesome Icons -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
     <style>
         :root {
-            --primary: #10b981;
-            --accent: #00f0ff;
+            --primary: #00f0ff;
+            --accent: #ffb703;
             --bg-dark: #020617;
             --card-bg: rgba(10, 16, 30, 0.85);
             --text-light: #f8fafc;
@@ -44,7 +45,7 @@
 
         /* UI Container */
         .container {
-            max-width: 850px;
+            max-width: 880px;
             margin-left: auto;
             margin-right: 20px;
             position: relative;
@@ -55,18 +56,24 @@
             .container {
                 margin: 0 auto;
             }
+            body {
+                padding: 15px;
+            }
         }
 
         header {
             text-align: left;
-            margin-bottom: 25px;
+            margin-bottom: 20px;
         }
 
         h1 {
-            color: #00f0ff;
+            color: var(--primary);
             font-size: 2.2rem;
             margin-bottom: 5px;
             text-shadow: 0 0 20px rgba(0, 240, 255, 0.6);
+            display: flex;
+            align-items: center;
+            gap: 12px;
         }
 
         /* Modals */
@@ -128,21 +135,24 @@
             border-radius: 8px;
             transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             white-space: nowrap;
+            display: flex;
+            align-items: center;
+            gap: 8px;
         }
 
         .tab-btn.active, .tab-btn:hover {
-            background: #00f0ff;
+            background: var(--primary);
             color: #000;
             box-shadow: 0 0 15px rgba(0, 240, 255, 0.6);
             transform: translateY(-2px);
         }
 
         .tab-btn.admin-tab {
-            border: 1px solid #ffb703;
-            color: #ffb703;
+            border: 1px solid var(--accent);
+            color: var(--accent);
         }
         .tab-btn.admin-tab.active {
-            background: #ffb703;
+            background: var(--accent);
             color: #000;
             box-shadow: 0 0 15px rgba(255, 183, 3, 0.6);
         }
@@ -192,12 +202,12 @@
         }
 
         input:focus, select:focus {
-            border-color: #00f0ff;
+            border-color: var(--primary);
             box-shadow: 0 0 8px rgba(0, 240, 255, 0.4);
         }
 
         button.action-btn {
-            background: #00f0ff;
+            background: var(--primary);
             color: #070b14;
             font-weight: 700;
             padding: 12px;
@@ -229,7 +239,7 @@
             margin-top: 15px;
             padding: 15px;
             background: rgba(0, 240, 255, 0.08);
-            border: 1px solid #00f0ff;
+            border: 1px solid var(--primary);
             border-radius: 8px;
             text-align: left;
         }
@@ -252,14 +262,14 @@
         }
 
         .card:hover {
-            transform: translateY(-5px);
+            transform: translateY(-5px) rotateX(2deg);
             border-color: rgba(0, 240, 255, 0.5);
             box-shadow: 0 10px 20px rgba(0, 240, 255, 0.15);
         }
 
         .card img {
             width: 100%;
-            height: 150px;
+            height: 140px;
             object-fit: cover;
             border-radius: 8px;
             margin-bottom: 12px;
@@ -268,13 +278,13 @@
         .price-tag {
             font-size: 1.2rem;
             font-weight: bold;
-            color: #00f0ff;
+            color: var(--primary);
             margin: 8px 0;
         }
 
         .payout-tag {
             font-size: 0.9rem;
-            color: #ffb703;
+            color: var(--accent);
             font-weight: 600;
         }
 
@@ -308,7 +318,7 @@
         .stat-card h3 {
             margin: 5px 0 0 0;
             font-size: 1.8rem;
-            color: #00f0ff;
+            color: var(--primary);
         }
 
         .admin-table {
@@ -326,7 +336,7 @@
 
         .admin-table th {
             background: rgba(0, 240, 255, 0.1);
-            color: #00f0ff;
+            color: var(--primary);
         }
 
         .admin-link {
@@ -338,7 +348,7 @@
             cursor: pointer;
         }
         .admin-link:hover {
-            color: #ffb703;
+            color: var(--accent);
         }
 
         .empty-msg {
@@ -357,15 +367,15 @@
 
     <div class="container">
         <header>
-            <h1>The Procrastination Protocol ♻️</h1>
-            <p style="color: #94a3b8; margin-top: -5px;"><i>Circular Electronics & E-Waste Recovery Marketplace</i></p>
+            <h1><i class="fa-solid fa-tower-observation"></i> The Procrastination Protocol</h1>
+            <p style="color: #94a3b8; margin-top: -2px;"><i>Guiding Recycled Electronics Safely Home &bull; Sea Harbor Marketplace</i></p>
         </header>
 
         <!-- Standard Login Modal -->
         <div id="login-modal" class="modal-overlay">
             <div class="modal-card">
-                <h2>Welcome Back</h2>
-                <p style="color: #94a3b8; font-size: 0.9rem;">Select your portal role</p>
+                <h2><i class="fa-solid fa-anchor"></i> Welcome Aboard</h2>
+                <p style="color: #94a3b8; font-size: 0.9rem;">Select your portal role to navigate</p>
                 <form onsubmit="handleLogin(event)">
                     <div class="form-group">
                         <label>Select Role</label>
@@ -375,10 +385,10 @@
                         </select>
                     </div>
                     <div class="form-group">
-                        <label>Username / Email</label>
+                        <label>Username / Officer Name</label>
                         <input type="text" id="username" required placeholder="Enter username">
                     </div>
-                    <button type="submit" class="action-btn">Enter Marketplace</button>
+                    <button type="submit" class="action-btn">Enter Harbor Marketplace</button>
                     <span class="admin-link" onclick="openAdminModal()">System Admin Portal Direct Access</span>
                 </form>
             </div>
@@ -386,9 +396,9 @@
 
         <!-- Dedicated Admin Login Modal -->
         <div id="admin-modal" class="modal-overlay" style="display:none;">
-            <div class="modal-card" style="border-color: #ffb703; box-shadow: 0 0 35px rgba(255, 183, 3, 0.3);">
-                <h2 style="color: #ffb703;">🛡️ System Admin Verification</h2>
-                <p style="color: #94a3b8; font-size: 0.9rem;">Restricted portal for platform administrators</p>
+            <div class="modal-card" style="border-color: var(--accent); box-shadow: 0 0 35px rgba(255, 183, 3, 0.3);">
+                <h2 style="color: var(--accent);"><i class="fa-solid fa-shield-halved"></i> System Admin Verification</h2>
+                <p style="color: #94a3b8; font-size: 0.9rem;">Restricted portal for harbor watch commanders</p>
                 <form onsubmit="handleAdminLogin(event)">
                     <div class="form-group">
                         <label>Admin ID</label>
@@ -398,7 +408,7 @@
                         <label>Secret Security Key</label>
                         <input type="password" id="admin-secret-pass" required placeholder="Enter Admin Password">
                     </div>
-                    <button type="submit" class="action-btn" style="background:#ffb703; color:#000;">Authenticate Admin</button>
+                    <button type="submit" class="action-btn" style="background:var(--accent); color:#000;">Authenticate Admin</button>
                     <br><br>
                     <button type="button" style="background:transparent; color:#94a3b8; border:none; cursor:pointer;" onclick="closeAdminModal()">Return to Standard Login</button>
                 </form>
@@ -408,9 +418,9 @@
         <!-- Payment Modal -->
         <div id="payment-modal" class="modal-overlay" style="display: none;">
             <div class="modal-card">
-                <h2>Checkout & Payment 💳</h2>
+                <h2><i class="fa-solid fa-credit-card"></i> Checkout & Payment</h2>
                 <p id="checkout-item-name" style="color: #94a3b8;">Item Name</p>
-                <h3 id="checkout-item-price" style="color: #00f0ff; font-size: 1.8rem; margin: 5px 0 15px 0;">$0.00</h3>
+                <h3 id="checkout-item-price" style="color: var(--primary); font-size: 1.8rem; margin: 5px 0 15px 0;">$0.00</h3>
                 <form onsubmit="processPayment(event)">
                     <div class="form-group">
                         <label>Cardholder Name</label>
@@ -444,22 +454,22 @@
         <!-- User Status Bar -->
         <div id="user-bar" class="user-bar" style="display:none;">
             <span id="user-display">Logged in as: -</span>
-            <button class="logout-btn" onclick="handleLogout()">Logout</button>
+            <button class="logout-btn" onclick="handleLogout()"><i class="fa-solid fa-right-from-bracket"></i> Logout</button>
         </div>
 
         <!-- Navigation Tabs -->
         <div class="nav-tabs">
-            <button id="btn-tab-buy" class="tab-btn" onclick="switchTab('buy')">Marketplace (Buy)</button>
-            <button id="btn-tab-purchases" class="tab-btn" onclick="switchTab('purchases')">My Orders</button>
-            <button id="btn-tab-sell" class="tab-btn" onclick="switchTab('sell')">Upload Device (Sell)</button>
-            <button id="btn-tab-dashboard" class="tab-btn" onclick="switchTab('dashboard')">Seller Dashboard</button>
-            <button id="btn-tab-assess" class="tab-btn" onclick="switchTab('assess')">Condition Assessment</button>
-            <button id="btn-tab-admin" class="tab-btn admin-tab" onclick="switchTab('admin')" style="display:none;">🛡️ Admin Portal</button>
+            <button id="btn-tab-buy" class="tab-btn" onclick="switchTab('buy')"><i class="fa-solid fa-store"></i> Marketplace (Buy)</button>
+            <button id="btn-tab-purchases" class="tab-btn" onclick="switchTab('purchases')"><i class="fa-solid fa-box"></i> My Orders</button>
+            <button id="btn-tab-sell" class="tab-btn" onclick="switchTab('sell')"><i class="fa-solid fa-upload"></i> Upload Device (Sell)</button>
+            <button id="btn-tab-dashboard" class="tab-btn" onclick="switchTab('dashboard')"><i class="fa-solid fa-chart-line"></i> Seller Dashboard</button>
+            <button id="btn-tab-assess" class="tab-btn" onclick="switchTab('assess')"><i class="fa-solid fa-clipboard-check"></i> Condition Assessment</button>
+            <button id="btn-tab-admin" class="tab-btn admin-tab" onclick="switchTab('admin')" style="display:none;"><i class="fa-solid fa-shield-halved"></i> Admin Portal</button>
         </div>
 
         <!-- Tab 1: Marketplace (Buy) -->
         <div id="tab-buy" class="section">
-            <h2>Available Hardware & Components</h2>
+            <h2>Available Hardware & Ships</h2>
             <div class="marketplace-grid" id="marketplace-list"></div>
         </div>
 
@@ -517,7 +527,7 @@
                 </div>
                 <div class="result-box">
                     <strong>Estimated Seller Cash Back:</strong> 
-                    <span id="seller-payout" style="font-size: 1.3rem; color: #00f0ff; font-weight: bold;">$0.00</span>
+                    <span id="seller-payout" style="font-size: 1.3rem; color: var(--primary); font-weight: bold;">$0.00</span>
                 </div>
                 <br>
                 <button type="submit" class="action-btn">Upload & Publish Listing</button>
@@ -563,21 +573,21 @@
 
         <!-- Tab 6: Admin Portal -->
         <div id="tab-admin" class="section">
-            <h2 style="color: #ffb703;">🛡️ System Administrator Portal</h2>
+            <h2 style="color: var(--accent);"><i class="fa-solid fa-shield-halved"></i> System Administrator Portal</h2>
             <p style="color: #94a3b8;">Overview of all registered platform buyers, sellers, and transactions.</p>
             
             <div class="dashboard-grid">
                 <div class="stat-card">
                     <p style="color:#94a3b8; margin:0;">Total Users</p>
-                    <h3 id="admin-total-users" style="color: #ffb703;">0</h3>
+                    <h3 id="admin-total-users" style="color: var(--accent);">0</h3>
                 </div>
                 <div class="stat-card">
                     <p style="color:#94a3b8; margin:0;">Total Transactions</p>
-                    <h3 id="admin-total-sales" style="color: #ffb703;">0</h3>
+                    <h3 id="admin-total-sales" style="color: var(--accent);">0</h3>
                 </div>
                 <div class="stat-card">
                     <p style="color:#94a3b8; margin:0;">Platform Volume</p>
-                    <h3 id="admin-total-volume" style="color: #ffb703;">$0.00</h3>
+                    <h3 id="admin-total-volume" style="color: var(--accent);">$0.00</h3>
                 </div>
             </div>
 
@@ -612,49 +622,72 @@
     </div>
 
     <script>
-        // --- 3D CANVAS SETUP ---
+        // --- 3D CANVAS & THREE.JS SETUP ---
         const canvas = document.getElementById('webgl-canvas');
-        const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true });
+        const renderer = new THREE.WebGLRenderer({ canvas, antialias: true });
         renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
         renderer.setSize(window.innerWidth, window.innerHeight);
+        renderer.shadowMap.enabled = true;
 
         const scene = new THREE.Scene();
+        scene.background = new THREE.Color(0x020617);
+        scene.fog = new THREE.FogExp2(0x020617, 0.025);
 
         const camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 1000);
-        let targetCameraPos = { x: -6, y: 2, z: 24 };
-        camera.position.set(-6, 2, 24);
+        let targetCameraPos = { x: -7, y: 3, z: 22 };
+        camera.position.set(-7, 3, 22);
 
-        // Scene Lighting
-        scene.add(new THREE.AmbientLight(0x0a192f, 2.5));
+        // Ambient & Scene Directional Lighting
+        scene.add(new THREE.AmbientLight(0x0a192f, 1.8));
         
-        const dirLight1 = new THREE.DirectionalLight(0x00f0ff, 2.0);
-        dirLight1.position.set(12, 18, 15);
-        scene.add(dirLight1);
+        const moonLight = new THREE.DirectionalLight(0x38bdf8, 1.2);
+        moonLight.position.set(20, 40, -10);
+        scene.add(moonLight);
 
-        const dirLight2 = new THREE.DirectionalLight(0x10b981, 1.5);
-        dirLight2.position.set(-12, -12, -10);
-        scene.add(dirLight2);
-
-        // --- OCEAN WATER SURFACE ---
-        const oceanGeo = new THREE.PlaneGeometry(60, 60, 40, 40);
+        // --- OCEAN WATER SURFACE WITH ANIMATED WAVES ---
+        const oceanGeo = new THREE.PlaneGeometry(160, 160, 64, 64);
         oceanGeo.rotateX(-Math.PI / 2);
-        const oceanMat = new THREE.MeshStandardMaterial({
-            color: 0x071528,
-            roughness: 0.2,
-            metalness: 0.8,
+        
+        // Save initial vertex positions for wave calculations
+        const posAttr = oceanGeo.attributes.position;
+        const initialY = new Float32Array(posAttr.count);
+        for (let i = 0; i < posAttr.count; i++) {
+            initialY[i] = posAttr.getY(i);
+        }
+
+        const oceanMat = new THREE.MeshPhongMaterial({
+            color: 0x03254c,
+            emissive: 0x011627,
+            specular: 0x00f0ff,
+            shininess: 90,
             flatShading: true,
             transparent: true,
-            opacity: 0.9
+            opacity: 0.92
         });
+
         const oceanMesh = new THREE.Mesh(oceanGeo, oceanMat);
         oceanMesh.position.set(-8, -4.5, 0);
         scene.add(oceanMesh);
 
-        // --- 3D WATCHTOWER STRUCTURE GROUP ---
-        const towerGroup = new THREE.Group();
-        towerGroup.position.set(-8, -4, 0);
-        scene.add(towerGroup);
+        // --- 3D WATCHTOWER & ROCKY ISLAND FOUNDATION ---
+        const islandGroup = new THREE.Group();
+        islandGroup.position.set(-8, -4.5, 0);
+        scene.add(islandGroup);
 
+        // Rocky Island Base
+        const rockGeo = new THREE.DodecahedronGeometry(3.8, 1);
+        const rockMat = new THREE.MeshStandardMaterial({
+            color: 0x1e293b,
+            roughness: 0.9,
+            metalness: 0.2,
+            flatShading: true
+        });
+        const rockMesh = new THREE.Mesh(rockGeo, rockMat);
+        rockMesh.scale.set(1.4, 0.7, 1.4);
+        rockMesh.position.y = 0.8;
+        islandGroup.add(rockMesh);
+
+        // Watchtower Metallic / Concrete Materials
         const towerMat = new THREE.MeshPhongMaterial({
             color: 0x0f172a,
             emissive: 0x020617,
@@ -669,35 +702,35 @@
             shininess: 90
         });
 
-        // 1. Rocky Island Base
-        const islandGeo = new THREE.CylinderGeometry(4.2, 5.0, 1.5, 8);
-        const islandMesh = new THREE.Mesh(islandGeo, towerMat);
-        islandMesh.position.y = 0.75;
-        towerGroup.add(islandMesh);
+        // 1. Tower Base Pedestal
+        const baseGeo = new THREE.CylinderGeometry(2.8, 3.4, 1.5, 12);
+        const baseMesh = new THREE.Mesh(baseGeo, towerMat);
+        baseMesh.position.y = 2.2;
+        islandGroup.add(baseMesh);
 
         // 2. Main Tower Shaft
-        const shaftGeo = new THREE.CylinderGeometry(1.8, 2.8, 8.5, 12);
+        const shaftGeo = new THREE.CylinderGeometry(1.6, 2.4, 8.5, 12);
         const shaftMesh = new THREE.Mesh(shaftGeo, towerMat);
-        shaftMesh.position.y = 5.75;
-        towerGroup.add(shaftMesh);
+        shaftMesh.position.y = 7.2;
+        islandGroup.add(shaftMesh);
 
-        // Accent Rings
-        for (let yPos of [2.8, 5.3, 7.8]) {
-            const ringGeo = new THREE.TorusGeometry(2.3 - (yPos * 0.08), 0.12, 12, 32);
+        // Accent Decorative Rings on Tower Shaft
+        for (let yPos of [4.5, 7.0, 9.5]) {
+            const ringGeo = new THREE.TorusGeometry(2.1 - (yPos * 0.06), 0.12, 12, 32);
             const ringMesh = new THREE.Mesh(ringGeo, accentMat);
             ringMesh.rotation.x = Math.PI / 2;
             ringMesh.position.y = yPos;
-            towerGroup.add(ringMesh);
+            islandGroup.add(ringMesh);
         }
 
-        // 3. Observation Deck
-        const deckBaseGeo = new THREE.CylinderGeometry(3.2, 1.8, 1.0, 12);
+        // 3. Observation Deck Platform & Railing
+        const deckBaseGeo = new THREE.CylinderGeometry(2.8, 1.6, 0.8, 12);
         const deckBaseMesh = new THREE.Mesh(deckBaseGeo, towerMat);
-        deckBaseMesh.position.y = 10.5;
-        towerGroup.add(deckBaseMesh);
+        deckBaseMesh.position.y = 11.85;
+        islandGroup.add(deckBaseMesh);
 
-        // 4. Cabin Lantern Room
-        const cabinGeo = new THREE.CylinderGeometry(2.8, 2.8, 1.5, 12);
+        // 4. Observation Cabin / Lantern Room Glass Window Ring
+        const cabinGeo = new THREE.CylinderGeometry(2.2, 2.2, 1.6, 12);
         const cabinMat = new THREE.MeshPhongMaterial({
             color: 0xffb703,
             emissive: 0xff9100,
@@ -706,368 +739,161 @@
             shininess: 100
         });
         const cabinMesh = new THREE.Mesh(cabinGeo, cabinMat);
-        cabinMesh.position.y = 11.75;
-        towerGroup.add(cabinMesh);
+        cabinMesh.position.y = 13.05;
+        islandGroup.add(cabinMesh);
 
-        // Dome Roof
-        const domeGeo = new THREE.ConeGeometry(3.3, 1.5, 12);
+        // Cabin Roof Cap / Dome
+        const domeGeo = new THREE.ConeGeometry(2.7, 1.4, 12);
         const domeMesh = new THREE.Mesh(domeGeo, towerMat);
-        domeMesh.position.y = 13.25;
-        towerGroup.add(domeMesh);
+        domeMesh.position.y = 14.5;
+        islandGroup.add(domeMesh);
 
-        // --- ROTATING YELLOW LIGHTHOUSE HEAD & BEAM ---
+        // --- DYNAMIC ROTATING LIGHTHOUSE / WATCHTOWER LIGHT ---
         const lightHousingGroup = new THREE.Group();
-        lightHousingGroup.position.set(0, 11.75, 0);
-        towerGroup.add(lightHousingGroup);
+        lightHousingGroup.position.set(0, 13.05, 0);
+        islandGroup.add(lightHousingGroup);
 
+        // Glowing Lamp Bulb Core
         const lampGeo = new THREE.SphereGeometry(0.6, 16, 16);
         const lampMat = new THREE.MeshBasicMaterial({ color: 0xffea00 });
         const lampMesh = new THREE.Mesh(lampGeo, lampMat);
         lightHousingGroup.add(lampMesh);
 
-        const beamLength = 25;
-        const beamGeo = new THREE.ConeGeometry(5.0, beamLength, 32, 1, true);
-        beamGeo.translate(0, -beamLength / 2, 0);
+        // Volumetric Transparent Yellow Light Beam Cone
+        const beamLength = 28;
+        const beamGeo = new THREE.ConeGeometry(5.2, beamLength, 32, 1, true);
+        beamGeo.translate(0, -beamLength / 2, 0); // Origin at top apex
 
         const beamMat = new THREE.MeshBasicMaterial({
             color: 0xffd700,
             transparent: true,
-            opacity: 0.35,
+            opacity: 0.38,
             side: THREE.DoubleSide,
             depthWrite: false,
             blending: THREE.AdditiveBlending
         });
+
         const lightBeamMesh = new THREE.Mesh(beamGeo, beamMat);
-        lightBeamMesh.rotation.x = Math.PI / 2.3;
+        lightBeamMesh.rotation.x = Math.PI / 2.25; // Tilt outward across sea level
         lightHousingGroup.add(lightBeamMesh);
 
-        const towerSpotlight = new THREE.SpotLight(0xffd700, 5.0, 40, Math.PI / 4, 0.4, 1);
+        // Real Spotlight casting illumination across floating ships
+        const towerSpotlight = new THREE.SpotLight(0xffd700, 5.0, 45, Math.PI / 5, 0.4, 1);
         towerSpotlight.position.set(0, 0, 0);
+        
         const spotTarget = new THREE.Object3D();
-        spotTarget.position.set(0, -2, 22);
+        spotTarget.position.set(0, -4, 25);
         lightHousingGroup.add(spotTarget);
         towerSpotlight.target = spotTarget;
         lightHousingGroup.add(towerSpotlight);
 
 
-        // --- PRECISE COMPONENT SHIP BUILDERS (BASED ON REFERENCE STYLES) ---
-        function createContainerShipModel() {
-            const group = new THREE.Group();
-            const hullMat = new THREE.MeshStandardMaterial({ color: 0x111827, roughness: 0.4 });
-            const bottomMat = new THREE.MeshStandardMaterial({ color: 0x991b1b, roughness: 0.5 });
-            const deckMat = new THREE.MeshStandardMaterial({ color: 0x1e293b, roughness: 0.5 });
-            
-            // Bottom hull red
-            const bGeo = new THREE.BoxGeometry(2.4, 0.5, 5.2);
-            const bMesh = new THREE.Mesh(bGeo, bottomMat);
-            bMesh.position.y = 0.25;
-            group.add(bMesh);
+        // --- PROCEDURAL 3D SHIPS / BOATS FLOATING & SAILING AT SEA ---
+        const shipGroup = new THREE.Group();
+        scene.add(shipGroup);
 
-            // Upper hull dark
-            const uGeo = new THREE.BoxGeometry(2.5, 0.5, 5.0);
-            const uMesh = new THREE.Mesh(uGeo, hullMat);
-            uMesh.position.y = 0.75;
-            group.add(uMesh);
+        function createShipMesh(color, textLabel) {
+            const ship = new THREE.Group();
 
-            // Deck
-            const dGeo = new THREE.BoxGeometry(2.4, 0.1, 4.8);
-            const dMesh = new THREE.Mesh(dGeo, deckMat);
-            dMesh.position.y = 1.05;
-            group.add(dMesh);
+            // Ship Hull
+            const hullGeo = new THREE.ConeGeometry(0.8, 2.4, 4);
+            hullGeo.rotateX(Math.PI / 2);
+            hullGeo.scale(1, 0.6, 1);
+            const hullMat = new THREE.MeshStandardMaterial({
+                color: color,
+                roughness: 0.4,
+                metalness: 0.6,
+                flatShading: true
+            });
+            const hull = new THREE.Mesh(hullGeo, hullMat);
+            hull.position.y = 0.2;
+            ship.add(hull);
 
-            // Containers stack
-            const colors = [0x00f0ff, 0x10b981, 0xffb703, 0x3b82f6, 0xef4444];
-            for (let x = -0.7; x <= 0.7; x += 0.7) {
-                for (let z = -1.2; z <= 1.2; z += 0.9) {
-                    for (let y = 0; y < 2; y++) {
-                        const cMat = new THREE.MeshStandardMaterial({ color: colors[Math.floor(Math.random() * colors.length)], roughness: 0.3 });
-                        const cGeo = new THREE.BoxGeometry(0.65, 0.55, 0.85);
-                        const cMesh = new THREE.Mesh(cGeo, cMat);
-                        cMesh.position.set(x, 1.4 + y * 0.6, z);
-                        group.add(cMesh);
-                    }
-                }
-            }
+            // Deck Cabin
+            const cabinGeo = new THREE.BoxGeometry(0.7, 0.5, 0.9);
+            const cabinMat = new THREE.MeshStandardMaterial({ color: 0x0f172a, roughness: 0.2 });
+            const cabin = new THREE.Mesh(cabinGeo, cabinMat);
+            cabin.position.set(0, 0.5, -0.2);
+            ship.add(cabin);
 
-            // Bridge (Aft)
-            const bridgeMat = new THREE.MeshStandardMaterial({ color: 0xf8fafc, roughness: 0.2 });
-            const bridgeGeo = new THREE.BoxGeometry(1.6, 1.2, 1.2);
-            const bridge = new THREE.Mesh(bridgeGeo, bridgeMat);
-            bridge.position.set(0, 1.7, -1.8);
-            group.add(bridge);
+            // Glowing Navigation Antenna / Beacon Light
+            const beaconGeo = new THREE.SphereGeometry(0.12, 8, 8);
+            const beaconMat = new THREE.MeshBasicMaterial({ color: 0x00f0ff });
+            const beacon = new THREE.Mesh(beaconGeo, beaconMat);
+            beacon.position.set(0, 0.9, -0.2);
+            ship.add(beacon);
 
-            group.scale.set(0.75, 0.75, 0.75);
-            return group;
+            // Floating Hardware Component Banner / Sprite Label
+            const canvas = document.createElement('canvas');
+            canvas.width = 256;
+            canvas.height = 64;
+            const ctx = canvas.getContext('2d');
+            ctx.fillStyle = 'rgba(10, 20, 35, 0.9)';
+            ctx.fillRect(0, 0, 256, 64);
+            ctx.strokeStyle = '#00f0ff';
+            ctx.lineWidth = 3;
+            ctx.strokeRect(2, 2, 252, 60);
+            ctx.fillStyle = '#00f0ff';
+            ctx.font = 'Bold 18px Segoe UI, sans-serif';
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+            ctx.fillText(textLabel, 128, 32);
+
+            const texture = new THREE.CanvasTexture(canvas);
+            const spriteMat = new THREE.SpriteMaterial({ map: texture, transparent: true, opacity: 0.95 });
+            const sprite = new THREE.Sprite(spriteMat);
+            sprite.scale.set(2.4, 0.6, 1);
+            sprite.position.set(0, 1.7, 0);
+            ship.add(sprite);
+
+            return ship;
         }
 
-        function createChemicalTankerModel() {
-            const group = new THREE.Group();
-            const hullMat = new THREE.MeshStandardMaterial({ color: 0x1e3a8a, roughness: 0.4 });
-            const bottomMat = new THREE.MeshStandardMaterial({ color: 0x991b1b, roughness: 0.5 });
-            const deckMat = new THREE.MeshStandardMaterial({ color: 0x334155, roughness: 0.5 });
-            
-            const bGeo = new THREE.BoxGeometry(2.2, 0.5, 5.0);
-            const bMesh = new THREE.Mesh(bGeo, bottomMat);
-            bMesh.position.y = 0.25;
-            group.add(bMesh);
-
-            const uGeo = new THREE.BoxGeometry(2.3, 0.6, 4.8);
-            const uMesh = new THREE.Mesh(uGeo, hullMat);
-            uMesh.position.y = 0.8;
-            group.add(uMesh);
-
-            // Piping & Deck
-            const dGeo = new THREE.BoxGeometry(2.1, 0.1, 4.4);
-            const dMesh = new THREE.Mesh(dGeo, deckMat);
-            dMesh.position.y = 1.15;
-            group.add(dMesh);
-
-            for (let z = -1.2; z <= 1.2; z += 0.8) {
-                const tankGeo = new THREE.CylinderGeometry(0.4, 0.4, 0.7, 16);
-                tankGeo.rotateX(Math.PI / 2);
-                const tankMat = new THREE.MeshStandardMaterial({ color: 0xef4444, metalness: 0.3 });
-                const tank = new THREE.Mesh(tankGeo, tankMat);
-                tank.position.set(0, 1.5, z);
-                group.add(tank);
-            }
-
-            // Bridge (Aft)
-            const bridgeGeo = new THREE.BoxGeometry(1.4, 1.0, 1.2);
-            const bridgeMat = new THREE.MeshStandardMaterial({ color: 0xf8fafc });
-            const bridge = new THREE.Mesh(bridgeGeo, bridgeMat);
-            bridge.position.set(0, 1.7, -1.8);
-            group.add(bridge);
-
-            group.scale.set(0.75, 0.75, 0.75);
-            return group;
-        }
-
-        function createBulkCarrierModel() {
-            const group = new THREE.Group();
-            const hullMat = new THREE.MeshStandardMaterial({ color: 0x1e3a8a, roughness: 0.4 });
-            const bottomMat = new THREE.MeshStandardMaterial({ color: 0x7c2d12, roughness: 0.5 });
-            
-            const bGeo = new THREE.BoxGeometry(2.4, 0.5, 5.2);
-            const bMesh = new THREE.Mesh(bGeo, bottomMat);
-            bMesh.position.y = 0.25;
-            group.add(bMesh);
-
-            const uGeo = new THREE.BoxGeometry(2.5, 0.8, 5.0);
-            const uMesh = new THREE.Mesh(uGeo, hullMat);
-            uMesh.position.y = 0.9;
-            group.add(uMesh);
-
-            // 4 Yellow Hopper Bins / Cargo Holds
-            for (let z = -1.5; z <= 1.5; z += 1.0) {
-                const hopperGeo = new THREE.BoxGeometry(1.8, 0.8, 0.8);
-                const hopperMat = new THREE.MeshStandardMaterial({ color: 0xffb703, roughness: 0.3 });
-                const hopper = new THREE.Mesh(hopperGeo, hopperMat);
-                hopper.position.set(0, 1.7, z);
-                group.add(hopper);
-            }
-
-            // Bridge (Aft)
-            const bridgeGeo = new THREE.BoxGeometry(1.6, 1.4, 1.2);
-            const bridgeMat = new THREE.MeshStandardMaterial({ color: 0xf8fafc });
-            const bridge = new THREE.Mesh(bridgeGeo, bridgeMat);
-            bridge.position.set(0, 2.0, -1.9);
-            group.add(bridge);
-
-            group.scale.set(0.75, 0.75, 0.75);
-            return group;
-        }
-
-        function createCrudeOilTankerModel() {
-            const group = new THREE.Group();
-            const hullMat = new THREE.MeshStandardMaterial({ color: 0x7f1d1d, roughness: 0.4 });
-            const bottomMat = new THREE.MeshStandardMaterial({ color: 0x111827, roughness: 0.5 });
-            
-            const bGeo = new THREE.BoxGeometry(2.6, 0.5, 5.4);
-            const bMesh = new THREE.Mesh(bGeo, bottomMat);
-            bMesh.position.y = 0.25;
-            group.add(bMesh);
-
-            const uGeo = new THREE.BoxGeometry(2.7, 0.9, 5.2);
-            const uMesh = new THREE.Mesh(uGeo, hullMat);
-            uMesh.position.y = 0.95;
-            group.add(uMesh);
-
-            // Piping & Deck Cranes
-            const deckMat = new THREE.MeshStandardMaterial({ color: 0x334155 });
-            const dGeo = new THREE.BoxGeometry(2.5, 0.1, 4.8);
-            const dMesh = new THREE.Mesh(dGeo, deckMat);
-            dMesh.position.y = 1.45;
-            group.add(dMesh);
-
-            // Bridge (Aft) & Funnel
-            const bridgeGeo = new THREE.BoxGeometry(1.6, 1.2, 1.4);
-            const bridgeMat = new THREE.MeshStandardMaterial({ color: 0xf8fafc });
-            const bridge = new THREE.Mesh(bridgeGeo, bridgeMat);
-            bridge.position.set(0, 2.1, -1.9);
-            group.add(bridge);
-
-            const funnelGeo = new THREE.CylinderGeometry(0.2, 0.2, 0.6);
-            const funnelMat = new THREE.MeshStandardMaterial({ color: 0xef4444 });
-            const funnel = new THREE.Mesh(funnelGeo, funnelMat);
-            funnel.position.set(0, 2.9, -1.9);
-            group.add(funnel);
-
-            group.scale.set(0.75, 0.75, 0.75);
-            return group;
-        }
-
-        function createLngTankerModel() {
-            const group = new THREE.Group();
-            const hullMat = new THREE.MeshStandardMaterial({ color: 0x991b1b, roughness: 0.4 });
-            const bottomMat = new THREE.MeshStandardMaterial({ color: 0x111827, roughness: 0.5 });
-            
-            const bGeo = new THREE.BoxGeometry(2.5, 0.5, 5.2);
-            const bMesh = new THREE.Mesh(bGeo, bottomMat);
-            bMesh.position.y = 0.25;
-            group.add(bMesh);
-
-            const uGeo = new THREE.BoxGeometry(2.6, 0.8, 5.0);
-            const uMesh = new THREE.Mesh(uGeo, hullMat);
-            uMesh.position.y = 0.9;
-            group.add(uMesh);
-
-            // 4 Spherical LNG Tanks
-            for (let z = -1.5; z <= 1.5; z += 1.0) {
-                const sphereGeo = new THREE.SphereGeometry(0.65, 24, 24);
-                // Flatten bottom hemisphere slightly
-                sphereGeo.scale(1, 0.85, 1);
-                const sphereMat = new THREE.MeshStandardMaterial({ color: 0xf8fafc, roughness: 0.2, metalness: 0.3 });
-                const sphere = new THREE.Mesh(sphereGeo, sphereMat);
-                sphere.position.set(0, 1.7, z);
-                group.add(sphere);
-            }
-
-            // Bridge (Aft)
-            const bridgeGeo = new THREE.BoxGeometry(1.6, 1.2, 1.2);
-            const bridgeMat = new THREE.MeshStandardMaterial({ color: 0x334155 });
-            const bridge = new THREE.Mesh(bridgeGeo, bridgeMat);
-            bridge.position.set(0, 1.9, -1.9);
-            group.add(bridge);
-
-            group.scale.set(0.75, 0.75, 0.75);
-            return group;
-        }
-
-        function createRoRoShipModel() {
-            const group = new THREE.Group();
-            const hullMat = new THREE.MeshStandardMaterial({ color: 0x1e3a8a, roughness: 0.4 });
-            const bottomMat = new THREE.MeshStandardMaterial({ color: 0x991b1b, roughness: 0.5 });
-            const superMat = new THREE.MeshStandardMaterial({ color: 0xf8fafc, roughness: 0.3 });
-
-            const bGeo = new THREE.BoxGeometry(2.6, 0.6, 5.2);
-            const bMesh = new THREE.Mesh(bGeo, bottomMat);
-            bMesh.position.y = 0.3;
-            group.add(bMesh);
-
-            const uGeo = new THREE.BoxGeometry(2.7, 1.4, 5.0);
-            const uMesh = new THREE.Mesh(uGeo, hullMat);
-            uMesh.position.y = 1.3;
-            group.add(uMesh);
-
-            // Large Upper Superstructure block
-            const topGeo = new THREE.BoxGeometry(2.6, 0.8, 3.8);
-            const topMesh = new THREE.Mesh(topGeo, superMat);
-            topMesh.position.set(0, 2.4, -0.4);
-            group.add(topMesh);
-
-            group.scale.set(0.75, 0.75, 0.75);
-            return group;
-        }
-
-        function createGeneralCargoModel() {
-            const group = new THREE.Group();
-            const hullMat = new THREE.MeshStandardMaterial({ color: 0x065f46, roughness: 0.4 });
-            const bottomMat = new THREE.MeshStandardMaterial({ color: 0x64748b, roughness: 0.5 });
-            
-            const bGeo = new THREE.BoxGeometry(2.4, 0.5, 5.0);
-            const bMesh = new THREE.Mesh(bGeo, bottomMat);
-            bMesh.position.y = 0.25;
-            group.add(bMesh);
-
-            const uGeo = new THREE.BoxGeometry(2.5, 0.7, 4.8);
-            const uMesh = new THREE.Mesh(uGeo, hullMat);
-            uMesh.position.y = 0.85;
-            group.add(uMesh);
-
-            // Deck Cranes / Gantries
-            for (let z of [-1.0, 1.0]) {
-                const gantryGeo = new THREE.BoxGeometry(2.2, 1.0, 0.3);
-                const gantryMat = new THREE.MeshStandardMaterial({ color: 0xffb703 });
-                const gantry = new THREE.Mesh(gantryGeo, gantryMat);
-                gantry.position.set(0, 1.7, z);
-                group.add(gantry);
-            }
-
-            // Bridge (Aft)
-            const bridgeGeo = new THREE.BoxGeometry(1.4, 1.0, 1.2);
-            const bridgeMat = new THREE.MeshStandardMaterial({ color: 0xf8fafc });
-            const bridge = new THREE.Mesh(bridgeGeo, bridgeMat);
-            bridge.position.set(0, 1.7, -1.8);
-            group.add(bridge);
-
-            group.scale.set(0.75, 0.75, 0.75);
-            return group;
-        }
-
-        // --- COMPONENT FLEET CREATION & NAMING ---
-        const componentNames = [
-            "Container Ship\n[CPU Processor]",
-            "Chemical Tanker\n[GPU RTX Card]",
-            "Bulk Carrier\n[Motherboard]",
-            "Crude Oil Tanker\n[RAM Memory]",
-            "LNG Tanker\n[SSD Storage]",
-            "Ro-Ro Ship\n[Power Supply]",
-            "General Cargo\n[Integrated Circuits]"
+        const componentShips = [
+            { name: "💻 LAPTOP", color: 0x3b82f6 },
+            { name: "🔳 CPU SHIP", color: 0x10b981 },
+            { name: "📟 MOTHERBOARD", color: 0x8b5cf6 },
+            { name: "🎮 RTX GPU", color: 0xf59e0b },
+            { name: "⚡ IC CIRCUIT", color: 0xef4444 },
+            { name: "🎴 RAM VESSEL", color: 0x06b6d4 },
+            { name: "💾 SSD CARRIER", color: 0xec4899 },
+            { name: "📱 TABLET", color: 0x6366f1 }
         ];
 
-        const fleetGroup = new THREE.Group();
-        scene.add(fleetGroup);
+        const activeShips = [];
 
-        const ships = [];
-        const shipBuilders = [
-            createContainerShipModel,
-            createChemicalTankerModel,
-            createBulkCarrierModel,
-            createCrudeOilTankerModel,
-            createLngTankerModel,
-            createRoRoShipModel,
-            createGeneralCargoModel
-        ];
+        componentShips.forEach((item, idx) => {
+            const shipMesh = createShipMesh(item.color, item.name);
+            shipGroup.add(shipMesh);
 
-        shipBuilders.forEach((builder, i) => {
-            const shipMesh = builder();
-            fleetGroup.add(shipMesh);
+            const radius = 8.5 + (idx % 3) * 3.2; // Orbit radii around Watchtower
+            const angle = (idx / componentShips.length) * Math.PI * 2;
+            const speed = 0.003 + (idx % 2) * 0.002;
 
-            ships.push({
+            activeShips.push({
                 mesh: shipMesh,
-                name: componentNames[i],
-                orbitRadius: 11 + (i * 1.8),
-                angle: (i / shipBuilders.length) * Math.PI * 2,
-                speed: 0.0018 + (i * 0.0003),
-                bobFreq: 2.0 + (i * 0.3),
-                bobOffset: i * 0.8
+                radius: radius,
+                angle: angle,
+                speed: speed,
+                bobFreq: 1.5 + Math.random() * 1.5
             });
         });
 
-        // Parallax Mouse Motion
+        // Parallax Interactive Mouse Movement
         let mouseX = 0, mouseY = 0;
         window.addEventListener('mousemove', (e) => {
             mouseX = (e.clientX / window.innerWidth - 0.5) * 2;
             mouseY = (e.clientY / window.innerHeight - 0.5) * 2;
         });
 
+        // Preset Camera Angles for Navigation Tabs
         const cameraPresets = {
-            buy: { x: -6, y: 2, z: 24 },
-            purchases: { x: -4, y: 2.5, z: 20 },
-            sell: { x: -8, y: 1, z: 24 },
-            dashboard: { x: -5, y: 3, z: 18 },
-            assess: { x: -6, y: 1, z: 22 },
-            admin: { x: -2, y: 4, z: 16 }
+            buy: { x: -7, y: 3, z: 22 },
+            purchases: { x: -4, y: 4, z: 18 },
+            sell: { x: -9, y: 1, z: 24 },
+            dashboard: { x: -5, y: 5, z: 16 },
+            assess: { x: -7, y: 2, z: 20 },
+            admin: { x: -2, y: 6, z: 15 }
         };
 
         function update3DCamera(tabName) {
@@ -1076,40 +902,60 @@
             }
         }
 
-        // Continuous Animation Loop
+        // Continuous Real-Time Animation Loop
         const clock = new THREE.Clock();
+
         function animate3D() {
             requestAnimationFrame(animate3D);
 
             const elapsedTime = clock.getElapsedTime();
 
-            // 1. Rotate Watchtower Light
-            lightHousingGroup.rotation.y = elapsedTime * 0.8;
-            towerGroup.rotation.y = Math.sin(elapsedTime * 0.15) * 0.04;
+            // 1. Animate Sea Water Surface Waves
+            const pos = oceanGeo.attributes.position;
+            for (let i = 0; i < pos.count; i++) {
+                const u = pos.getX(i);
+                const v = pos.getZ(i);
+                const z = Math.sin(u * 0.3 + elapsedTime * 1.5) * 0.18 + 
+                          Math.cos(v * 0.4 + elapsedTime * 1.2) * 0.18;
+                pos.setY(i, z);
+            }
+            pos.needsUpdate = true;
 
-            // 2. Sail & Buoyancy Animation for Ships across the Sea
-            ships.forEach(s => {
-                s.angle += s.speed;
-                const x = Math.cos(s.angle) * s.orbitRadius - 8;
-                const z = Math.sin(s.angle) * s.orbitRadius;
-                
-                // Bobbing up and down on waves
-                const waveY = -4.3 + Math.sin(elapsedTime * s.bobFreq + s.bobOffset) * 0.18;
-                
-                s.mesh.position.set(x, waveY, z);
-                
-                // Face direction of travel along circle with tilt rocking
-                s.mesh.rotation.y = -s.angle + Math.PI / 2;
-                s.mesh.rotation.z = Math.cos(elapsedTime * s.bobFreq + s.bobOffset) * 0.05;
-                s.mesh.rotation.x = Math.sin(elapsedTime * (s.bobFreq * 0.8)) * 0.04;
+            // 2. Rotate the Watchtower Yellow Light continuously
+            lightHousingGroup.rotation.y = elapsedTime * 0.85;
+
+            // 3. Orbit Ships / Boats around Watchtower & Float with Water Waves
+            activeShips.forEach(ship => {
+                ship.angle += ship.speed;
+
+                // X & Z position orbiting around island at (-8, 0)
+                const targetX = Math.cos(ship.angle) * ship.radius - 8;
+                const targetZ = Math.sin(ship.angle) * ship.radius;
+
+                ship.mesh.position.x = targetX;
+                ship.mesh.position.z = targetZ;
+
+                // Y water wave buoyant float motion
+                const waveY = Math.sin(targetX * 0.3 + elapsedTime * 1.5) * 0.18 + 
+                              Math.cos(targetZ * 0.4 + elapsedTime * 1.2) * 0.18;
+                ship.mesh.position.y = -4.3 + waveY;
+
+                // Orient Ship facing tangential direction of movement
+                const nextAngle = ship.angle + 0.05;
+                const nextX = Math.cos(nextAngle) * ship.radius - 8;
+                const nextZ = Math.sin(nextAngle) * ship.radius;
+                ship.mesh.lookAt(nextX, ship.mesh.position.y, nextZ);
+
+                // Gentle Pitch/Roll rocking on waves
+                ship.mesh.rotation.z += Math.sin(elapsedTime * ship.bobFreq) * 0.06;
             });
 
             // Smooth Camera Interpolation
-            camera.position.x += (targetCameraPos.x + mouseX * 1.2 - camera.position.x) * 0.04;
-            camera.position.y += (targetCameraPos.y - mouseY * 1.2 - camera.position.y) * 0.04;
+            camera.position.x += (targetCameraPos.x + mouseX * 1.5 - camera.position.x) * 0.04;
+            camera.position.y += (targetCameraPos.y - mouseY * 1.5 - camera.position.y) * 0.04;
             camera.position.z += (targetCameraPos.z - camera.position.z) * 0.04;
 
-            camera.lookAt(-4, -1, 0);
+            camera.lookAt(-4, 0, 0);
             renderer.render(scene, camera);
         }
 
@@ -1121,7 +967,7 @@
             renderer.setSize(window.innerWidth, window.innerHeight);
         });
 
-        // Local Storage & State Management
+        // --- LOCAL STORAGE STATE MANAGEMENT & MARKETPLACE CONTROLLERS ---
         let listings = JSON.parse(localStorage.getItem('market_listings')) || [];
         let salesHistory = JSON.parse(localStorage.getItem('sales_history')) || [];
         let userRegistry = JSON.parse(localStorage.getItem('user_registry')) || [];
@@ -1195,20 +1041,20 @@
             if (currentUser.role === 'Buyer') {
                 document.getElementById('btn-tab-sell').style.display = 'none';
                 document.getElementById('btn-tab-dashboard').style.display = 'none';
-                document.getElementById('btn-tab-purchases').style.display = 'block';
+                document.getElementById('btn-tab-purchases').style.display = 'flex';
                 btnAdmin.style.display = 'none';
                 switchTab('buy');
             } else if (currentUser.role === 'Seller') {
-                document.getElementById('btn-tab-sell').style.display = 'block';
-                document.getElementById('btn-tab-dashboard').style.display = 'block';
+                document.getElementById('btn-tab-sell').style.display = 'flex';
+                document.getElementById('btn-tab-dashboard').style.display = 'flex';
                 document.getElementById('btn-tab-purchases').style.display = 'none';
                 btnAdmin.style.display = 'none';
                 switchTab('dashboard');
             } else if (currentUser.role === 'Admin') {
-                document.getElementById('btn-tab-sell').style.display = 'block';
-                document.getElementById('btn-tab-dashboard').style.display = 'block';
-                document.getElementById('btn-tab-purchases').style.display = 'block';
-                btnAdmin.style.display = 'block';
+                document.getElementById('btn-tab-sell').style.display = 'flex';
+                document.getElementById('btn-tab-dashboard').style.display = 'flex';
+                document.getElementById('btn-tab-purchases').style.display = 'flex';
+                btnAdmin.style.display = 'flex';
                 switchTab('admin');
             }
         }
@@ -1277,7 +1123,7 @@
                     listings.push(newItem);
                     localStorage.setItem('market_listings', JSON.stringify(listings));
 
-                    alert("Listing successfully created!");
+                    alert("Listing successfully created and dispatched!");
                     document.getElementById('sell-form').reset();
                     document.getElementById('custom-cat-group').style.display = 'none';
                     document.getElementById('seller-payout').innerText = "$0.00";
@@ -1293,7 +1139,7 @@
             const activeItems = listings.filter(item => item.status === 'Active');
 
             if (activeItems.length === 0) {
-                grid.innerHTML = `<div class="empty-msg">No active hardware components listed yet.</div>`;
+                grid.innerHTML = `<div class="empty-msg">No active hardware components listed yet. Upload a device to dispatch a vessel!</div>`;
                 return;
             }
 
@@ -1306,7 +1152,7 @@
                         <p style="margin: 0; font-size:0.85rem; color:#94a3b8;">Seller: ${item.seller}</p>
                         <p style="margin: 5px 0; font-size:0.9rem;">Condition: ${item.condition}</p>
                         <div class="price-tag">$${item.price}</div>
-                        <button class="action-btn" onclick="openPaymentModal(${item.id})">Buy Now</button>
+                        <button class="action-btn" onclick="openPaymentModal(${item.id})"><i class="fa-solid fa-cart-shopping"></i> Buy Now</button>
                     </div>
                 `;
             });
@@ -1344,7 +1190,7 @@
                 localStorage.setItem('market_listings', JSON.stringify(listings));
                 localStorage.setItem('sales_history', JSON.stringify(salesHistory));
 
-                alert(`Payment successful! Order confirmed for ${boughtItem.name}.`);
+                alert(`Payment successful! Order confirmed for ${boughtItem.name}. Guided safely into harbor.`);
                 closePaymentModal();
                 renderMarketplace();
             }
@@ -1364,7 +1210,7 @@
                 grid.innerHTML += `
                     <div class="card">
                         <img src="${item.image}" alt="${item.name}">
-                        <span class="badge" style="background:rgba(0, 240, 255, 0.2); color:#00f0ff;">Order Confirmed</span>
+                        <span class="badge" style="background:rgba(0, 240, 255, 0.2); color:#00f0ff;"><i class="fa-solid fa-circle-check"></i> Arrived in Harbor</span>
                         <h4 style="margin: 5px 0;">${item.name}</h4>
                         <p style="margin: 0; font-size:0.85rem; color:#94a3b8;">Category: ${item.category}</p>
                         <div class="price-tag">Paid: $${item.price}</div>
@@ -1386,7 +1232,7 @@
             grid.innerHTML = "";
 
             if (myItems.length === 0) {
-                grid.innerHTML = `<div class="empty-msg">No hardware listings found.</div>`;
+                grid.innerHTML = `<div class="empty-msg">No hardware listings found for your account.</div>`;
                 return;
             }
 
@@ -1438,7 +1284,7 @@
             buyersTable.innerHTML = "";
 
             if (salesHistory.length === 0) {
-                buyersTable.innerHTML = `<tr><td colspan="5" style="text-align:center; color:#64748b;">No completed transactions yet.</td></tr>`;
+                buyersTable.innerHTML = `<tr><td colspan="5" style="text-align:center; color:#64748b;">No completed harbor transactions yet.</td></tr>`;
             } else {
                 salesHistory.forEach(sh => {
                     buyersTable.innerHTML += `
@@ -1459,7 +1305,7 @@
             const isReusable = document.getElementById('reusable').checked;
             const isRefurbishable = document.getElementById('refurbishable').checked;
 
-            let pathway = isRepairable ? "Repair" : isReusable ? "Reuse / Resale" : isRefurbishable ? "Refurbishment" : "Responsible Recycling";
+            let pathway = isRepairable ? "Repair & Refurbish" : isReusable ? "Direct Reuse / Resale" : isRefurbishable ? "Component Harvesting" : "Safe E-Waste Recycling";
 
             const resultDiv = document.getElementById('assess-result');
             resultDiv.style.display = 'block';
