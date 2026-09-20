@@ -329,6 +329,18 @@
             color: #00ffcc;
         }
 
+        .admin-link {
+            display: inline-block;
+            margin-top: 15px;
+            color: #64748b;
+            font-size: 0.8rem;
+            text-decoration: underline;
+            cursor: pointer;
+        }
+        .admin-link:hover {
+            color: #ffb703;
+        }
+
         .empty-msg {
             text-align: center;
             color: #64748b;
@@ -349,7 +361,7 @@
             <p style="color: #94a3b8; margin-top: -5px;"><i>Circular Electronics & E-Waste Recovery Marketplace</i></p>
         </header>
 
-        <!-- Login Modal -->
+        <!-- Standard Login Modal -->
         <div id="login-modal" class="modal-overlay">
             <div class="modal-card">
                 <h2>Welcome Back</h2>
@@ -357,21 +369,38 @@
                 <form onsubmit="handleLogin(event)">
                     <div class="form-group">
                         <label>Select Role</label>
-                        <select id="user-role" onchange="toggleAdminPasskey()">
+                        <select id="user-role">
                             <option value="Buyer">Buyer</option>
                             <option value="Seller">Seller</option>
-                            <option value="Admin">System Administrator</option>
                         </select>
                     </div>
                     <div class="form-group">
                         <label>Username / Email</label>
                         <input type="text" id="username" required placeholder="Enter username">
                     </div>
-                    <div class="form-group" id="admin-pass-group" style="display:none;">
-                        <label>Admin Passkey</label>
-                        <input type="password" id="admin-passkey" placeholder="Enter admin passkey (default: admin123)">
-                    </div>
                     <button type="submit" class="action-btn">Enter Marketplace</button>
+                    <span class="admin-link" onclick="openAdminModal()">System Admin Portal Direct Access</span>
+                </form>
+            </div>
+        </div>
+
+        <!-- Separate Dedicated Admin Login Modal -->
+        <div id="admin-modal" class="modal-overlay" style="display:none;">
+            <div class="modal-card" style="border-color: #ffb703; box-shadow: 0 0 35px rgba(255, 183, 3, 0.3);">
+                <h2 style="color: #ffb703;">🛡️ System Admin Verification</h2>
+                <p style="color: #94a3b8; font-size: 0.9rem;">Restricted portal for platform administrators</p>
+                <form onsubmit="handleAdminLogin(event)">
+                    <div class="form-group">
+                        <label>Admin ID</label>
+                        <input type="text" id="admin-id" required placeholder="Enter Admin Username">
+                    </div>
+                    <div class="form-group">
+                        <label>Secret Security Key</label>
+                        <input type="password" id="admin-secret-pass" required placeholder="Enter Admin Password">
+                    </div>
+                    <button type="submit" class="action-btn" style="background:#ffb703; color:#000;">Authenticate Admin</button>
+                    <br><br>
+                    <button type="button" style="background:transparent; color:#94a3b8; border:none; cursor:pointer;" onclick="closeAdminModal()">Return to Standard Login</button>
                 </form>
             </div>
         </div>
@@ -583,7 +612,7 @@
     </div>
 
     <script>
-        // --- 3D ENGINE & REALISTIC HARDWARE COMPONENT PARTICLES ---
+        // --- REALISTIC BANYAN / MANGO TECH TREE ENGINE ---
         const canvas = document.getElementById('webgl-canvas');
         const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true });
         renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
@@ -592,90 +621,86 @@
         const scene = new THREE.Scene();
 
         const camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 1000);
-        let targetCameraPos = { x: -8, y: 1, z: 24 };
-        camera.position.set(-8, 1, 24);
+        let targetCameraPos = { x: -8, y: 2, z: 26 };
+        camera.position.set(-8, 2, 26);
 
-        // Lights
-        scene.add(new THREE.AmbientLight(0xffffff, 0.9));
-        const dirLight = new THREE.DirectionalLight(0x00ffcc, 1.8);
+        // Lighting
+        scene.add(new THREE.AmbientLight(0xffffff, 1.0));
+        const dirLight = new THREE.DirectionalLight(0x00ffcc, 1.5);
         dirLight.position.set(10, 20, 15);
         scene.add(dirLight);
 
-        const pointLight = new THREE.PointLight(0x10b981, 2.5, 60);
+        const pointLight = new THREE.PointLight(0x10b981, 2.0, 60);
         pointLight.position.set(-8, 5, 5);
         scene.add(pointLight);
 
-        // Realistic Organic Tech Tree Group
+        // Realistic Banyan Organic Tree Group
         const treeGroup = new THREE.Group();
         treeGroup.position.set(-9, -11, 0);
         scene.add(treeGroup);
 
         const barkMaterial = new THREE.MeshStandardMaterial({
-            color: 0x0a2e23,
-            roughness: 0.7,
-            metalness: 0.3,
-            emissive: 0x031c15,
-            emissiveIntensity: 0.5
+            color: 0x1f2923,
+            roughness: 0.85,
+            metalness: 0.1,
+            emissive: 0x071a13,
+            emissiveIntensity: 0.3
         });
 
-        const leafMaterial = new THREE.MeshStandardMaterial({
+        const canopyMaterial = new THREE.MeshStandardMaterial({
             color: 0x00ffcc,
-            roughness: 0.2,
-            emissive: 0x00ffcc,
-            emissiveIntensity: 0.9,
-            side: THREE.DoubleSide,
+            roughness: 0.3,
+            emissive: 0x00b386,
+            emissiveIntensity: 0.6,
             transparent: true,
-            opacity: 0.85
+            opacity: 0.88
         });
 
-        // Organic Recursive Tree Construction
-        function createRealisticBranch(parent, length, radius, depth) {
-            if (depth > 5) return;
+        // Banyan Trunk with Wide Roots
+        function createBanyanTree() {
+            // Main Central Thick Trunk
+            const trunkGeo = new THREE.CylinderGeometry(1.2, 2.2, 8, 16);
+            trunkGeo.translate(0, 4, 0);
+            const mainTrunk = new THREE.Mesh(trunkGeo, barkMaterial);
+            treeGroup.add(mainTrunk);
 
-            const geometry = new THREE.CylinderGeometry(radius * 0.68, radius, length, 12);
-            geometry.translate(0, length / 2, 0);
-            const branch = new THREE.Mesh(geometry, barkMaterial);
+            // Wide Horizontal Limb Branches (Mango/Banyan style wide canopy)
+            const branchAngles = [0, 1.2, 2.4, 3.6, 4.8];
+            branchAngles.forEach((angle, idx) => {
+                const limbGroup = new THREE.Group();
+                limbGroup.position.set(0, 7.2, 0);
+                limbGroup.rotation.y = angle;
+                limbGroup.rotation.z = 0.65; // Wide horizontal spreading limb
 
-            parent.add(branch);
+                const limbGeo = new THREE.CylinderGeometry(0.45, 0.85, 6, 12);
+                limbGeo.translate(0, 3, 0);
+                const limb = new THREE.Mesh(limbGeo, barkMaterial);
+                limbGroup.add(limb);
 
-            if (depth >= 4) {
-                // Add foliage leaves around upper branches
-                const leafCount = 4;
-                for (let j = 0; j < leafCount; j++) {
-                    const leafGeo = new THREE.PlaneGeometry(0.6, 1.2);
-                    const leaf = new THREE.Mesh(leafGeo, leafMaterial);
-                    leaf.position.set(
-                        (Math.random() - 0.5) * 0.8,
-                        length + (Math.random() - 0.5) * 0.5,
-                        (Math.random() - 0.5) * 0.8
-                    );
-                    leaf.rotation.set(Math.random() * Math.PI, Math.random() * Math.PI, 0);
-                    branch.add(leaf);
-                }
-            }
+                // Dense Foliage Canopy Clusters (Leaves)
+                const leafSphere = new THREE.Mesh(
+                    new THREE.DodecahedronGeometry(2.2 + (idx % 2) * 0.5, 2),
+                    canopyMaterial
+                );
+                leafSphere.position.set(0, 6, 0);
+                limbGroup.add(leafSphere);
 
-            if (depth === 5) return;
+                // Hanging Aerial Prop Roots (Classic Banyan Feature)
+                const propRoot = new THREE.Mesh(
+                    new THREE.CylinderGeometry(0.08, 0.05, 7, 8),
+                    barkMaterial
+                );
+                propRoot.position.set(0.8, 2.5, 0);
+                propRoot.rotation.z = -0.65; // Hanging straight down
+                limbGroup.add(propRoot);
 
-            const branchCount = 2 + Math.floor(Math.random() * 2);
-            for (let i = 0; i < branchCount; i++) {
-                const subGroup = new THREE.Group();
-                subGroup.position.set(0, length * 0.92, 0);
-
-                const angleX = (Math.random() - 0.5) * 0.7 + (i % 2 === 0 ? 0.35 : -0.35);
-                const angleZ = (Math.random() - 0.5) * 0.7 + (i > 1 ? 0.35 : -0.35);
-
-                subGroup.rotation.x = angleX;
-                subGroup.rotation.z = angleZ;
-
-                branch.add(subGroup);
-                createRealisticBranch(subGroup, length * 0.72, radius * 0.65, depth + 1);
-            }
+                treeGroup.add(limbGroup);
+            });
         }
 
-        createRealisticBranch(treeGroup, 6.5, 0.75, 0);
+        createBanyanTree();
 
-        // --- FLYING HARDWARE PARTICLES SYSTEM ---
-        // (Laptop, CPU, Motherboard, RTX, IC Circuits, RAM, Secondary Memory, Tablet, Phone)
+        // --- SLOWED DOWN FLYING HARDWARE PARTICLES SYSTEM ---
         const componentNames = [
             "💻 LAPTOP", "🔳 CPU", "📟 MOTHERBOARD", "🎮 RTX GPU", 
             "⚡ IC CIRCUIT", "🎴 RAM STICK", "💾 SSD / MEMORY", "📱 TABLET", "📲 SMARTPHONE"
@@ -686,7 +711,7 @@
             canvas.width = 256;
             canvas.height = 64;
             const ctx = canvas.getContext('2d');
-            ctx.fillStyle = 'rgba(10, 20, 35, 0.85)';
+            ctx.fillStyle = 'rgba(10, 20, 35, 0.88)';
             ctx.fillRect(0, 0, 256, 64);
             ctx.strokeStyle = '#00ffcc';
             ctx.lineWidth = 3;
@@ -697,14 +722,13 @@
             ctx.textBaseline = 'middle';
             ctx.fillText(text, 128, 32);
 
-            const texture = new THREE.CanvasTexture(canvas);
-            return texture;
+            return new THREE.CanvasTexture(canvas);
         }
 
         const hardwareParticlesGroup = new THREE.Group();
         scene.add(hardwareParticlesGroup);
 
-        const hardwareParticleCount = 28;
+        const hardwareParticleCount = 26;
         const particleNodes = [];
 
         for (let i = 0; i < hardwareParticleCount; i++) {
@@ -713,11 +737,11 @@
             const mat = new THREE.SpriteMaterial({ map: texture, transparent: true, opacity: 0.9 });
             const sprite = new THREE.Sprite(mat);
 
-            sprite.scale.set(3.2, 0.8, 1);
+            sprite.scale.set(3.0, 0.75, 1);
             
-            const radius = 6 + Math.random() * 10;
+            const radius = 7 + Math.random() * 9;
             const angle = Math.random() * Math.PI * 2;
-            const y = Math.random() * 16 - 8;
+            const y = Math.random() * 15 - 6;
 
             sprite.position.set(
                 Math.cos(angle) * radius - 8,
@@ -727,26 +751,27 @@
 
             hardwareParticlesGroup.add(sprite);
 
+            // SIGNIFICANTLY REDUCED SPEED (Gentle, smooth glide)
             particleNodes.push({
                 mesh: sprite,
                 angle: angle,
                 radius: radius,
-                speed: 0.005 + Math.random() * 0.01,
+                speed: 0.0012 + Math.random() * 0.0018, // Slowed down by 70%
                 yBase: y,
-                yFreq: 0.5 + Math.random()
+                yFreq: 0.2 + Math.random() * 0.3
             });
         }
 
-        // Parallax Mouse Interaction
+        // Parallax Mouse Motion
         let mouseX = 0, mouseY = 0;
         window.addEventListener('mousemove', (e) => {
             mouseX = (e.clientX / window.innerWidth - 0.5) * 2;
             mouseY = (e.clientY / window.innerHeight - 0.5) * 2;
         });
 
-        // 3D Camera Nav Preset Views
+        // Camera Views
         const cameraPresets = {
-            buy: { x: -8, y: 1, z: 24 },
+            buy: { x: -8, y: 2, z: 26 },
             purchases: { x: -6, y: 3, z: 22 },
             sell: { x: -10, y: -1, z: 26 },
             dashboard: { x: -7, y: 4, z: 20 },
@@ -767,21 +792,21 @@
 
             const elapsedTime = clock.getElapsedTime();
 
-            // Rotate Main Tree
-            treeGroup.rotation.y = Math.sin(elapsedTime * 0.25) * 0.12 + (mouseX * 0.2);
+            // Very slow ambient tree sway
+            treeGroup.rotation.y = Math.sin(elapsedTime * 0.15) * 0.08 + (mouseX * 0.15);
 
-            // Animate Flying Hardware Particles
+            // Smooth & Slow Orbiting Hardware Components
             particleNodes.forEach(p => {
                 p.angle += p.speed;
                 p.mesh.position.x = Math.cos(p.angle) * p.radius - 8;
                 p.mesh.position.z = Math.sin(p.angle) * p.radius;
-                p.mesh.position.y = p.yBase + Math.sin(elapsedTime * p.yFreq) * 0.8;
+                p.mesh.position.y = p.yBase + Math.sin(elapsedTime * p.yFreq) * 0.5;
             });
 
             // Smooth Interpolated Camera Panning
-            camera.position.x += (targetCameraPos.x + mouseX * 1.5 - camera.position.x) * 0.05;
-            camera.position.y += (targetCameraPos.y - mouseY * 1.5 - camera.position.y) * 0.05;
-            camera.position.z += (targetCameraPos.z - camera.position.z) * 0.05;
+            camera.position.x += (targetCameraPos.x + mouseX * 1.5 - camera.position.x) * 0.04;
+            camera.position.y += (targetCameraPos.y - mouseY * 1.5 - camera.position.y) * 0.04;
+            camera.position.z += (targetCameraPos.z - camera.position.z) * 0.04;
 
             camera.lookAt(-5, 1, 0);
             renderer.render(scene, camera);
@@ -795,7 +820,7 @@
             renderer.setSize(window.innerWidth, window.innerHeight);
         });
 
-        // Local Storage State Management
+        // Local Storage & Application State Management
         let listings = JSON.parse(localStorage.getItem('market_listings')) || [];
         let salesHistory = JSON.parse(localStorage.getItem('sales_history')) || [];
         let userRegistry = JSON.parse(localStorage.getItem('user_registry')) || [];
@@ -810,32 +835,48 @@
             }
         };
 
-        function toggleAdminPasskey() {
-            const role = document.getElementById('user-role').value;
-            document.getElementById('admin-pass-group').style.display = role === 'Admin' ? 'block' : 'none';
+        function openAdminModal() {
+            document.getElementById('login-modal').style.display = 'none';
+            document.getElementById('admin-modal').style.display = 'flex';
+        }
+
+        function closeAdminModal() {
+            document.getElementById('admin-modal').style.display = 'none';
+            document.getElementById('login-modal').style.display = 'flex';
         }
 
         function handleLogin(e) {
             e.preventDefault();
             const role = document.getElementById('user-role').value;
             const name = document.getElementById('username').value;
-            const pass = document.getElementById('admin-passkey').value;
-
-            if (role === 'Admin' && pass !== 'admin123' && pass !== '') {
-                alert("Incorrect Admin Passkey! Use default passkey: admin123");
-                return;
-            }
 
             currentUser = { name, role };
             localStorage.setItem('current_user', JSON.stringify(currentUser));
 
-            // Register user in global user registry
             if (!userRegistry.some(u => u.name === name && u.role === role)) {
                 userRegistry.push({ name, role, dateJoined: new Date().toLocaleDateString() });
                 localStorage.setItem('user_registry', JSON.stringify(userRegistry));
             }
 
             document.getElementById('login-modal').style.display = 'none';
+            applyUserRolePermissions();
+        }
+
+        // SECURE ADMIN LOG-IN VALIDATION (Passcode: Skylord@2005)
+        function handleAdminLogin(e) {
+            e.preventDefault();
+            const adminId = document.getElementById('admin-id').value;
+            const adminPass = document.getElementById('admin-secret-pass').value;
+
+            if (adminPass !== 'Skylord@2005') {
+                alert("Access Denied: Invalid Security Passkey.");
+                return;
+            }
+
+            currentUser = { name: adminId, role: 'Admin' };
+            localStorage.setItem('current_user', JSON.stringify(currentUser));
+
+            document.getElementById('admin-modal').style.display = 'none';
             applyUserRolePermissions();
         }
 
