@@ -7,39 +7,119 @@
     <style>
         body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; max-width: 900px; margin: 20px auto; padding: 20px; color: #333; }
         h1, h2, h3 { color: #1b5e20; }
+        
+        /* Welcome Gateway Modal */
+        .gateway-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); display: flex; justify-content: center; align-items: center; z-index: 1000; }
+        .gateway-card { background: white; padding: 40px; border-radius: 12px; text-align: center; max-width: 450px; width: 90%; box-shadow: 0 4px 15px rgba(0,0,0,0.2); }
+        .gateway-options { display: flex; gap: 20px; margin-top: 25px; }
+        .gateway-btn { flex: 1; padding: 20px; font-size: 18px; font-weight: bold; border: none; border-radius: 8px; cursor: pointer; transition: transform 0.2s, background 0.2s; }
+        .btn-buy { background: #2e7d32; color: white; }
+        .btn-buy:hover { background: #1b5e20; transform: translateY(-2px); }
+        .btn-sell { background: #e65100; color: white; }
+        .btn-sell:hover { background: #bf360c; transform: translateY(-2px); }
+
+        /* Navigation & Sections */
         .nav-tabs { display: flex; gap: 10px; margin-bottom: 20px; border-bottom: 2px solid #ddd; padding-bottom: 10px; }
         .tab-btn { padding: 10px 20px; font-weight: bold; cursor: pointer; border: none; background: #e0e0e0; border-radius: 5px; }
         .tab-btn.active { background: #2e7d32; color: white; }
         .section { display: none; background: #f9f9f9; padding: 20px; border-radius: 8px; border: 1px solid #ddd; }
         .section.active { display: block; }
+        
+        /* Form & Cards */
         .form-group { margin-bottom: 15px; }
         label { display: block; margin-bottom: 5px; font-weight: bold; }
-        input[type="text"], input[type="number"], select { width: 100%; padding: 8px; box-sizing: border-box; border: 1px solid #ccc; border-radius: 4px; }
+        input[type="text"], input[type="number"], input[type="file"], select { width: 100%; padding: 8px; box-sizing: border-box; border: 1px solid #ccc; border-radius: 4px; }
         button.action-btn { background-color: #2e7d32; color: white; padding: 10px 15px; border: none; cursor: pointer; border-radius: 4px; font-size: 16px; }
         button.action-btn:hover { background-color: #1b5e20; }
         .result-box { margin-top: 15px; padding: 15px; background-color: #e8f5e9; border: 1px solid #c8e6c9; border-radius: 4px; }
-        .marketplace-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 20px; margin-top: 20px; }
+        
+        .marketplace-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 20px; margin-top: 20px; }
         .card { background: white; border: 1px solid #ddd; border-radius: 8px; padding: 15px; box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
+        .card img { width: 100%; height: 180px; object-fit: cover; border-radius: 6px; margin-bottom: 10px; border: 1px solid #eee; }
         .card h4 { margin: 0 0 10px 0; color: #2e7d32; }
-        .price-tag { font-size: 18px; font-weight: bold; color: #2e7d32; margin: 10px 0; }
+        .price-tag { font-size: 18px; font-weight: bold; color: #2e7d32; margin: 5px 0; }
         .payout-tag { font-size: 14px; color: #e65100; font-weight: bold; }
         .badge { display: inline-block; padding: 3px 8px; font-size: 12px; border-radius: 4px; background: #e0e0e0; margin-bottom: 10px; }
+        .empty-msg { text-align: center; color: #666; font-style: italic; padding: 30px; grid-column: 1 / -1; }
     </style>
 </head>
 <body>
+
+    <!-- First Page Gateway Modal -->
+    <div id="gateway-modal" class="gateway-overlay">
+        <div class="gateway-card">
+            <h2>Welcome to The Procrastination Protocol ♻️</h2>
+            <p>What would you like to do today?</p>
+            <div class="gateway-options">
+                <button class="gateway-btn btn-buy" onclick="chooseIntent('buy')">🛒 Buy Devices</button>
+                <button class="gateway-btn btn-sell" onclick="chooseIntent('sell')">🏷️ Sell / Upload Device</button>
+            </div>
+        </div>
+    </div>
 
     <h1>The Procrastination Protocol ♻️</h1>
     <p><i>Circular Electronics & E-Waste Recovery Marketplace</i></p>
 
     <!-- Navigation Tabs -->
     <div class="nav-tabs">
-        <button class="tab-btn active" onclick="switchTab('assess')">1. Assessment Engine</button>
-        <button class="tab-btn" onclick="switchTab('sell')">2. Sell / Upload Device</button>
-        <button class="tab-btn" onclick="switchTab('buy')">3. Marketplace (Buy Devices)</button>
+        <button id="btn-tab-buy" class="tab-btn" onclick="switchTab('buy')">Marketplace (Buy Devices)</button>
+        <button id="btn-tab-sell" class="tab-btn" onclick="switchTab('sell')">Sell / Upload Device</button>
+        <button id="btn-tab-assess" class="tab-btn" onclick="switchTab('assess')">Condition Assessment Engine</button>
     </div>
 
-    <!-- Section 1: Assessment -->
-    <div id="tab-assess" class="section active">
+    <!-- Section: Marketplace View (Buy) -->
+    <div id="tab-buy" class="section">
+        <h2>Available Devices for Purchase / Recovery</h2>
+        <div class="marketplace-grid" id="marketplace-list">
+            <!-- Dynamic user uploads will load here -->
+        </div>
+    </div>
+
+    <!-- Section: Sell / Upload -->
+    <div id="tab-sell" class="section">
+        <h2>List Your Device for Resale / Recovery</h2>
+        <form id="sell-form" onsubmit="uploadDevice(event)">
+            <div class="form-group">
+                <label>Device Name / Model</label>
+                <input type="text" id="dev-name" placeholder="e.g. Dell G15, iPhone 13" required>
+            </div>
+            <div class="form-group">
+                <label>Category</label>
+                <select id="dev-category">
+                    <option value="Laptop">Laptop</option>
+                    <option value="Smartphone">Smartphone</option>
+                    <option value="Tablet">Tablet</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Device Image (Product Picture)</label>
+                <input type="file" id="dev-image" accept="image/*" required>
+            </div>
+            <div class="form-group">
+                <label>Estimated Market Price ($)</label>
+                <input type="number" id="dev-price" placeholder="e.g. 100" oninput="calculatePayout()" required>
+            </div>
+            <div class="form-group">
+                <label>Device Condition</label>
+                <select id="dev-condition" onchange="calculatePayout()">
+                    <option value="Working / Reusable">Working / Reusable (85% Seller Payout)</option>
+                    <option value="Minor Repairs Needed">Minor Repairs Needed (65% Seller Payout)</option>
+                    <option value="Needs Refurbishment">Needs Refurbishment (45% Seller Payout)</option>
+                    <option value="E-Waste / For Parts">E-Waste / For Parts (20% Recovery Value Payout)</option>
+                </select>
+            </div>
+            
+            <div class="result-box">
+                <strong>Your Estimated Earnings (Money You Get):</strong> 
+                <span id="seller-payout" style="font-size: 20px; color: #2e7d32;">$0.00</span>
+            </div>
+            <br>
+            <button type="submit" class="action-btn">Upload to Marketplace</button>
+        </form>
+    </div>
+
+    <!-- Section: Condition Assessment -->
+    <div id="tab-assess" class="section">
         <h2>Device Condition Assessment</h2>
         <div class="form-group">
             <label><input type="checkbox" id="repairable"> Device is repairable (minor/moderate fault)?</label>
@@ -54,85 +134,31 @@
         <div id="assess-result" class="result-box" style="display:none;"></div>
     </div>
 
-    <!-- Section 2: Sell / Upload -->
-    <div id="tab-sell" class="section">
-        <h2>List Your Device for Resale / Recovery</h2>
-        <form id="sell-form" onsubmit="uploadDevice(event)">
-            <div class="form-group">
-                <label>Device Name / Model</label>
-                <input type="text" id="dev-name" placeholder="e.g. iPhone 11, Dell XPS 13" required>
-            </div>
-            <div class="form-group">
-                <label>Category</label>
-                <select id="dev-category">
-                    <option value="Smartphone">Smartphone</option>
-                    <option value="Laptop">Laptop</option>
-                    <option value="Tablet">Tablet</option>
-                </select>
-            </div>
-            <div class="form-group">
-                <label>Estimated Market Price ($)</label>
-                <input type="number" id="dev-price" placeholder="e.g. 200" oninput="calculatePayout()" required>
-            </div>
-            <div class="form-group">
-                <label>Device Condition</label>
-                <select id="dev-condition" onchange="calculatePayout()">
-                    <option value="Working / Reusable">Working / Reusable (85% Seller Payout)</option>
-                    <option value="Minor Repairs Needed">Minor Repairs Needed (65% Seller Payout)</option>
-                    <option value="Needs Refurbishment">Needs Refurbishment (45% Seller Payout)</option>
-                    <option value="E-Waste / For Parts">E-Waste / For Parts (20% Recovery Value Payout)</option>
-                </select>
-            </div>
-            
-            <div class="result-box">
-                <strong>Your Estimated Earnings (Money You Get):</strong> 
-                <span id="seller-payout" style="font-size: 20px; color: #2e7d32;">$0</span>
-            </div>
-            <br>
-            <button type="submit" class="action-btn">Upload to Marketplace</button>
-        </form>
-    </div>
-
-    <!-- Section 3: Marketplace View -->
-    <div id="tab-buy" class="section">
-        <h2>Available Devices for Purchase / Recovery</h2>
-        <div class="marketplace-grid" id="marketplace-list">
-            <!-- Dynamic items will load here -->
-        </div>
-    </div>
-
     <script>
-        // Default Listings Data
-        let listings = [
-            { name: "iPhone XR", category: "Smartphone", price: 180, payout: 153, condition: "Working / Reusable", status: "Active" },
-            { name: "MacBook Air 2017", category: "Laptop", price: 250, payout: 162, condition: "Minor Repairs Needed", status: "Under Repair" },
-            { name: "iPad Air 2", category: "Tablet", price: 90, payout: 18, condition: "E-Waste / For Parts", status: "Recycling Recovery" }
-        ];
+        // Array stores ONLY real uploads (Empty by default)
+        let listings = [];
+
+        // Landing Gateway Selection Handler
+        function chooseIntent(intent) {
+            document.getElementById('gateway-modal').style.display = 'none';
+            if (intent === 'sell') {
+                switchTab('sell');
+            } else {
+                switchTab('buy');
+            }
+        }
 
         function switchTab(tabName) {
             document.querySelectorAll('.section').forEach(sec => sec.classList.remove('active'));
             document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
             
             document.getElementById('tab-' + tabName).classList.add('active');
-            event.target.classList.add('active');
+            document.getElementById('btn-tab-' + tabName).classList.add('active');
 
             if (tabName === 'buy') renderMarketplace();
         }
 
-        // Assessment Engine Logic
-        function assessDevice() {
-            const isRepairable = document.getElementById('repairable').checked;
-            const isReusable = document.getElementById('reusable').checked;
-            const isRefurbishable = document.getElementById('refurbishable').checked;
-
-            let pathway = isRepairable ? "Repair" : isReusable ? "Reuse / Resale" : isRefurbishable ? "Refurbishment" : "Responsible Recycling";
-
-            const resultDiv = document.getElementById('assess-result');
-            resultDiv.style.display = 'block';
-            resultDiv.innerHTML = "<strong>Recommended Pathway:</strong> " + pathway;
-        }
-
-        // Payout Calculation Engine
+        // Payout Calculation
         function calculatePayout() {
             const price = parseFloat(document.getElementById('dev-price').value) || 0;
             const condition = document.getElementById('dev-condition').value;
@@ -147,7 +173,7 @@
             return payout;
         }
 
-        // Upload Item Handler
+        // Upload Item Handler with Image Reader
         function uploadDevice(e) {
             e.preventDefault();
             const name = document.getElementById('dev-name').value;
@@ -155,13 +181,23 @@
             const price = parseFloat(document.getElementById('dev-price').value);
             const condition = document.getElementById('dev-condition').value;
             const payout = calculatePayout();
+            const fileInput = document.getElementById('dev-image');
 
-            listings.push({ name, category, price, payout, condition, status: "Listed" });
+            if (fileInput.files && fileInput.files[0]) {
+                const reader = new FileReader();
+                reader.onload = function (e) {
+                    const imageDataUrl = e.target.result;
+                    
+                    // Save product listing with base64 image
+                    listings.push({ name, category, price, payout, condition, image: imageDataUrl });
 
-            alert("Device Uploaded Successfully! Earnings locked at $" + payout);
-            document.getElementById('sell-form').reset();
-            document.getElementById('seller-payout').innerText = "$0";
-            switchTab('buy');
+                    alert("Device uploaded successfully! Your earnings: $" + payout);
+                    document.getElementById('sell-form').reset();
+                    document.getElementById('seller-payout').innerText = "$0.00";
+                    switchTab('buy');
+                };
+                reader.readAsDataURL(fileInput.files[0]);
+            }
         }
 
         // Render Marketplace Grid
@@ -169,9 +205,15 @@
             const grid = document.getElementById('marketplace-list');
             grid.innerHTML = "";
 
+            if (listings.length === 0) {
+                grid.innerHTML = `<div class="empty-msg">No devices currently listed for sale. Be the first to list one!</div>`;
+                return;
+            }
+
             listings.forEach(item => {
                 grid.innerHTML += `
                     <div class="card">
+                        <img src="${item.image}" alt="${item.name}">
                         <span class="badge">${item.category}</span>
                         <h4>${item.name}</h4>
                         <p><strong>Condition:</strong> ${item.condition}</p>
@@ -184,8 +226,18 @@
             });
         }
 
-        // Initial render
-        renderMarketplace();
+        // Assessment Engine Logic
+        function assessDevice() {
+            const isRepairable = document.getElementById('repairable').checked;
+            const isReusable = document.getElementById('reusable').checked;
+            const isRefurbishable = document.getElementById('refurbishable').checked;
+
+            let pathway = isRepairable ? "Repair" : isReusable ? "Reuse / Resale" : isRefurbishable ? "Refurbishment" : "Responsible Recycling";
+
+            const resultDiv = document.getElementById('assess-result');
+            resultDiv.style.display = 'block';
+            resultDiv.innerHTML = "<strong>Recommended Pathway:</strong> " + pathway;
+        }
     </script>
 </body>
 </html>
