@@ -3,16 +3,16 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>The Procrastination Protocol - 3D Circular Marketplace</title>
+    <title>The Procrastination Protocol - 3D PCB Circuit Forest</title>
     
-    <!-- Three.js Library for Hardware-Accelerated 3D -->
+    <!-- Three.js Library -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 
     <style>
         :root {
             --primary: #10b981;
-            --accent: #00ffcc;
-            --bg-dark: #030712;
+            --accent: #00f0ff;
+            --bg-dark: #020617;
             --card-bg: rgba(10, 16, 30, 0.85);
             --text-light: #f8fafc;
         }
@@ -63,10 +63,10 @@
         }
 
         h1 {
-            color: #00ffcc;
+            color: #00f0ff;
             font-size: 2.2rem;
             margin-bottom: 5px;
-            text-shadow: 0 0 20px rgba(0, 255, 204, 0.6);
+            text-shadow: 0 0 20px rgba(0, 240, 255, 0.6);
         }
 
         /* Modals */
@@ -76,7 +76,7 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(3, 7, 18, 0.90);
+            background: rgba(2, 6, 23, 0.92);
             backdrop-filter: blur(14px);
             display: flex;
             justify-content: center;
@@ -86,13 +86,13 @@
 
         .modal-card {
             background: rgba(15, 23, 42, 0.95);
-            border: 1px solid rgba(0, 255, 204, 0.4);
+            border: 1px solid rgba(0, 240, 255, 0.4);
             padding: 30px;
             border-radius: 16px;
             text-align: center;
             max-width: 450px;
             width: 90%;
-            box-shadow: 0 0 35px rgba(0, 255, 204, 0.3);
+            box-shadow: 0 0 35px rgba(0, 240, 255, 0.3);
         }
 
         .user-bar {
@@ -100,7 +100,7 @@
             justify-content: space-between;
             align-items: center;
             background: rgba(16, 185, 129, 0.15);
-            border: 1px solid rgba(0, 255, 204, 0.4);
+            border: 1px solid rgba(0, 240, 255, 0.4);
             padding: 12px 20px;
             border-radius: 10px;
             margin-bottom: 20px;
@@ -131,9 +131,9 @@
         }
 
         .tab-btn.active, .tab-btn:hover {
-            background: #00ffcc;
+            background: #00f0ff;
             color: #000;
-            box-shadow: 0 0 15px rgba(0, 255, 204, 0.6);
+            box-shadow: 0 0 15px rgba(0, 240, 255, 0.6);
             transform: translateY(-2px);
         }
 
@@ -154,7 +154,7 @@
             backdrop-filter: blur(14px);
             padding: 25px;
             border-radius: 16px;
-            border: 1px solid rgba(0, 255, 204, 0.25);
+            border: 1px solid rgba(0, 240, 255, 0.25);
             box-shadow: 0 15px 35px rgba(0, 0, 0, 0.6);
             opacity: 0;
             transform: translateY(20px) scale(0.98);
@@ -185,19 +185,19 @@
             width: 100%;
             padding: 10px 12px;
             background: rgba(7, 11, 20, 0.8);
-            border: 1px solid rgba(0, 255, 204, 0.3);
+            border: 1px solid rgba(0, 240, 255, 0.3);
             border-radius: 8px;
             color: #fff;
             outline: none;
         }
 
         input:focus, select:focus {
-            border-color: #00ffcc;
-            box-shadow: 0 0 8px rgba(0, 255, 204, 0.4);
+            border-color: #00f0ff;
+            box-shadow: 0 0 8px rgba(0, 240, 255, 0.4);
         }
 
         button.action-btn {
-            background: #00ffcc;
+            background: #00f0ff;
             color: #070b14;
             font-weight: 700;
             padding: 12px;
@@ -210,8 +210,8 @@
         }
 
         button.action-btn:hover {
-            background: #00cc99;
-            box-shadow: 0 0 15px rgba(0, 255, 204, 0.5);
+            background: #00ccff;
+            box-shadow: 0 0 15px rgba(0, 240, 255, 0.5);
             transform: scale(1.01);
         }
 
@@ -228,8 +228,8 @@
         .result-box {
             margin-top: 15px;
             padding: 15px;
-            background: rgba(0, 255, 204, 0.08);
-            border: 1px solid #00ffcc;
+            background: rgba(0, 240, 255, 0.08);
+            border: 1px solid #00f0ff;
             border-radius: 8px;
             text-align: left;
         }
@@ -253,8 +253,8 @@
 
         .card:hover {
             transform: translateY(-5px) rotateX(2deg);
-            border-color: rgba(0, 255, 204, 0.5);
-            box-shadow: 0 10px 20px rgba(0, 255, 204, 0.15);
+            border-color: rgba(0, 240, 255, 0.5);
+            box-shadow: 0 10px 20px rgba(0, 240, 255, 0.15);
         }
 
         .card img {
@@ -268,7 +268,7 @@
         .price-tag {
             font-size: 1.2rem;
             font-weight: bold;
-            color: #00ffcc;
+            color: #00f0ff;
             margin: 8px 0;
         }
 
@@ -301,14 +301,14 @@
             background: rgba(15, 23, 42, 0.7);
             padding: 15px;
             border-radius: 10px;
-            border: 1px solid rgba(0, 255, 204, 0.2);
+            border: 1px solid rgba(0, 240, 255, 0.2);
             text-align: center;
         }
 
         .stat-card h3 {
             margin: 5px 0 0 0;
             font-size: 1.8rem;
-            color: #00ffcc;
+            color: #00f0ff;
         }
 
         .admin-table {
@@ -325,8 +325,8 @@
         }
 
         .admin-table th {
-            background: rgba(0, 255, 204, 0.1);
-            color: #00ffcc;
+            background: rgba(0, 240, 255, 0.1);
+            color: #00f0ff;
         }
 
         .admin-link {
@@ -410,7 +410,7 @@
             <div class="modal-card">
                 <h2>Checkout & Payment 💳</h2>
                 <p id="checkout-item-name" style="color: #94a3b8;">Item Name</p>
-                <h3 id="checkout-item-price" style="color: #00ffcc; font-size: 1.8rem; margin: 5px 0 15px 0;">$0.00</h3>
+                <h3 id="checkout-item-price" style="color: #00f0ff; font-size: 1.8rem; margin: 5px 0 15px 0;">$0.00</h3>
                 <form onsubmit="processPayment(event)">
                     <div class="form-group">
                         <label>Cardholder Name</label>
@@ -517,7 +517,7 @@
                 </div>
                 <div class="result-box">
                     <strong>Estimated Seller Cash Back:</strong> 
-                    <span id="seller-payout" style="font-size: 1.3rem; color: #00ffcc; font-weight: bold;">$0.00</span>
+                    <span id="seller-payout" style="font-size: 1.3rem; color: #00f0ff; font-weight: bold;">$0.00</span>
                 </div>
                 <br>
                 <button type="submit" class="action-btn">Upload & Publish Listing</button>
@@ -621,111 +621,184 @@
         const scene = new THREE.Scene();
 
         const camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 1000);
-        let targetCameraPos = { x: -8, y: 2, z: 26 };
-        camera.position.set(-8, 2, 26);
+        let targetCameraPos = { x: -6, y: 0, z: 24 };
+        camera.position.set(-6, 0, 24);
 
-        // Lighting
-        scene.add(new THREE.AmbientLight(0xffffff, 1.2));
-        const dirLight = new THREE.DirectionalLight(0x00ffcc, 2.0);
-        dirLight.position.set(10, 20, 15);
+        // Ambient and Directional Lighting
+        scene.add(new THREE.AmbientLight(0x0088ff, 0.8));
+        const dirLight = new THREE.DirectionalLight(0x00ffff, 2.5);
+        dirLight.position.set(0, 10, 20);
         scene.add(dirLight);
 
-        const pointLight = new THREE.PointLight(0x00e5ff, 3, 60);
-        pointLight.position.set(-8, 5, 5);
-        scene.add(pointLight);
+        // Base Scene Group
+        const forestGroup = new THREE.Group();
+        forestGroup.position.set(-8, -4, 0);
+        scene.add(forestGroup);
 
-        // Digital Neural Circuit Tree Group
-        const treeGroup = new THREE.Group();
-        treeGroup.position.set(-9, -6, 0);
-        scene.add(treeGroup);
+        // --- GLOWING HORIZONTAL HORIZON LINE ---
+        function createHorizonLine() {
+            const points = [
+                new THREE.Vector3(-25, 0, 0),
+                new THREE.Vector3(25, 0, 0)
+            ];
+            const geo = new THREE.BufferGeometry().setFromPoints(points);
+            const mat = new THREE.LineBasicMaterial({ color: 0x00f0ff, linewidth: 3, transparent: true, opacity: 0.9 });
+            const line = new THREE.Line(geo, mat);
+            forestGroup.add(line);
 
-        // --- GLOWING DIGITAL NEURAL TREE GENERATOR ---
-        function createCircuitTree() {
-            const linePositions = [];
-            const nodePositions = [];
+            // Horizon Glow Line
+            const glowGeo = new THREE.PlaneGeometry(50, 0.4);
+            const glowMat = new THREE.MeshBasicMaterial({ color: 0x00f0ff, transparent: true, opacity: 0.35, side: THREE.DoubleSide });
+            const glow = new THREE.Mesh(glowGeo, glowMat);
+            forestGroup.add(glow);
+        }
+        createHorizonLine();
 
-            // Helper to recursively generate glowing circuit lines & nodes
-            function addBranch(startX, startY, startZ, length, angleY, angleZ, depth) {
-                if (depth <= 0) return;
+        // --- ORTHOGONAL PCB CIRCUIT TREE BUILDER ---
+        function createPCBCircuitTree(scale = 1.0, positionX = 0) {
+            const treeGroup = new THREE.Group();
+            treeGroup.position.set(positionX, 0, 0);
 
-                const endX = startX + Math.sin(angleZ) * Math.sin(angleY) * length;
-                const endY = startY + Math.cos(angleZ) * length;
-                const endZ = startZ + Math.sin(angleZ) * Math.cos(angleY) * length;
+            const linesPoints = [];
+            const terminalNodes = [];
 
-                // Add line segment
-                linePositions.push(startX, startY, startZ);
-                linePositions.push(endX, endY, endZ);
+            // Parallel Main Trunk Lines
+            const trunkTraces = 7;
+            const trunkHeight = 5.5 * scale;
+            const trunkWidth = 0.8 * scale;
 
-                // Add node at junction
-                nodePositions.push(endX, endY, endZ);
-
-                // Split into sub-branches
-                const numSplits = depth > 3 ? 2 : Math.floor(Math.random() * 2) + 2;
-                for (let i = 0; i < numSplits; i++) {
-                    const nextAngleY = angleY + (Math.random() - 0.5) * 1.2;
-                    const nextAngleZ = angleZ + (Math.random() * 0.4 + 0.2);
-                    addBranch(endX, endY, endZ, length * 0.75, nextAngleY, nextAngleZ, depth - 1);
-                }
-            }
-
-            // Central Trunk Bundles
-            const trunkCount = 8;
-            for (let i = 0; i < trunkCount; i++) {
-                const angle = (i / trunkCount) * Math.PI * 2;
-                const r = 0.4;
-                const startX = Math.cos(angle) * r;
-                const startZ = Math.sin(angle) * r;
+            for (let i = 0; i < trunkTraces; i++) {
+                const xOffset = ((i / (trunkTraces - 1)) - 0.5) * trunkWidth;
                 
-                // Root strands spreading down
-                linePositions.push(startX, 0, startZ);
-                linePositions.push(startX * 3.5, -3.5, startZ * 3.5);
-                nodePositions.push(startX * 3.5, -3.5, startZ * 3.5);
-
-                // Upper trunk & canopy branching up
-                addBranch(startX, 0, startZ, 3.2, angle, 0.25, 5);
+                // Vertical trunk lines
+                linesPoints.push(xOffset, 0, 0);
+                linesPoints.push(xOffset, trunkHeight * (0.4 + (i % 3) * 0.2), 0);
             }
 
-            // Create Glowing Lines Geometry
-            const lineGeo = new THREE.BufferGeometry();
-            lineGeo.setAttribute('position', new THREE.Float32BufferAttribute(linePositions, 3));
-            const lineMat = new THREE.LineBasicMaterial({ color: 0x00e5ff, opacity: 0.85, transparent: true });
-            const lines = new THREE.LineSegments(lineGeo, lineMat);
-            treeGroup.add(lines);
+            // PCB Branch Traces (Structured 45°/90° Angles)
+            const branchConfigs = [
+                // Left Canopy Branches
+                { start: [-0.4 * scale, 2.2 * scale], path: [[-1.2, 0.8], [-1.2, 1.8], [-2.0, 2.6], [-2.0, 3.4]] },
+                { start: [-0.2 * scale, 3.0 * scale], path: [[-0.9, 0.9], [-0.9, 2.2], [-1.5, 2.8]] },
+                { start: [-0.1 * scale, 3.8 * scale], path: [[-0.6, 0.6], [-0.6, 1.6], [-1.1, 2.1]] },
+                { start: [0.0, 4.4 * scale], path: [[-0.4, 0.4], [-0.4, 1.2], [-0.8, 1.6]] },
 
-            // Create Glowing Junction Points
-            const nodeGeo = new THREE.BufferGeometry();
-            nodeGeo.setAttribute('position', new THREE.Float32BufferAttribute(nodePositions, 3));
-            const nodeMat = new THREE.PointsMaterial({
-                color: 0x00ffcc,
-                size: 0.35,
-                transparent: true,
-                opacity: 0.9
+                // Right Canopy Branches
+                { start: [0.4 * scale, 2.2 * scale], path: [[1.2, 0.8], [1.2, 1.8], [2.0, 2.6], [2.0, 3.4]] },
+                { start: [0.2 * scale, 3.0 * scale], path: [[0.9, 0.9], [0.9, 2.2], [1.5, 2.8]] },
+                { start: [0.1 * scale, 3.8 * scale], path: [[0.6, 0.6], [0.6, 1.6], [1.1, 2.1]] },
+                { start: [0.0, 4.4 * scale], path: [[0.4, 0.4], [0.4, 1.2], [0.8, 1.6]] },
+
+                // Top Vertical Extension Branches
+                { start: [-0.15 * scale, 4.8 * scale], path: [[-0.3, 0.3], [-0.3, 1.5], [-0.5, 2.2]] },
+                { start: [0.15 * scale, 4.8 * scale], path: [[0.3, 0.3], [0.3, 1.5], [0.5, 2.2]] },
+                { start: [0.0, 5.0 * scale], path: [[0.0, 2.5]] }
+            ];
+
+            branchConfigs.forEach(b => {
+                let currX = b.start[0];
+                let currY = b.start[1];
+
+                b.path.forEach(step => {
+                    const nextX = b.start[0] + (step[0] * scale);
+                    const nextY = b.start[1] + (step[1] * scale);
+
+                    linesPoints.push(currX, currY, 0);
+                    linesPoints.push(nextX, nextY, 0);
+
+                    // Add intermediate node connection
+                    if (Math.random() > 0.4) {
+                        terminalNodes.push(nextX, nextY, 0);
+                    }
+
+                    currX = nextX;
+                    currY = nextY;
+                });
+
+                // End terminal ring pad
+                terminalNodes.push(currX, currY, 0);
             });
+
+            // Geometry for PCB Traces
+            const lineGeo = new THREE.BufferGeometry();
+            lineGeo.setAttribute('position', new THREE.Float32BufferAttribute(linesPoints, 3));
+            const lineMat = new THREE.LineBasicMaterial({ color: 0x00f0ff, transparent: true, opacity: 0.9 });
+            const pcbTraces = new THREE.LineSegments(lineGeo, lineMat);
+            treeGroup.add(pcbTraces);
+
+            // Glowing Circular Ring Terminal Nodes
+            const nodeGeo = new THREE.BufferGeometry();
+            nodeGeo.setAttribute('position', new THREE.Float32BufferAttribute(terminalNodes, 3));
+            
+            // Create Ring Texture for Terminal Pads
+            const canvas = document.createElement('canvas');
+            canvas.width = 64;
+            canvas.height = 64;
+            const ctx = canvas.getContext('2d');
+            ctx.strokeStyle = '#00f0ff';
+            ctx.lineWidth = 6;
+            ctx.beginPath();
+            ctx.arc(32, 32, 22, 0, Math.PI * 2);
+            ctx.stroke();
+            ctx.fillStyle = '#ffffff';
+            ctx.beginPath();
+            ctx.arc(32, 32, 10, 0, Math.PI * 2);
+            ctx.fill();
+
+            const ringTex = new THREE.CanvasTexture(canvas);
+            const nodeMat = new THREE.PointsMaterial({
+                size: 0.45 * scale,
+                map: ringTex,
+                transparent: true,
+                opacity: 0.95,
+                blending: THREE.AdditiveBlending
+            });
+
             const nodes = new THREE.Points(nodeGeo, nodeMat);
             treeGroup.add(nodes);
 
-            // Canopy Digital Dust Particles
-            const dustPositions = [];
-            for (let i = 0; i < 400; i++) {
-                const r = Math.random() * 8;
-                const theta = Math.random() * Math.PI * 2;
-                const phi = Math.random() * Math.PI;
-                dustPositions.push(
-                    r * Math.sin(phi) * Math.cos(theta),
-                    r * Math.cos(phi) + 7,
-                    r * Math.sin(phi) * Math.sin(theta)
-                );
-            }
-            const dustGeo = new THREE.BufferGeometry();
-            dustGeo.setAttribute('position', new THREE.Float32BufferAttribute(dustPositions, 3));
-            const dustMat = new THREE.PointsMaterial({ color: 0x00ffcc, size: 0.15, transparent: true, opacity: 0.6 });
-            const dust = new THREE.Points(dustGeo, dustMat);
-            treeGroup.add(dust);
+            // Root Junction Flare at Ground Line
+            const rootGlowGeo = new THREE.PlaneGeometry(1.2 * scale, 0.6 * scale);
+            const rootGlowMat = new THREE.MeshBasicMaterial({ color: 0x00f0ff, transparent: true, opacity: 0.6, side: THREE.DoubleSide });
+            const rootGlow = new THREE.Mesh(rootGlowGeo, rootGlowMat);
+            rootGlow.position.set(0, 0.2, 0);
+            treeGroup.add(rootGlow);
+
+            return treeGroup;
         }
 
-        createCircuitTree();
+        // Generate 3 PCB Trees Matching Reference (1 Large Center, 2 Small Sides)
+        const centerTree = createPCBCircuitTree(1.1, 0);
+        const leftTree = createPCBCircuitTree(0.65, -8.5);
+        const rightTree = createPCBCircuitTree(0.65, 8.5);
 
-        // --- REVOLVING FLYING HARDWARE PARTICLES SYSTEM ---
+        forestGroup.add(centerTree);
+        forestGroup.add(leftTree);
+        forestGroup.add(rightTree);
+
+        // Ambient Floating Glow Bokeh Particles
+        const particleCount = 120;
+        const particlePositions = [];
+        for (let i = 0; i < particleCount; i++) {
+            particlePositions.push(
+                (Math.random() - 0.5) * 30,
+                Math.random() * 12 - 2,
+                (Math.random() - 0.5) * 10
+            );
+        }
+        const pGeo = new THREE.BufferGeometry();
+        pGeo.setAttribute('position', new THREE.Float32BufferAttribute(particlePositions, 3));
+        const pMat = new THREE.PointsMaterial({
+            color: 0x00f0ff,
+            size: 0.25,
+            transparent: true,
+            opacity: 0.6,
+            blending: THREE.AdditiveBlending
+        });
+        const particles = new THREE.Points(pGeo, pMat);
+        forestGroup.add(particles);
+
+        // --- REVOLVING HARDWARE COMPONENT SPRITES ---
         const componentNames = [
             "💻 LAPTOP", "🔳 CPU", "📟 MOTHERBOARD", "🎮 RTX GPU", 
             "⚡ IC CIRCUIT", "🎴 RAM STICK", "💾 SSD / MEMORY", "📱 TABLET", "📲 SMARTPHONE"
@@ -738,10 +811,10 @@
             const ctx = canvas.getContext('2d');
             ctx.fillStyle = 'rgba(10, 20, 35, 0.88)';
             ctx.fillRect(0, 0, 256, 64);
-            ctx.strokeStyle = '#00ffcc';
+            ctx.strokeStyle = '#00f0ff';
             ctx.lineWidth = 3;
             ctx.strokeRect(2, 2, 252, 60);
-            ctx.fillStyle = '#00ffcc';
+            ctx.fillStyle = '#00f0ff';
             ctx.font = 'Bold 18px Segoe UI, sans-serif';
             ctx.textAlign = 'center';
             ctx.textBaseline = 'middle';
@@ -753,23 +826,21 @@
         const hardwareParticlesGroup = new THREE.Group();
         scene.add(hardwareParticlesGroup);
 
-        const hardwareParticleCount = 26;
         const particleNodes = [];
-
-        for (let i = 0; i < hardwareParticleCount; i++) {
+        for (let i = 0; i < 20; i++) {
             const name = componentNames[i % componentNames.length];
             const texture = createComponentTexture(name);
             const mat = new THREE.SpriteMaterial({ map: texture, transparent: true, opacity: 0.9 });
             const sprite = new THREE.Sprite(mat);
 
-            sprite.scale.set(3.0, 0.75, 1);
+            sprite.scale.set(2.8, 0.7, 1);
             
-            const radius = 6 + Math.random() * 8;
+            const radius = 8 + Math.random() * 8;
             const angle = Math.random() * Math.PI * 2;
-            const y = Math.random() * 14 - 4;
+            const y = Math.random() * 10 - 2;
 
             sprite.position.set(
-                Math.cos(angle) * radius - 9,
+                Math.cos(angle) * radius - 8,
                 y,
                 Math.sin(angle) * radius
             );
@@ -780,7 +851,7 @@
                 mesh: sprite,
                 angle: angle,
                 radius: radius,
-                speed: 0.005 + Math.random() * 0.006,
+                speed: 0.004 + Math.random() * 0.004,
                 yBase: y,
                 yFreq: 0.5 + Math.random() * 0.5
             });
@@ -793,14 +864,14 @@
             mouseY = (e.clientY / window.innerHeight - 0.5) * 2;
         });
 
-        // Camera Views
+        // Camera Positions
         const cameraPresets = {
-            buy: { x: -8, y: 2, z: 26 },
-            purchases: { x: -6, y: 3, z: 22 },
-            sell: { x: -10, y: -1, z: 26 },
-            dashboard: { x: -7, y: 4, z: 20 },
-            assess: { x: -8, y: 0, z: 25 },
-            admin: { x: -4, y: 5, z: 18 }
+            buy: { x: -6, y: 0, z: 24 },
+            purchases: { x: -4, y: 1, z: 20 },
+            sell: { x: -8, y: -1, z: 24 },
+            dashboard: { x: -5, y: 2, z: 18 },
+            assess: { x: -6, y: -1, z: 22 },
+            admin: { x: -2, y: 3, z: 16 }
         };
 
         function update3DCamera(tabName) {
@@ -809,30 +880,27 @@
             }
         }
 
-        // Render Loop
+        // Animation Loop
         const clock = new THREE.Clock();
         function animate3D() {
             requestAnimationFrame(animate3D);
 
             const elapsedTime = clock.getElapsedTime();
 
-            // Tree Slow Rotation
-            treeGroup.rotation.y = elapsedTime * 0.15 + (mouseX * 0.2);
-
-            // Revolving Hardware Components Orbiting Tree
+            // Slight Pulsing Glow & Floating Orbiters
             particleNodes.forEach(p => {
                 p.angle += p.speed;
-                p.mesh.position.x = Math.cos(p.angle) * p.radius - 9;
+                p.mesh.position.x = Math.cos(p.angle) * p.radius - 8;
                 p.mesh.position.z = Math.sin(p.angle) * p.radius;
-                p.mesh.position.y = p.yBase + Math.sin(elapsedTime * p.yFreq) * 0.6;
+                p.mesh.position.y = p.yBase + Math.sin(elapsedTime * p.yFreq) * 0.4;
             });
 
-            // Smooth Interpolated Camera Panning
-            camera.position.x += (targetCameraPos.x + mouseX * 1.5 - camera.position.x) * 0.04;
-            camera.position.y += (targetCameraPos.y - mouseY * 1.5 - camera.position.y) * 0.04;
+            // Smooth Camera Interpolation
+            camera.position.x += (targetCameraPos.x + mouseX * 1.2 - camera.position.x) * 0.04;
+            camera.position.y += (targetCameraPos.y - mouseY * 1.2 - camera.position.y) * 0.04;
             camera.position.z += (targetCameraPos.z - camera.position.z) * 0.04;
 
-            camera.lookAt(-5, 1, 0);
+            camera.lookAt(-4, 0, 0);
             renderer.render(scene, camera);
         }
 
@@ -844,7 +912,7 @@
             renderer.setSize(window.innerWidth, window.innerHeight);
         });
 
-        // Local Storage & Application State Management
+        // Local Storage & State Management
         let listings = JSON.parse(localStorage.getItem('market_listings')) || [];
         let salesHistory = JSON.parse(localStorage.getItem('sales_history')) || [];
         let userRegistry = JSON.parse(localStorage.getItem('user_registry')) || [];
@@ -886,7 +954,6 @@
             applyUserRolePermissions();
         }
 
-        // SECURE ADMIN LOG-IN VALIDATION (Passcode: Skylord@2005)
         function handleAdminLogin(e) {
             e.preventDefault();
             const adminId = document.getElementById('admin-id').value;
@@ -1088,7 +1155,7 @@
                 grid.innerHTML += `
                     <div class="card">
                         <img src="${item.image}" alt="${item.name}">
-                        <span class="badge" style="background:rgba(0, 255, 204, 0.2); color:#00ffcc;">Order Confirmed</span>
+                        <span class="badge" style="background:rgba(0, 240, 255, 0.2); color:#00f0ff;">Order Confirmed</span>
                         <h4 style="margin: 5px 0;">${item.name}</h4>
                         <p style="margin: 0; font-size:0.85rem; color:#94a3b8;">Category: ${item.category}</p>
                         <div class="price-tag">Paid: $${item.price}</div>
@@ -1118,7 +1185,7 @@
                 grid.innerHTML += `
                     <div class="card">
                         <img src="${item.image}" alt="${item.name}">
-                        <span class="badge" style="background:${item.status === 'Active' ? 'rgba(0, 255, 204, 0.2)' : 'rgba(239, 68, 68, 0.2)'}">${item.status}</span>
+                        <span class="badge" style="background:${item.status === 'Active' ? 'rgba(0, 240, 255, 0.2)' : 'rgba(239, 68, 68, 0.2)'}">${item.status}</span>
                         <h4 style="margin: 5px 0;">${item.name}</h4>
                         <p style="margin:0; font-size:0.85rem; color:#94a3b8;">${item.category}</p>
                         <div class="price-tag">$${item.price}</div>
@@ -1128,7 +1195,6 @@
             });
         }
 
-        // --- ADMIN PORTAL RENDERING ---
         function renderAdminPortal() {
             document.getElementById('admin-total-users').innerText = userRegistry.length;
             document.getElementById('admin-total-sales').innerText = salesHistory.length;
@@ -1136,7 +1202,6 @@
             const totalVolume = salesHistory.reduce((sum, item) => sum + parseFloat(item.price), 0);
             document.getElementById('admin-total-volume').innerText = "$" + totalVolume.toFixed(2);
 
-            // Populate Sellers Directory Table
             const sellersTable = document.getElementById('admin-sellers-table');
             sellersTable.innerHTML = "";
             const sellers = userRegistry.filter(u => u.role === 'Seller');
@@ -1160,7 +1225,6 @@
                 });
             }
 
-            // Populate Buyers Directory Table
             const buyersTable = document.getElementById('admin-buyers-table');
             buyersTable.innerHTML = "";
 
