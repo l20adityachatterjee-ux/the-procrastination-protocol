@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>The Procrastination Protocol - 3D Watchtower & Fleet</title>
+    <title>The Procrastination Protocol - Fleet & Watchtower</title>
     
     <!-- Three.js Library -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
@@ -252,7 +252,7 @@
         }
 
         .card:hover {
-            transform: translateY(-5px) rotateX(2deg);
+            transform: translateY(-5px);
             border-color: rgba(0, 240, 255, 0.5);
             box-shadow: 0 10px 20px rgba(0, 240, 255, 0.15);
         }
@@ -750,78 +750,309 @@
         lightHousingGroup.add(towerSpotlight);
 
 
-        // --- PROPER 3D SHIP STRUCTURES (FLEET SAILING THE SEA) ---
-        function createCargoShipModel() {
-            const shipGroup = new THREE.Group();
+        // --- PRECISE COMPONENT SHIP BUILDERS (BASED ON REFERENCE STYLES) ---
+        function createContainerShipModel() {
+            const group = new THREE.Group();
+            const hullMat = new THREE.MeshStandardMaterial({ color: 0x111827, roughness: 0.4 });
+            const bottomMat = new THREE.MeshStandardMaterial({ color: 0x991b1b, roughness: 0.5 });
+            const deckMat = new THREE.MeshStandardMaterial({ color: 0x1e293b, roughness: 0.5 });
+            
+            // Bottom hull red
+            const bGeo = new THREE.BoxGeometry(2.4, 0.5, 5.2);
+            const bMesh = new THREE.Mesh(bGeo, bottomMat);
+            bMesh.position.y = 0.25;
+            group.add(bMesh);
 
-            const hullMat = new THREE.MeshStandardMaterial({ color: 0x1e293b, roughness: 0.4, metalness: 0.6 });
-            const deckMat = new THREE.MeshStandardMaterial({ color: 0x334155, roughness: 0.5 });
-            const containerMat1 = new THREE.MeshStandardMaterial({ color: 0x00f0ff, roughness: 0.3 });
-            const containerMat2 = new THREE.MeshStandardMaterial({ color: 0x10b981, roughness: 0.3 });
-            const superstructureMat = new THREE.MeshStandardMaterial({ color: 0xf8fafc, roughness: 0.2 });
-
-            // Hull
-            const hullGeo = new THREE.BoxGeometry(2.6, 0.8, 5.2);
-            const hull = new THREE.Mesh(hullGeo, hullMat);
-            hull.position.y = 0.4;
-            shipGroup.add(hull);
+            // Upper hull dark
+            const uGeo = new THREE.BoxGeometry(2.5, 0.5, 5.0);
+            const uMesh = new THREE.Mesh(uGeo, hullMat);
+            uMesh.position.y = 0.75;
+            group.add(uMesh);
 
             // Deck
-            const deckGeo = new THREE.BoxGeometry(2.4, 0.2, 4.8);
-            const deck = new THREE.Mesh(deckGeo, deckMat);
-            deck.position.y = 0.9;
-            shipGroup.add(deck);
+            const dGeo = new THREE.BoxGeometry(2.4, 0.1, 4.8);
+            const dMesh = new THREE.Mesh(dGeo, deckMat);
+            dMesh.position.y = 1.05;
+            group.add(dMesh);
 
-            // Cargo Containers
-            for (let x of [-0.6, 0.6]) {
-                for (let z of [-1.2, 0, 1.2]) {
-                    const cGeo = new THREE.BoxGeometry(1.0, 0.9, 1.0);
-                    const cMesh = new THREE.Mesh(cGeo, (Math.random() > 0.5 ? containerMat1 : containerMat2));
-                    cMesh.position.set(x, 1.45, z);
-                    shipGroup.add(cMesh);
+            // Containers stack
+            const colors = [0x00f0ff, 0x10b981, 0xffb703, 0x3b82f6, 0xef4444];
+            for (let x = -0.7; x <= 0.7; x += 0.7) {
+                for (let z = -1.2; z <= 1.2; z += 0.9) {
+                    for (let y = 0; y < 2; y++) {
+                        const cMat = new THREE.MeshStandardMaterial({ color: colors[Math.floor(Math.random() * colors.length)], roughness: 0.3 });
+                        const cGeo = new THREE.BoxGeometry(0.65, 0.55, 0.85);
+                        const cMesh = new THREE.Mesh(cGeo, cMat);
+                        cMesh.position.set(x, 1.4 + y * 0.6, z);
+                        group.add(cMesh);
+                    }
                 }
             }
 
-            // Bridge / Superstructure (Aft)
-            const bridgeBaseGeo = new THREE.BoxGeometry(1.8, 1.2, 1.4);
-            const bridgeBase = new THREE.Mesh(bridgeBaseGeo, superstructureMat);
-            bridgeBase.position.set(0, 1.6, -1.8);
-            shipGroup.add(bridgeBase);
+            // Bridge (Aft)
+            const bridgeMat = new THREE.MeshStandardMaterial({ color: 0xf8fafc, roughness: 0.2 });
+            const bridgeGeo = new THREE.BoxGeometry(1.6, 1.2, 1.2);
+            const bridge = new THREE.Mesh(bridgeGeo, bridgeMat);
+            bridge.position.set(0, 1.7, -1.8);
+            group.add(bridge);
 
-            const bridgeTopGeo = new THREE.BoxGeometry(1.4, 0.8, 1.0);
-            const bridgeTop = new THREE.Mesh(bridgeTopGeo, containerMat1);
-            bridgeTop.position.set(0, 2.5, -1.8);
-            shipGroup.add(bridgeTop);
-
-            // Mast & Radar
-            const mastGeo = new THREE.CylinderGeometry(0.05, 0.05, 1.5);
-            const mast = new THREE.Mesh(mastGeo, hullMat);
-            mast.position.set(0, 3.25, -1.8);
-            shipGroup.add(mast);
-
-            shipGroup.scale.set(0.8, 0.8, 0.8);
-            return shipGroup;
+            group.scale.set(0.75, 0.75, 0.75);
+            return group;
         }
+
+        function createChemicalTankerModel() {
+            const group = new THREE.Group();
+            const hullMat = new THREE.MeshStandardMaterial({ color: 0x1e3a8a, roughness: 0.4 });
+            const bottomMat = new THREE.MeshStandardMaterial({ color: 0x991b1b, roughness: 0.5 });
+            const deckMat = new THREE.MeshStandardMaterial({ color: 0x334155, roughness: 0.5 });
+            
+            const bGeo = new THREE.BoxGeometry(2.2, 0.5, 5.0);
+            const bMesh = new THREE.Mesh(bGeo, bottomMat);
+            bMesh.position.y = 0.25;
+            group.add(bMesh);
+
+            const uGeo = new THREE.BoxGeometry(2.3, 0.6, 4.8);
+            const uMesh = new THREE.Mesh(uGeo, hullMat);
+            uMesh.position.y = 0.8;
+            group.add(uMesh);
+
+            // Piping & Deck
+            const dGeo = new THREE.BoxGeometry(2.1, 0.1, 4.4);
+            const dMesh = new THREE.Mesh(dGeo, deckMat);
+            dMesh.position.y = 1.15;
+            group.add(dMesh);
+
+            for (let z = -1.2; z <= 1.2; z += 0.8) {
+                const tankGeo = new THREE.CylinderGeometry(0.4, 0.4, 0.7, 16);
+                tankGeo.rotateX(Math.PI / 2);
+                const tankMat = new THREE.MeshStandardMaterial({ color: 0xef4444, metalness: 0.3 });
+                const tank = new THREE.Mesh(tankGeo, tankMat);
+                tank.position.set(0, 1.5, z);
+                group.add(tank);
+            }
+
+            // Bridge (Aft)
+            const bridgeGeo = new THREE.BoxGeometry(1.4, 1.0, 1.2);
+            const bridgeMat = new THREE.MeshStandardMaterial({ color: 0xf8fafc });
+            const bridge = new THREE.Mesh(bridgeGeo, bridgeMat);
+            bridge.position.set(0, 1.7, -1.8);
+            group.add(bridge);
+
+            group.scale.set(0.75, 0.75, 0.75);
+            return group;
+        }
+
+        function createBulkCarrierModel() {
+            const group = new THREE.Group();
+            const hullMat = new THREE.MeshStandardMaterial({ color: 0x1e3a8a, roughness: 0.4 });
+            const bottomMat = new THREE.MeshStandardMaterial({ color: 0x7c2d12, roughness: 0.5 });
+            
+            const bGeo = new THREE.BoxGeometry(2.4, 0.5, 5.2);
+            const bMesh = new THREE.Mesh(bGeo, bottomMat);
+            bMesh.position.y = 0.25;
+            group.add(bMesh);
+
+            const uGeo = new THREE.BoxGeometry(2.5, 0.8, 5.0);
+            const uMesh = new THREE.Mesh(uGeo, hullMat);
+            uMesh.position.y = 0.9;
+            group.add(uMesh);
+
+            // 4 Yellow Hopper Bins / Cargo Holds
+            for (let z = -1.5; z <= 1.5; z += 1.0) {
+                const hopperGeo = new THREE.BoxGeometry(1.8, 0.8, 0.8);
+                const hopperMat = new THREE.MeshStandardMaterial({ color: 0xffb703, roughness: 0.3 });
+                const hopper = new THREE.Mesh(hopperGeo, hopperMat);
+                hopper.position.set(0, 1.7, z);
+                group.add(hopper);
+            }
+
+            // Bridge (Aft)
+            const bridgeGeo = new THREE.BoxGeometry(1.6, 1.4, 1.2);
+            const bridgeMat = new THREE.MeshStandardMaterial({ color: 0xf8fafc });
+            const bridge = new THREE.Mesh(bridgeGeo, bridgeMat);
+            bridge.position.set(0, 2.0, -1.9);
+            group.add(bridge);
+
+            group.scale.set(0.75, 0.75, 0.75);
+            return group;
+        }
+
+        function createCrudeOilTankerModel() {
+            const group = new THREE.Group();
+            const hullMat = new THREE.MeshStandardMaterial({ color: 0x7f1d1d, roughness: 0.4 });
+            const bottomMat = new THREE.MeshStandardMaterial({ color: 0x111827, roughness: 0.5 });
+            
+            const bGeo = new THREE.BoxGeometry(2.6, 0.5, 5.4);
+            const bMesh = new THREE.Mesh(bGeo, bottomMat);
+            bMesh.position.y = 0.25;
+            group.add(bMesh);
+
+            const uGeo = new THREE.BoxGeometry(2.7, 0.9, 5.2);
+            const uMesh = new THREE.Mesh(uGeo, hullMat);
+            uMesh.position.y = 0.95;
+            group.add(uMesh);
+
+            // Piping & Deck Cranes
+            const deckMat = new THREE.MeshStandardMaterial({ color: 0x334155 });
+            const dGeo = new THREE.BoxGeometry(2.5, 0.1, 4.8);
+            const dMesh = new THREE.Mesh(dGeo, deckMat);
+            dMesh.position.y = 1.45;
+            group.add(dMesh);
+
+            // Bridge (Aft) & Funnel
+            const bridgeGeo = new THREE.BoxGeometry(1.6, 1.2, 1.4);
+            const bridgeMat = new THREE.MeshStandardMaterial({ color: 0xf8fafc });
+            const bridge = new THREE.Mesh(bridgeGeo, bridgeMat);
+            bridge.position.set(0, 2.1, -1.9);
+            group.add(bridge);
+
+            const funnelGeo = new THREE.CylinderGeometry(0.2, 0.2, 0.6);
+            const funnelMat = new THREE.MeshStandardMaterial({ color: 0xef4444 });
+            const funnel = new THREE.Mesh(funnelGeo, funnelMat);
+            funnel.position.set(0, 2.9, -1.9);
+            group.add(funnel);
+
+            group.scale.set(0.75, 0.75, 0.75);
+            return group;
+        }
+
+        function createLngTankerModel() {
+            const group = new THREE.Group();
+            const hullMat = new THREE.MeshStandardMaterial({ color: 0x991b1b, roughness: 0.4 });
+            const bottomMat = new THREE.MeshStandardMaterial({ color: 0x111827, roughness: 0.5 });
+            
+            const bGeo = new THREE.BoxGeometry(2.5, 0.5, 5.2);
+            const bMesh = new THREE.Mesh(bGeo, bottomMat);
+            bMesh.position.y = 0.25;
+            group.add(bMesh);
+
+            const uGeo = new THREE.BoxGeometry(2.6, 0.8, 5.0);
+            const uMesh = new THREE.Mesh(uGeo, hullMat);
+            uMesh.position.y = 0.9;
+            group.add(uMesh);
+
+            // 4 Spherical LNG Tanks
+            for (let z = -1.5; z <= 1.5; z += 1.0) {
+                const sphereGeo = new THREE.SphereGeometry(0.65, 24, 24);
+                // Flatten bottom hemisphere slightly
+                sphereGeo.scale(1, 0.85, 1);
+                const sphereMat = new THREE.MeshStandardMaterial({ color: 0xf8fafc, roughness: 0.2, metalness: 0.3 });
+                const sphere = new THREE.Mesh(sphereGeo, sphereMat);
+                sphere.position.set(0, 1.7, z);
+                group.add(sphere);
+            }
+
+            // Bridge (Aft)
+            const bridgeGeo = new THREE.BoxGeometry(1.6, 1.2, 1.2);
+            const bridgeMat = new THREE.MeshStandardMaterial({ color: 0x334155 });
+            const bridge = new THREE.Mesh(bridgeGeo, bridgeMat);
+            bridge.position.set(0, 1.9, -1.9);
+            group.add(bridge);
+
+            group.scale.set(0.75, 0.75, 0.75);
+            return group;
+        }
+
+        function createRoRoShipModel() {
+            const group = new THREE.Group();
+            const hullMat = new THREE.MeshStandardMaterial({ color: 0x1e3a8a, roughness: 0.4 });
+            const bottomMat = new THREE.MeshStandardMaterial({ color: 0x991b1b, roughness: 0.5 });
+            const superMat = new THREE.MeshStandardMaterial({ color: 0xf8fafc, roughness: 0.3 });
+
+            const bGeo = new THREE.BoxGeometry(2.6, 0.6, 5.2);
+            const bMesh = new THREE.Mesh(bGeo, bottomMat);
+            bMesh.position.y = 0.3;
+            group.add(bMesh);
+
+            const uGeo = new THREE.BoxGeometry(2.7, 1.4, 5.0);
+            const uMesh = new THREE.Mesh(uGeo, hullMat);
+            uMesh.position.y = 1.3;
+            group.add(uMesh);
+
+            // Large Upper Superstructure block
+            const topGeo = new THREE.BoxGeometry(2.6, 0.8, 3.8);
+            const topMesh = new THREE.Mesh(topGeo, superMat);
+            topMesh.position.set(0, 2.4, -0.4);
+            group.add(topMesh);
+
+            group.scale.set(0.75, 0.75, 0.75);
+            return group;
+        }
+
+        function createGeneralCargoModel() {
+            const group = new THREE.Group();
+            const hullMat = new THREE.MeshStandardMaterial({ color: 0x065f46, roughness: 0.4 });
+            const bottomMat = new THREE.MeshStandardMaterial({ color: 0x64748b, roughness: 0.5 });
+            
+            const bGeo = new THREE.BoxGeometry(2.4, 0.5, 5.0);
+            const bMesh = new THREE.Mesh(bGeo, bottomMat);
+            bMesh.position.y = 0.25;
+            group.add(bMesh);
+
+            const uGeo = new THREE.BoxGeometry(2.5, 0.7, 4.8);
+            const uMesh = new THREE.Mesh(uGeo, hullMat);
+            uMesh.position.y = 0.85;
+            group.add(uMesh);
+
+            // Deck Cranes / Gantries
+            for (let z of [-1.0, 1.0]) {
+                const gantryGeo = new THREE.BoxGeometry(2.2, 1.0, 0.3);
+                const gantryMat = new THREE.MeshStandardMaterial({ color: 0xffb703 });
+                const gantry = new THREE.Mesh(gantryGeo, gantryMat);
+                gantry.position.set(0, 1.7, z);
+                group.add(gantry);
+            }
+
+            // Bridge (Aft)
+            const bridgeGeo = new THREE.BoxGeometry(1.4, 1.0, 1.2);
+            const bridgeMat = new THREE.MeshStandardMaterial({ color: 0xf8fafc });
+            const bridge = new THREE.Mesh(bridgeGeo, bridgeMat);
+            bridge.position.set(0, 1.7, -1.8);
+            group.add(bridge);
+
+            group.scale.set(0.75, 0.75, 0.75);
+            return group;
+        }
+
+        // --- COMPONENT FLEET CREATION & NAMING ---
+        const componentNames = [
+            "Container Ship\n[CPU Processor]",
+            "Chemical Tanker\n[GPU RTX Card]",
+            "Bulk Carrier\n[Motherboard]",
+            "Crude Oil Tanker\n[RAM Memory]",
+            "LNG Tanker\n[SSD Storage]",
+            "Ro-Ro Ship\n[Power Supply]",
+            "General Cargo\n[Integrated Circuits]"
+        ];
 
         const fleetGroup = new THREE.Group();
         scene.add(fleetGroup);
 
         const ships = [];
-        const numShips = 7;
+        const shipBuilders = [
+            createContainerShipModel,
+            createChemicalTankerModel,
+            createBulkCarrierModel,
+            createCrudeOilTankerModel,
+            createLngTankerModel,
+            createRoRoShipModel,
+            createGeneralCargoModel
+        ];
 
-        for (let i = 0; i < numShips; i++) {
-            const ship = createCargoShipModel();
-            fleetGroup.add(ship);
+        shipBuilders.forEach((builder, i) => {
+            const shipMesh = builder();
+            fleetGroup.add(shipMesh);
 
             ships.push({
-                mesh: ship,
-                orbitRadius: 10 + Math.random() * 12,
-                angle: (i / numShips) * Math.PI * 2,
-                speed: 0.002 + Math.random() * 0.002,
-                bobFreq: 2.0 + Math.random() * 1.5,
-                bobOffset: Math.random() * Math.PI
+                mesh: shipMesh,
+                name: componentNames[i],
+                orbitRadius: 11 + (i * 1.8),
+                angle: (i / shipBuilders.length) * Math.PI * 2,
+                speed: 0.0018 + (i * 0.0003),
+                bobFreq: 2.0 + (i * 0.3),
+                bobOffset: i * 0.8
             });
-        }
+        });
 
         // Parallax Mouse Motion
         let mouseX = 0, mouseY = 0;
@@ -856,18 +1087,7 @@
             lightHousingGroup.rotation.y = elapsedTime * 0.8;
             towerGroup.rotation.y = Math.sin(elapsedTime * 0.15) * 0.04;
 
-            // 2. Animate Ocean Waves Vertex Displacements
-            const positions = oceanGeo.attributes.position;
-            for (let i = 0; i < positions.count; i++) {
-                const u = positions.getX(i);
-                const v = getY = positions.getY(i);
-                // Simple sine wave displacement on water vertices
-                const zDist = Math.sin(u * 0.3 + elapsedTime * 1.5) * Math.cos(v * 0.3 + elapsedTime * 1.2) * 0.25;
-                // keep base flat at edges, wavy in center
-            }
-            oceanGeo.computeVertexNormals();
-
-            // 3. Sail & Buoyancy Animation for Ships across the Sea
+            // 2. Sail & Buoyancy Animation for Ships across the Sea
             ships.forEach(s => {
                 s.angle += s.speed;
                 const x = Math.cos(s.angle) * s.orbitRadius - 8;
