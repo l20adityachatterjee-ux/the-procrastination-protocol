@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>The Procrastination Protocol - 3D PCB Circuit Forest</title>
+    <title>The Procrastination Protocol - 3D Globe Marketplace</title>
     
     <!-- Three.js Library -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
@@ -384,7 +384,7 @@
             </div>
         </div>
 
-        <!-- Separate Dedicated Admin Login Modal -->
+        <!-- Dedicated Admin Login Modal -->
         <div id="admin-modal" class="modal-overlay" style="display:none;">
             <div class="modal-card" style="border-color: #ffb703; box-shadow: 0 0 35px rgba(255, 183, 3, 0.3);">
                 <h2 style="color: #ffb703;">🛡️ System Admin Verification</h2>
@@ -561,7 +561,7 @@
             <div id="assess-result" class="result-box" style="display:none;"></div>
         </div>
 
-        <!-- Tab 6: Admin Portal (Restricted) -->
+        <!-- Tab 6: Admin Portal -->
         <div id="tab-admin" class="section">
             <h2 style="color: #ffb703;">🛡️ System Administrator Portal</h2>
             <p style="color: #94a3b8;">Overview of all registered platform buyers, sellers, and transactions.</p>
@@ -630,173 +630,83 @@
         dirLight.position.set(0, 10, 20);
         scene.add(dirLight);
 
-        // Base Scene Group
-        const forestGroup = new THREE.Group();
-        forestGroup.position.set(-8, -4, 0);
-        scene.add(forestGroup);
+        // --- 3D ROTATING GLOBE (EARTH WIREFRAME) ---
+        const globeGroup = new THREE.Group();
+        globeGroup.position.set(-8, 0, 0);
+        scene.add(globeGroup);
 
-        // --- GLOWING HORIZONTAL HORIZON LINE ---
-        function createHorizonLine() {
-            const points = [
-                new THREE.Vector3(-25, 0, 0),
-                new THREE.Vector3(25, 0, 0)
-            ];
-            const geo = new THREE.BufferGeometry().setFromPoints(points);
-            const mat = new THREE.LineBasicMaterial({ color: 0x00f0ff, linewidth: 3, transparent: true, opacity: 0.9 });
-            const line = new THREE.Line(geo, mat);
-            forestGroup.add(line);
+        const globeRadius = 6;
 
-            // Horizon Glow Line
-            const glowGeo = new THREE.PlaneGeometry(50, 0.4);
-            const glowMat = new THREE.MeshBasicMaterial({ color: 0x00f0ff, transparent: true, opacity: 0.35, side: THREE.DoubleSide });
-            const glow = new THREE.Mesh(glowGeo, glowMat);
-            forestGroup.add(glow);
-        }
-        createHorizonLine();
+        // Globe Sphere Wireframe
+        const globeGeo = new THREE.IcosahedronGeometry(globeRadius, 4);
+        const globeMat = new THREE.MeshBasicMaterial({
+            color: 0x00f0ff,
+            wireframe: true,
+            transparent: true,
+            opacity: 0.18
+        });
+        const globeMesh = new THREE.Mesh(globeGeo, globeMat);
+        globeGroup.add(globeMesh);
 
-        // --- ORTHOGONAL PCB CIRCUIT TREE BUILDER ---
-        function createPCBCircuitTree(scale = 1.0, positionX = 0) {
-            const treeGroup = new THREE.Group();
-            treeGroup.position.set(positionX, 0, 0);
-
-            const linesPoints = [];
-            const terminalNodes = [];
-
-            // Parallel Main Trunk Lines
-            const trunkTraces = 7;
-            const trunkHeight = 5.5 * scale;
-            const trunkWidth = 0.8 * scale;
-
-            for (let i = 0; i < trunkTraces; i++) {
-                const xOffset = ((i / (trunkTraces - 1)) - 0.5) * trunkWidth;
-                
-                // Vertical trunk lines
-                linesPoints.push(xOffset, 0, 0);
-                linesPoints.push(xOffset, trunkHeight * (0.4 + (i % 3) * 0.2), 0);
-            }
-
-            // PCB Branch Traces (Structured 45°/90° Angles)
-            const branchConfigs = [
-                // Left Canopy Branches
-                { start: [-0.4 * scale, 2.2 * scale], path: [[-1.2, 0.8], [-1.2, 1.8], [-2.0, 2.6], [-2.0, 3.4]] },
-                { start: [-0.2 * scale, 3.0 * scale], path: [[-0.9, 0.9], [-0.9, 2.2], [-1.5, 2.8]] },
-                { start: [-0.1 * scale, 3.8 * scale], path: [[-0.6, 0.6], [-0.6, 1.6], [-1.1, 2.1]] },
-                { start: [0.0, 4.4 * scale], path: [[-0.4, 0.4], [-0.4, 1.2], [-0.8, 1.6]] },
-
-                // Right Canopy Branches
-                { start: [0.4 * scale, 2.2 * scale], path: [[1.2, 0.8], [1.2, 1.8], [2.0, 2.6], [2.0, 3.4]] },
-                { start: [0.2 * scale, 3.0 * scale], path: [[0.9, 0.9], [0.9, 2.2], [1.5, 2.8]] },
-                { start: [0.1 * scale, 3.8 * scale], path: [[0.6, 0.6], [0.6, 1.6], [1.1, 2.1]] },
-                { start: [0.0, 4.4 * scale], path: [[0.4, 0.4], [0.4, 1.2], [0.8, 1.6]] },
-
-                // Top Vertical Extension Branches
-                { start: [-0.15 * scale, 4.8 * scale], path: [[-0.3, 0.3], [-0.3, 1.5], [-0.5, 2.2]] },
-                { start: [0.15 * scale, 4.8 * scale], path: [[0.3, 0.3], [0.3, 1.5], [0.5, 2.2]] },
-                { start: [0.0, 5.0 * scale], path: [[0.0, 2.5]] }
-            ];
-
-            branchConfigs.forEach(b => {
-                let currX = b.start[0];
-                let currY = b.start[1];
-
-                b.path.forEach(step => {
-                    const nextX = b.start[0] + (step[0] * scale);
-                    const nextY = b.start[1] + (step[1] * scale);
-
-                    linesPoints.push(currX, currY, 0);
-                    linesPoints.push(nextX, nextY, 0);
-
-                    // Add intermediate node connection
-                    if (Math.random() > 0.4) {
-                        terminalNodes.push(nextX, nextY, 0);
-                    }
-
-                    currX = nextX;
-                    currY = nextY;
-                });
-
-                // End terminal ring pad
-                terminalNodes.push(currX, currY, 0);
-            });
-
-            // Geometry for PCB Traces
-            const lineGeo = new THREE.BufferGeometry();
-            lineGeo.setAttribute('position', new THREE.Float32BufferAttribute(linesPoints, 3));
-            const lineMat = new THREE.LineBasicMaterial({ color: 0x00f0ff, transparent: true, opacity: 0.9 });
-            const pcbTraces = new THREE.LineSegments(lineGeo, lineMat);
-            treeGroup.add(pcbTraces);
-
-            // Glowing Circular Ring Terminal Nodes
-            const nodeGeo = new THREE.BufferGeometry();
-            nodeGeo.setAttribute('position', new THREE.Float32BufferAttribute(terminalNodes, 3));
-            
-            // Create Ring Texture for Terminal Pads
-            const canvas = document.createElement('canvas');
-            canvas.width = 64;
-            canvas.height = 64;
-            const ctx = canvas.getContext('2d');
-            ctx.strokeStyle = '#00f0ff';
-            ctx.lineWidth = 6;
-            ctx.beginPath();
-            ctx.arc(32, 32, 22, 0, Math.PI * 2);
-            ctx.stroke();
-            ctx.fillStyle = '#ffffff';
-            ctx.beginPath();
-            ctx.arc(32, 32, 10, 0, Math.PI * 2);
-            ctx.fill();
-
-            const ringTex = new THREE.CanvasTexture(canvas);
-            const nodeMat = new THREE.PointsMaterial({
-                size: 0.45 * scale,
-                map: ringTex,
-                transparent: true,
-                opacity: 0.95,
-                blending: THREE.AdditiveBlending
-            });
-
-            const nodes = new THREE.Points(nodeGeo, nodeMat);
-            treeGroup.add(nodes);
-
-            // Root Junction Flare at Ground Line
-            const rootGlowGeo = new THREE.PlaneGeometry(1.2 * scale, 0.6 * scale);
-            const rootGlowMat = new THREE.MeshBasicMaterial({ color: 0x00f0ff, transparent: true, opacity: 0.6, side: THREE.DoubleSide });
-            const rootGlow = new THREE.Mesh(rootGlowGeo, rootGlowMat);
-            rootGlow.position.set(0, 0.2, 0);
-            treeGroup.add(rootGlow);
-
-            return treeGroup;
+        // Latitudinal & Longitudinal Circuit Rings
+        for (let i = 0; i < 5; i++) {
+            const ringGeo = new THREE.RingGeometry(globeRadius + 0.05, globeRadius + 0.1, 64);
+            const ringMat = new THREE.MeshBasicMaterial({ color: 0x00f0ff, side: THREE.DoubleSide, transparent: true, opacity: 0.25 });
+            const ring = new THREE.Mesh(ringGeo, ringMat);
+            ring.rotation.x = Math.PI / 2;
+            ring.position.y = (i - 2) * 2;
+            ring.scale.setScalar(Math.cos((i - 2) * 0.35));
+            globeGroup.add(ring);
         }
 
-        // Generate 3 PCB Trees Matching Reference (1 Large Center, 2 Small Sides)
-        const centerTree = createPCBCircuitTree(1.1, 0);
-        const leftTree = createPCBCircuitTree(0.65, -8.5);
-        const rightTree = createPCBCircuitTree(0.65, 8.5);
+        // Glowing Surface Nodes (Cities/Circuits)
+        const nodePositions = [];
+        const numNodes = 120;
+        for (let i = 0; i < numNodes; i++) {
+            const phi = Math.acos(-1 + (2 * i) / numNodes);
+            const theta = Math.sqrt(numNodes * Math.PI) * phi;
+            nodePositions.push(
+                globeRadius * Math.cos(theta) * Math.sin(phi),
+                globeRadius * Math.sin(theta) * Math.sin(phi),
+                globeRadius * Math.cos(phi)
+            );
+        }
 
-        forestGroup.add(centerTree);
-        forestGroup.add(leftTree);
-        forestGroup.add(rightTree);
+        const nodeGeo = new THREE.BufferGeometry();
+        nodeGeo.setAttribute('position', new THREE.Float32BufferAttribute(nodePositions, 3));
+        
+        const nodeMat = new THREE.PointsMaterial({
+            color: 0x00f0ff,
+            size: 0.25,
+            transparent: true,
+            opacity: 0.85,
+            blending: THREE.AdditiveBlending
+        });
 
-        // Ambient Floating Glow Bokeh Particles
-        const particleCount = 120;
+        const globeNodes = new THREE.Points(nodeGeo, nodeMat);
+        globeGroup.add(globeNodes);
+
+        // Ambient Floating Particles
+        const particleCount = 100;
         const particlePositions = [];
         for (let i = 0; i < particleCount; i++) {
             particlePositions.push(
-                (Math.random() - 0.5) * 30,
-                Math.random() * 12 - 2,
-                (Math.random() - 0.5) * 10
+                (Math.random() - 0.5) * 35,
+                (Math.random() - 0.5) * 20,
+                (Math.random() - 0.5) * 20
             );
         }
         const pGeo = new THREE.BufferGeometry();
         pGeo.setAttribute('position', new THREE.Float32BufferAttribute(particlePositions, 3));
         const pMat = new THREE.PointsMaterial({
             color: 0x00f0ff,
-            size: 0.25,
+            size: 0.2,
             transparent: true,
-            opacity: 0.6,
+            opacity: 0.5,
             blending: THREE.AdditiveBlending
         });
         const particles = new THREE.Points(pGeo, pMat);
-        forestGroup.add(particles);
+        scene.add(particles);
 
         // --- REVOLVING HARDWARE COMPONENT SPRITES ---
         const componentNames = [
@@ -835,9 +745,9 @@
 
             sprite.scale.set(2.8, 0.7, 1);
             
-            const radius = 8 + Math.random() * 8;
+            const radius = 8.5 + Math.random() * 4;
             const angle = Math.random() * Math.PI * 2;
-            const y = Math.random() * 10 - 2;
+            const y = (Math.random() - 0.5) * 8;
 
             sprite.position.set(
                 Math.cos(angle) * radius - 8,
@@ -851,7 +761,7 @@
                 mesh: sprite,
                 angle: angle,
                 radius: radius,
-                speed: 0.004 + Math.random() * 0.004,
+                speed: 0.003 + Math.random() * 0.003,
                 yBase: y,
                 yFreq: 0.5 + Math.random() * 0.5
             });
@@ -887,7 +797,11 @@
 
             const elapsedTime = clock.getElapsedTime();
 
-            // Slight Pulsing Glow & Floating Orbiters
+            // Rotate Globe
+            globeGroup.rotation.y = elapsedTime * 0.15;
+            globeGroup.rotation.x = Math.sin(elapsedTime * 0.05) * 0.1;
+
+            // Rotating Hardware Orbiters
             particleNodes.forEach(p => {
                 p.angle += p.speed;
                 p.mesh.position.x = Math.cos(p.angle) * p.radius - 8;
