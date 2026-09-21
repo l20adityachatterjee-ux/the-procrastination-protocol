@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>The Procrastination Protocol - Watchtower Harbor Marketplace</title>
+    <title>SECOND SPARK</title>
     
     <!-- Three.js & FontAwesome Icons -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
@@ -368,7 +368,7 @@
 
     <div class="container">
         <header>
-            <h1><i class="fa-solid fa-tower-observation"></i> The Procrastination Protocol</h1>
+            <h1><i class="fa-solid fa-tower-observation"></i> SECOND SPARK</h1>
             <p style="color: #94a3b8; margin-top: -2px;"><i>Guiding Recycled Electronics Safely Home &bull; Sea Harbor Marketplace</i></p>
         </header>
 
@@ -634,9 +634,9 @@
         scene.background = new THREE.Color(0x020617);
         scene.fog = new THREE.FogExp2(0x020617, 0.025);
 
-        const camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 1000);
-        let targetCameraPos = { x: -7, y: 3, z: 22 };
-        camera.position.set(-7, 3, 22);
+        const camera = new THREE.PerspectiveCamera(50, window.innerWidth / window.innerHeight, 0.1, 1000);
+        let targetCameraPos = { x: -7, y: 5, z: 30 };
+        camera.position.set(-7, 5, 30);
 
         // Ambient & Scene Directional Lighting
         scene.add(new THREE.AmbientLight(0x0a192f, 1.8));
@@ -793,183 +793,296 @@
         const shipGroup = new THREE.Group();
         scene.add(shipGroup);
 
-        function createShipMesh(color, textLabel) {
-            // Large, high-contrast cargo ship designed to remain unmistakable at the
-            // fixed camera distance. The ship's length runs along local Z so lookAt()
-            // naturally points the bow in the sailing direction.
+        function createShipMesh(color, textLabel, variant = 0) {
+            // Realistic-looking merchant vessels inspired by the reference silhouettes.
+            // Each vessel keeps a distinct hull/superstructure silhouette while the
+            // supplied component colour remains visible as the main accent.
             const ship = new THREE.Group();
-            ship.scale.set(1.8, 1.8, 1.8);
+            ship.scale.set(1.0, 1.0, 1.0);
+
+            const accentMat = new THREE.MeshStandardMaterial({
+                color: color,
+                roughness: 0.34,
+                metalness: 0.28
+            });
+            const darkMat = new THREE.MeshStandardMaterial({
+                color: 0x111827,
+                roughness: 0.42,
+                metalness: 0.35
+            });
+            const whiteMat = new THREE.MeshStandardMaterial({
+                color: 0xe8edf3,
+                roughness: 0.5,
+                metalness: 0.08
+            });
+            const glassMat = new THREE.MeshStandardMaterial({
+                color: 0x49b6e9,
+                emissive: 0x075985,
+                emissiveIntensity: 0.45,
+                roughness: 0.15,
+                metalness: 0.35
+            });
+            const steelMat = new THREE.MeshStandardMaterial({
+                color: 0x9ca3af,
+                roughness: 0.5,
+                metalness: 0.45
+            });
+
+            // Reference-inspired hull palette.
+            const ref = [
+                { hull: 0x8f2638, lower: 0x111111 }, // container
+                { hull: 0x167fa6, lower: 0x0f4f69 }, // chemical
+                { hull: 0x0d637c, lower: 0x06445a }, // bulk
+                { hull: 0x8f2638, lower: 0x171717 }, // crude
+                { hull: 0xd94141, lower: 0x9f2e2e }, // LNG
+                { hull: 0x3f628b, lower: 0x9e2b22 }, // ro-ro
+                { hull: 0x4f9a6b, lower: 0xa7a7a7 }, // general cargo
+                { hull: 0x8f2638, lower: 0x171717 }  // extra container ship
+            ][variant % 8];
 
             const hullMat = new THREE.MeshStandardMaterial({
-                color: color,
-                roughness: 0.3,
-                metalness: 0.45,
-                emissive: color,
-                emissiveIntensity: 0.10
-            });
-
-            const darkMat = new THREE.MeshStandardMaterial({
-                color: 0x172033,
+                color: ref.hull,
                 roughness: 0.32,
-                metalness: 0.5
+                metalness: 0.28
+            });
+            const lowerHullMat = new THREE.MeshStandardMaterial({
+                color: ref.lower,
+                roughness: 0.4,
+                metalness: 0.28
             });
 
-            const deckMat = new THREE.MeshStandardMaterial({
-                color: 0xe5e7eb,
-                roughness: 0.42,
-                metalness: 0.12
-            });
+            // Main hull: side-profile extrusion for a more ship-like silhouette.
+            const hullShape = new THREE.Shape();
+            hullShape.moveTo(-0.82, 0.0);
+            hullShape.lineTo(-0.76, 0.42);
+            hullShape.lineTo(-0.48, 0.64);
+            hullShape.lineTo(0.48, 0.64);
+            hullShape.lineTo(0.78, 0.48);
+            hullShape.lineTo(0.94, 0.16);
+            hullShape.lineTo(0.72, 0.0);
+            hullShape.lineTo(-0.82, 0.0);
 
-            const glassMat = new THREE.MeshStandardMaterial({
-                color: 0x38bdf8,
-                emissive: 0x075985,
-                emissiveIntensity: 0.5,
-                roughness: 0.1,
-                metalness: 0.5
+            const hullGeo = new THREE.ExtrudeGeometry(hullShape, {
+                depth: 4.65,
+                bevelEnabled: true,
+                bevelSegments: 2,
+                bevelSize: 0.06,
+                bevelThickness: 0.05,
+                curveSegments: 2
             });
-
-            // Main hull: long and wide, clearly above the water.
-            const hull = new THREE.Mesh(
-                new THREE.BoxGeometry(1.45, 0.72, 4.6),
-                hullMat
-            );
-            hull.position.y = 0.45;
+            hullGeo.translate(0, 0, -2.325);
+            const hull = new THREE.Mesh(hullGeo, hullMat);
             ship.add(hull);
 
-            // Raised bow and pointed prow.
-            const bow = new THREE.Mesh(
-                new THREE.ConeGeometry(0.72, 1.55, 4),
+            // Dark underwater belt.
+            const lowerHull = new THREE.Mesh(
+                new THREE.BoxGeometry(1.38, 0.28, 4.25),
+                lowerHullMat
+            );
+            lowerHull.position.set(0, 0.10, 0);
+            ship.add(lowerHull);
+
+            // Bow bulb and raised prow, both at local -Z (the sailing direction).
+            const bulb = new THREE.Mesh(
+                new THREE.SphereGeometry(0.42, 16, 8),
+                lowerHullMat
+            );
+            bulb.scale.set(0.75, 0.45, 1.0);
+            bulb.position.set(0, 0.25, -2.28);
+            ship.add(bulb);
+
+            const prow = new THREE.Mesh(
+                new THREE.ConeGeometry(0.72, 1.15, 5),
                 hullMat
             );
-            bow.rotation.x = Math.PI / 2;
-            bow.position.set(0, 0.45, 2.95);
-            bow.scale.y = 0.72;
-            ship.add(bow);
+            prow.rotation.x = -Math.PI / 2;
+            prow.scale.y = 0.72;
+            prow.position.set(0, 0.48, -2.42);
+            ship.add(prow);
 
-            // Black lower keel, making the waterline obvious.
-            const keel = new THREE.Mesh(
-                new THREE.BoxGeometry(1.15, 0.30, 3.9),
-                darkMat
-            );
-            keel.position.set(0, 0.12, 0);
-            ship.add(keel);
-
-            // Bright deck strip.
+            // Deck.
             const deck = new THREE.Mesh(
-                new THREE.BoxGeometry(1.28, 0.14, 4.0),
-                deckMat
+                new THREE.BoxGeometry(1.28, 0.12, 4.0),
+                steelMat
             );
-            deck.position.set(0, 0.84, 0.15);
+            deck.position.set(0, 0.78, 0.05);
             ship.add(deck);
 
-            // Rear cargo area.
-            const cargoBase = new THREE.Mesh(
-                new THREE.BoxGeometry(1.18, 0.35, 1.65),
-                darkMat
-            );
-            cargoBase.position.set(0, 1.05, -0.75);
-            ship.add(cargoBase);
-
-            // Stacked cargo containers with contrasting faces.
-            const cargoColors = [0x2563eb, 0xf97316, 0x22c55e, 0xa855f7];
-            [-0.45, 0.0, 0.45].forEach((xPos, i) => {
-                const container = new THREE.Mesh(
-                    new THREE.BoxGeometry(0.34, 0.52, 0.72),
-                    new THREE.MeshStandardMaterial({
-                        color: cargoColors[i % cargoColors.length],
-                        roughness: 0.38,
-                        metalness: 0.35
-                    })
+            // Different merchant-ship deck arrangements.
+            if (variant === 0 || variant === 7) {
+                // Container ship: multiple rows of stacked containers.
+                const containerColors = [0x2f78a8, 0xe87524, 0xb33a35, 0xe8edf3, 0x2e7899];
+                [-0.48, 0, 0.48].forEach((x, xi) => {
+                    [-1.00, -0.35, 0.30].forEach((z, zi) => {
+                        const c = new THREE.Mesh(
+                            new THREE.BoxGeometry(0.38, 0.48, 0.55),
+                            new THREE.MeshStandardMaterial({
+                                color: containerColors[(xi + zi) % containerColors.length],
+                                roughness: 0.48,
+                                metalness: 0.25
+                            })
+                        );
+                        c.position.set(x, 1.05 + (zi % 2) * 0.43, z);
+                        ship.add(c);
+                    });
+                });
+            } else if (variant === 1) {
+                // Chemical tanker: narrow deck with cylindrical tank modules.
+                for (let z = -1.25; z <= 0.75; z += 0.7) {
+                    const tank = new THREE.Mesh(
+                        new THREE.CylinderGeometry(0.32, 0.32, 0.72, 16),
+                        new THREE.MeshStandardMaterial({ color: 0xdfe5ea, roughness: 0.5, metalness: 0.18 })
+                    );
+                    tank.rotation.z = Math.PI / 2;
+                    tank.position.set(0, 1.02, z);
+                    ship.add(tank);
+                }
+            } else if (variant === 2) {
+                // Bulk carrier: covered cargo hatches.
+                [-1.05, -0.35, 0.35, 1.05].forEach(z => {
+                    const hatch = new THREE.Mesh(
+                        new THREE.BoxGeometry(1.02, 0.24, 0.48),
+                        new THREE.MeshStandardMaterial({ color: 0xe0a91a, roughness: 0.55, metalness: 0.15 })
+                    );
+                    hatch.position.set(0, 1.02, z);
+                    ship.add(hatch);
+                });
+            } else if (variant === 3) {
+                // Crude-oil tanker: low-profile dark tank deck.
+                for (let z = -0.95; z <= 0.95; z += 0.63) {
+                    const tank = new THREE.Mesh(
+                        new THREE.CylinderGeometry(0.48, 0.48, 0.28, 20),
+                        darkMat
+                    );
+                    tank.rotation.z = Math.PI / 2;
+                    tank.position.set(0, 1.02, z);
+                    ship.add(tank);
+                }
+            } else if (variant === 4) {
+                // LNG tanker: large white spherical containment tanks.
+                [-0.82, -0.25, 0.32, 0.89].forEach(z => {
+                    const tank = new THREE.Mesh(
+                        new THREE.SphereGeometry(0.43, 18, 12),
+                        whiteMat
+                    );
+                    tank.scale.y = 0.78;
+                    tank.position.set(0, 1.14, z);
+                    ship.add(tank);
+                });
+            } else if (variant === 5) {
+                // Ro-Ro: broad enclosed vehicle deck.
+                const vehicleDeck = new THREE.Mesh(
+                    new THREE.BoxGeometry(1.12, 0.72, 2.35),
+                    whiteMat
                 );
-                container.position.set(xPos, 1.48, -0.72);
-                ship.add(container);
-            });
+                vehicleDeck.position.set(0, 1.12, 0.0);
+                ship.add(vehicleDeck);
 
-            // Bridge / wheelhouse at the stern.
+                const ramp = new THREE.Mesh(
+                    new THREE.BoxGeometry(1.0, 0.08, 0.65),
+                    darkMat
+                );
+                ramp.position.set(0, 0.93, -1.42);
+                ship.add(ramp);
+            } else if (variant === 6) {
+                // General cargo: open deck and two orange cargo cranes.
+                [-0.75, 0.55].forEach(z => {
+                    const craneMast = new THREE.Mesh(
+                        new THREE.BoxGeometry(0.08, 1.35, 0.08),
+                        new THREE.MeshStandardMaterial({ color: 0xf0a52b, roughness: 0.45, metalness: 0.25 })
+                    );
+                    craneMast.position.set(0, 1.48, z);
+                    ship.add(craneMast);
+
+                    const boom = new THREE.Mesh(
+                        new THREE.BoxGeometry(0.75, 0.08, 0.08),
+                        new THREE.MeshStandardMaterial({ color: 0xf0a52b, roughness: 0.45, metalness: 0.25 })
+                    );
+                    boom.position.set(0, 2.05, z);
+                    ship.add(boom);
+                });
+            }
+
+            // Bridge / wheelhouse at the stern (local +Z).
             const bridge = new THREE.Mesh(
-                new THREE.BoxGeometry(1.05, 0.85, 0.82),
-                deckMat
+                new THREE.BoxGeometry(0.92, 0.82, 0.72),
+                whiteMat
             );
-            bridge.position.set(0, 1.38, -1.55);
+            bridge.position.set(0, 1.36, 1.48);
             ship.add(bridge);
 
-            // Large blue windows facing both sides.
-            [-0.535, 0.535].forEach(xPos => {
-                const windows = new THREE.Mesh(
-                    new THREE.BoxGeometry(0.025, 0.34, 0.62),
+            // Slanted-looking roof and blue bridge windows.
+            const bridgeRoof = new THREE.Mesh(
+                new THREE.BoxGeometry(1.02, 0.12, 0.82),
+                whiteMat
+            );
+            bridgeRoof.position.set(0, 1.82, 1.48);
+            ship.add(bridgeRoof);
+
+            [-0.47, 0.47].forEach(x => {
+                const window = new THREE.Mesh(
+                    new THREE.BoxGeometry(0.025, 0.30, 0.52),
                     glassMat
                 );
-                windows.position.set(xPos, 1.48, -1.57);
-                ship.add(windows);
+                window.position.set(x, 1.48, 1.44);
+                ship.add(window);
             });
 
-            // Funnel / smokestack.
+            // Funnel and mast.
             const funnel = new THREE.Mesh(
-                new THREE.CylinderGeometry(0.17, 0.22, 0.65, 12),
+                new THREE.CylinderGeometry(0.15, 0.20, 0.60, 12),
                 darkMat
             );
-            funnel.position.set(0, 1.78, -0.95);
+            funnel.position.set(0, 2.02, 0.82);
             ship.add(funnel);
 
-            // Mast.
             const mast = new THREE.Mesh(
-                new THREE.CylinderGeometry(0.055, 0.065, 1.15, 10),
+                new THREE.CylinderGeometry(0.045, 0.055, 1.05, 10),
                 darkMat
             );
-            mast.position.set(0, 2.28, -1.55);
+            mast.position.set(0, 2.55, 1.48);
             ship.add(mast);
 
-            // Crossbar / radar.
             const radar = new THREE.Mesh(
-                new THREE.BoxGeometry(0.72, 0.06, 0.06),
+                new THREE.BoxGeometry(0.65, 0.05, 0.05),
                 darkMat
             );
-            radar.position.set(0, 2.68, -1.55);
+            radar.position.set(0, 2.92, 1.48);
             ship.add(radar);
 
-            // Visible navigation lights.
+            // Navigation lights.
             const redLight = new THREE.Mesh(
-                new THREE.SphereGeometry(0.12, 12, 12),
+                new THREE.SphereGeometry(0.09, 10, 10),
                 new THREE.MeshBasicMaterial({ color: 0xff2038 })
             );
-            redLight.position.set(-0.78, 1.55, 1.9);
+            redLight.position.set(-0.66, 1.02, -2.0);
             ship.add(redLight);
 
             const greenLight = new THREE.Mesh(
-                new THREE.SphereGeometry(0.12, 12, 12),
+                new THREE.SphereGeometry(0.09, 10, 10),
                 new THREE.MeshBasicMaterial({ color: 0x21ff8a })
             );
-            greenLight.position.set(0.78, 1.55, 1.9);
+            greenLight.position.set(0.66, 1.02, -2.0);
             ship.add(greenLight);
 
-            // Warm mast beacon.
-            const beacon = new THREE.Mesh(
-                new THREE.SphereGeometry(0.13, 12, 12),
-                new THREE.MeshBasicMaterial({ color: 0xffe600 })
+            // Component colour stripe so the original marketplace identity is retained.
+            const accentStripe = new THREE.Mesh(
+                new THREE.BoxGeometry(1.34, 0.10, 3.65),
+                accentMat
             );
-            beacon.position.set(0, 2.78, -1.55);
-            ship.add(beacon);
+            accentStripe.position.set(0, 0.70, 0.12);
+            ship.add(accentStripe);
 
-            // Red stern stripe.
-            const sternStripe = new THREE.Mesh(
-                new THREE.BoxGeometry(1.5, 0.48, 0.10),
-                new THREE.MeshBasicMaterial({ color: 0xff3344 })
-            );
-            sternStripe.position.set(0, 0.50, -2.32);
-            ship.add(sternStripe);
-
-            // Large readable component-name plaque.
+            // Smaller depth-aware label.
             const labelCanvas = document.createElement("canvas");
             labelCanvas.width = 700;
-            labelCanvas.height = 120;
+            labelCanvas.height = 100;
             const ctx = labelCanvas.getContext("2d");
-
             ctx.clearRect(0, 0, labelCanvas.width, labelCanvas.height);
-            ctx.fillStyle = "rgba(2, 6, 23, 0.96)";
+            ctx.fillStyle = "rgba(2, 6, 23, 0.94)";
             ctx.strokeStyle = "#00f0ff";
-            ctx.lineWidth = 5;
-
-            const lx = 5, ly = 5, lw = 690, lh = 110, lr = 18;
+            ctx.lineWidth = 4;
+            const lx = 5, ly = 5, lw = 690, lh = 90, lr = 16;
             ctx.beginPath();
             ctx.moveTo(lx + lr, ly);
             ctx.lineTo(lx + lw - lr, ly);
@@ -983,53 +1096,52 @@
             ctx.closePath();
             ctx.fill();
             ctx.stroke();
-
+            ctx.font = "bold 34px Arial";
             ctx.fillStyle = "#ffffff";
-            ctx.font = "bold 36px Segoe UI, Arial, sans-serif";
             ctx.textAlign = "center";
             ctx.textBaseline = "middle";
             ctx.fillText(String(textLabel).trim(), labelCanvas.width / 2, labelCanvas.height / 2);
 
             const labelTexture = new THREE.CanvasTexture(labelCanvas);
             labelTexture.minFilter = THREE.LinearFilter;
-
             const labelSprite = new THREE.Sprite(
                 new THREE.SpriteMaterial({
                     map: labelTexture,
                     transparent: true,
                     opacity: 1,
-                    depthTest: false
+                    depthTest: true,
+                    depthWrite: false
                 })
             );
-            labelSprite.scale.set(4.9, 0.84, 1);
-            labelSprite.position.set(0, 3.65, 0);
+            labelSprite.scale.set(3.5, 0.50, 1);
+            labelSprite.position.set(0, 3.25, 0);
             ship.add(labelSprite);
 
             return ship;
         }
 
         const componentShips = [
-            { name: "LAPTOP", color: 0x3b82f6 },
-            { name: "CPU / PROCESSOR", color: 0x10b981 },
-            { name: "MOTHERBOARD", color: 0x8b5cf6 },
-            { name: "RTX GPU", color: 0xf59e0b },
-            { name: "INTEGRATED CIRCUIT", color: 0xef4444 },
-            { name: "RAM STICK", color: 0x06b6d4 },
-            { name: "SSD / HDD", color: 0xec4899 },
-            { name: "TABLET", color: 0x6366f1 }
+            { name: "LAPTOP", color: 0x3b82f6, variant: 0 },
+            { name: "CPU / PROCESSOR", color: 0x10b981, variant: 1 },
+            { name: "MOTHERBOARD", color: 0x8b5cf6, variant: 2 },
+            { name: "RTX GPU", color: 0xf59e0b, variant: 3 },
+            { name: "INTEGRATED CIRCUIT", color: 0xef4444, variant: 4 },
+            { name: "RAM STICK", color: 0x06b6d4, variant: 5 },
+            { name: "SSD / HDD", color: 0xec4899, variant: 6 },
+            { name: "TABLET", color: 0x6366f1, variant: 7 }
         ];
 
         const activeShips = [];
 
         componentShips.forEach((item, idx) => {
-            const shipMesh = createShipMesh(item.color, item.name);
+            const shipMesh = createShipMesh(item.color, item.name, item.variant);
             shipGroup.add(shipMesh);
 
             // Ships use three clearly separated traffic lanes. Ships in the same
             // lane keep the same speed and fixed phase spacing, so they never
             // catch up to or pass through one another.
             const lane = idx % 3;
-            const laneRadii = [10.0, 14.0, 18.0];
+            const laneRadii = [7.0, 9.8, 12.6];
             const laneCounts = [3, 3, 2];
             const laneIndex = Math.floor(idx / 3);
             const radius = laneRadii[lane];
@@ -1054,7 +1166,7 @@
 
         // Fixed camera: changing UI tabs no longer moves the 3D harbor scene.
         // Mouse parallax is still allowed, but the base camera position remains constant.
-        const FIXED_CAMERA = { x: -7, y: 3, z: 22 };
+        const FIXED_CAMERA = { x: -7, y: 5, z: 30 };
 
         function update3DCamera(tabName) {
             // Intentionally do nothing.
@@ -1111,11 +1223,11 @@
             });
 
             // Smooth Camera Interpolation
-            camera.position.x += (targetCameraPos.x + mouseX * 1.5 - camera.position.x) * 0.04;
-            camera.position.y += (targetCameraPos.y - mouseY * 1.5 - camera.position.y) * 0.04;
+            camera.position.x += (targetCameraPos.x + mouseX * 0.8 - camera.position.x) * 0.04;
+            camera.position.y += (targetCameraPos.y - mouseY * 0.8 - camera.position.y) * 0.04;
             camera.position.z += (targetCameraPos.z - camera.position.z) * 0.04;
 
-            camera.lookAt(-4, 0, 0);
+            camera.lookAt(-8, 4.0, 0);
             renderer.render(scene, camera);
         }
 
