@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SECOND SPARK</title>
+    <title>The Procrastination Protocol - Watchtower Harbor Marketplace</title>
     
     <!-- Three.js & FontAwesome Icons -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
@@ -368,7 +368,7 @@
 
     <div class="container">
         <header>
-            <h1><i class="fa-solid fa-tower-observation"></i> SECOND SPARK</h1>
+            <h1><i class="fa-solid fa-tower-observation"></i> The Procrastination Protocol</h1>
             <p style="color: #94a3b8; margin-top: -2px;"><i>Guiding Recycled Electronics Safely Home &bull; Sea Harbor Marketplace</i></p>
         </header>
 
@@ -625,25 +625,47 @@
     <script>
         // --- 3D CANVAS & THREE.JS SETUP ---
         const canvas = document.getElementById('webgl-canvas');
-        const renderer = new THREE.WebGLRenderer({ canvas, antialias: true });
-        renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-        renderer.setSize(window.innerWidth, window.innerHeight);
+        const renderer = new THREE.WebGLRenderer({
+            canvas,
+            antialias: true,
+            powerPreference: 'high-performance'
+        });
+        renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 1.5));
+        renderer.setSize(window.innerWidth, window.innerHeight, false);
         renderer.shadowMap.enabled = true;
+        renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+        renderer.outputEncoding = THREE.sRGBEncoding;
+        renderer.toneMapping = THREE.ACESFilmicToneMapping;
+        renderer.toneMappingExposure = 1.08;
 
         const scene = new THREE.Scene();
         scene.background = new THREE.Color(0x020617);
-        scene.fog = new THREE.FogExp2(0x020617, 0.025);
+        scene.fog = new THREE.FogExp2(0x020617, 0.018);
 
-        const camera = new THREE.PerspectiveCamera(50, window.innerWidth / window.innerHeight, 0.1, 1000);
+        const camera = new THREE.PerspectiveCamera(52, window.innerWidth / window.innerHeight, 0.1, 500);
         let targetCameraPos = { x: -7, y: 5, z: 30 };
         camera.position.set(-7, 5, 30);
 
-        // Ambient & Scene Directional Lighting
-        scene.add(new THREE.AmbientLight(0x0a192f, 1.8));
-        
-        const moonLight = new THREE.DirectionalLight(0x38bdf8, 1.2);
-        moonLight.position.set(20, 40, -10);
+        // Layered cinematic lighting: soft sky fill + cool moon key + warm harbor fill.
+        const hemiLight = new THREE.HemisphereLight(0x6aa7d8, 0x020617, 1.55);
+        scene.add(hemiLight);
+
+        const moonLight = new THREE.DirectionalLight(0x9bd7ff, 1.8);
+        moonLight.position.set(18, 35, -18);
+        moonLight.castShadow = true;
+        moonLight.shadow.mapSize.width = 1024;
+        moonLight.shadow.mapSize.height = 1024;
+        moonLight.shadow.camera.near = 1;
+        moonLight.shadow.camera.far = 90;
+        moonLight.shadow.camera.left = -35;
+        moonLight.shadow.camera.right = 35;
+        moonLight.shadow.camera.top = 35;
+        moonLight.shadow.camera.bottom = -35;
         scene.add(moonLight);
+
+        const harborFill = new THREE.PointLight(0xffa64d, 2.2, 32, 2);
+        harborFill.position.set(-14, 9, 7);
+        scene.add(harborFill);
 
         // --- OCEAN WATER SURFACE WITH ANIMATED WAVES ---
         const oceanGeo = new THREE.PlaneGeometry(160, 160, 64, 64);
@@ -657,22 +679,23 @@
         }
 
         const oceanMat = new THREE.MeshPhongMaterial({
-            color: 0x03254c,
+            color: 0x063765,
             emissive: 0x011627,
-            specular: 0x00f0ff,
-            shininess: 90,
-            flatShading: true,
+            specular: 0x8fdcff,
+            shininess: 120,
+            flatShading: false,
             transparent: true,
-            opacity: 0.92
+            opacity: 0.94
         });
 
         const oceanMesh = new THREE.Mesh(oceanGeo, oceanMat);
-        oceanMesh.position.set(-8, -4.5, 0);
+        oceanMesh.position.set(-14, -4.5, 0);
+        oceanMesh.receiveShadow = true;
         scene.add(oceanMesh);
 
         // --- 3D WATCHTOWER & ROCKY ISLAND FOUNDATION ---
         const islandGroup = new THREE.Group();
-        islandGroup.position.set(-8, -4.5, 0);
+        islandGroup.position.set(-14, -4.5, 0);
         scene.add(islandGroup);
 
         // Rocky Island Base
@@ -686,6 +709,7 @@
         const rockMesh = new THREE.Mesh(rockGeo, rockMat);
         rockMesh.scale.set(1.4, 0.7, 1.4);
         rockMesh.position.y = 0.8;
+        rockMesh.castShadow = true; rockMesh.receiveShadow = true;
         islandGroup.add(rockMesh);
 
         // Watchtower Metallic / Concrete Materials
@@ -707,12 +731,14 @@
         const baseGeo = new THREE.CylinderGeometry(2.8, 3.4, 1.5, 12);
         const baseMesh = new THREE.Mesh(baseGeo, towerMat);
         baseMesh.position.y = 2.2;
+        baseMesh.castShadow = true; baseMesh.receiveShadow = true;
         islandGroup.add(baseMesh);
 
         // 2. Main Tower Shaft
         const shaftGeo = new THREE.CylinderGeometry(1.6, 2.4, 8.5, 12);
         const shaftMesh = new THREE.Mesh(shaftGeo, towerMat);
         shaftMesh.position.y = 7.2;
+        shaftMesh.castShadow = true; shaftMesh.receiveShadow = true;
         islandGroup.add(shaftMesh);
 
         // Accent Decorative Rings on Tower Shaft
@@ -1117,6 +1143,70 @@
             labelSprite.position.set(0, 3.25, 0);
             ship.add(labelSprite);
 
+            // Stylized wake: lightweight transparent geometry gives each vessel a moving
+            // water trail without expensive particle systems.
+            const wakeShape = new THREE.Shape();
+            wakeShape.moveTo(0, 0);
+            wakeShape.lineTo(0.28, 0.75);
+            wakeShape.lineTo(0.78, 3.0);
+            wakeShape.lineTo(0.0, 2.55);
+            wakeShape.lineTo(-0.78, 3.0);
+            wakeShape.lineTo(-0.28, 0.75);
+            wakeShape.closePath();
+
+            const wakeMat = new THREE.MeshBasicMaterial({
+                color: 0x9edcff,
+                transparent: true,
+                opacity: 0.20,
+                depthWrite: false,
+                side: THREE.DoubleSide,
+                blending: THREE.AdditiveBlending
+            });
+            const wake = new THREE.Mesh(new THREE.ShapeGeometry(wakeShape), wakeMat);
+            wake.rotation.x = -Math.PI / 2;
+            wake.position.set(0, 0.74, 2.08);
+            wake.scale.set(0.72, 0.72, 0.72);
+            ship.add(wake);
+
+            // Small stern wash gives the wake a softer inner highlight.
+            const innerWakeMat = new THREE.MeshBasicMaterial({
+                color: 0xd9f4ff,
+                transparent: true,
+                opacity: 0.16,
+                depthWrite: false,
+                side: THREE.DoubleSide
+            });
+            const innerWake = new THREE.Mesh(
+                new THREE.PlaneGeometry(0.45, 2.4),
+                innerWakeMat
+            );
+            innerWake.rotation.x = -Math.PI / 2;
+            innerWake.position.set(0, 0.755, 2.35);
+            ship.add(innerWake);
+
+            // Portholes / bridge windows add small-scale detail without many polygons.
+            for (let z = 0.95; z <= 1.72; z += 0.26) {
+                const portL = new THREE.Mesh(
+                    new THREE.CircleGeometry(0.055, 10),
+                    glassMat
+                );
+                portL.rotation.y = Math.PI / 2;
+                portL.position.set(-0.47, 1.48, z);
+                ship.add(portL);
+
+                const portR = portL.clone();
+                portR.position.x = 0.47;
+                ship.add(portR);
+            }
+
+            // Keep every physical ship surface eligible for soft shadowing.
+            ship.traverse((object) => {
+                if (object.isMesh) {
+                    object.castShadow = true;
+                    object.receiveShadow = true;
+                }
+            });
+
             return ship;
         }
 
@@ -1137,16 +1227,24 @@
             const shipMesh = createShipMesh(item.color, item.name, item.variant);
             shipGroup.add(shipMesh);
 
-            // Ships use three clearly separated traffic lanes. Ships in the same
-            // lane keep the same speed and fixed phase spacing, so they never
-            // catch up to or pass through one another.
+            // Three fixed traffic lanes with deliberately staggered phases.
+            // Every ship uses the SAME angular speed, so relative spacing never
+            // changes and ships cannot catch one another. The radial gaps are
+            // deliberately widened beyond the ship hull width/length so ships
+            // in neighboring lanes cannot clip through each other.
             const lane = idx % 3;
-            const laneRadii = [7.0, 9.8, 12.6];
-            const laneCounts = [3, 3, 2];
+            const laneRadii = [6.8, 11.4, 16.0];
+            const laneAnglesDeg = [
+                [0, 120, 240],   // inner lane: 3 ships
+                [60, 180, 300],  // middle lane: 3 ships
+                [150, 330]       // outer lane: 2 ships
+            ];
             const laneIndex = Math.floor(idx / 3);
             const radius = laneRadii[lane];
-            const angle = (laneIndex / laneCounts[lane]) * Math.PI * 2 + lane * 0.35;
-            const speed = 0.0032 + lane * 0.00015;
+            const angle = THREE.MathUtils.degToRad(laneAnglesDeg[lane][laneIndex]);
+
+            // Identical angular velocity keeps every inter-ship gap constant.
+            const speed = 0.00345;
 
             activeShips.push({
                 mesh: shipMesh,
@@ -1165,6 +1263,7 @@
         });
 
         // Fixed camera: changing UI tabs no longer moves the 3D harbor scene.
+        // The harbor itself is positioned left of the marketplace UI so the interface never covers it.
         // Mouse parallax is still allowed, but the base camera position remains constant.
         const FIXED_CAMERA = { x: -7, y: 5, z: 30 };
 
@@ -1175,6 +1274,11 @@
         }
 
         // Continuous Real-Time Animation Loop
+        // IMPORTANT: this ship model's pointed bow is LOCAL -Z and its flat
+        // stern is LOCAL +Z. That means THREE.js lookAt() already points the
+        // ship's bow toward the target position. Do NOT apply an extra 90°
+        // rotation after lookAt(), or the ship will sail sideways/backwards.
+        // Ships travel anticlockwise around the watchtower.
         const clock = new THREE.Clock();
 
         function animate3D() {
@@ -1198,28 +1302,55 @@
 
             // 3. Orbit Ships / Boats around Watchtower & Float with Water Waves
             activeShips.forEach(ship => {
+                // MOVEMENT REFERENCE: use the exact ship movement logic from the
+                // reference HTML you provided. This is the movement pattern you
+                // confirmed is correct.
                 ship.angle += ship.speed;
 
-                // X & Z position orbiting around island at (-8, 0)
-                const targetX = Math.cos(ship.angle) * ship.radius - 8;
+                // X & Z position orbiting around island at (-14, 0)
+                const targetX = Math.cos(ship.angle) * ship.radius - 14;
                 const targetZ = Math.sin(ship.angle) * ship.radius;
 
                 ship.mesh.position.x = targetX;
                 ship.mesh.position.z = targetZ;
 
                 // Y water wave buoyant float motion
-                const waveY = Math.sin(targetX * 0.3 + elapsedTime * 1.5) * 0.18 + 
+                const waveY = Math.sin(targetX * 0.3 + elapsedTime * 1.5) * 0.18 +
                               Math.cos(targetZ * 0.4 + elapsedTime * 1.2) * 0.18;
                 ship.mesh.position.y = 0.05 + waveY;
 
-                // Orient Ship facing tangential direction of movement
+                // Point the ship's pointed bow (-Z) directly along its actual
+                // direction of travel. lookAt() establishes the heading first;
+                // the small wave rotations are then applied in LOCAL space so
+                // they cannot destroy the forward-facing orientation.
                 const nextAngle = ship.angle + 0.05;
-                const nextX = Math.cos(nextAngle) * ship.radius - 8;
+                const nextX = Math.cos(nextAngle) * ship.radius - 14;
                 const nextZ = Math.sin(nextAngle) * ship.radius;
-                ship.mesh.lookAt(nextX, ship.mesh.position.y, nextZ);
+                const nextWaveY = 0.05 +
+                    Math.sin(nextX * 0.3 + elapsedTime * 1.5) * 0.18 +
+                    Math.cos(nextZ * 0.4 + elapsedTime * 1.2) * 0.18;
 
-                // Keep the ship silhouette stable while it sails; vertical bobbing comes from the water motion above.
-                // This avoids the ship appearing to rotate into a flat shape at some camera angles.
+                // Including the next Y position makes the bow lead the movement
+                // instead of the vessel merely floating horizontally.
+                ship.mesh.lookAt(nextX, nextWaveY, nextZ);
+
+                // IMPORTANT: the visible ship meshes in this scene have their
+                // pointed bow on the opposite local axis from the direction
+                // produced by lookAt(). Rotate the model 180 degrees around Y
+                // so the POINTED BOW is always the leading end and the FLAT
+                // STERN always stays behind it.
+                ship.mesh.rotateY(Math.PI);
+
+                // Gentle pitch/roll with the water, applied AFTER heading.
+                // These are deliberately tiny so the bow remains the clear leader.
+                const waveSlopeX = Math.cos(targetX * 0.3 + elapsedTime * 1.5) * 0.18;
+                const waveSlopeZ = -Math.sin(targetZ * 0.4 + elapsedTime * 1.2) * 0.18;
+                const pitch = waveSlopeZ * 0.045;
+                const roll = waveSlopeX * 0.045 +
+                    Math.sin(elapsedTime * ship.bobFreq + ship.angle) * 0.008;
+
+                ship.mesh.rotateX(pitch);
+                ship.mesh.rotateZ(roll);
             });
 
             // Smooth Camera Interpolation
@@ -1236,7 +1367,7 @@
         window.addEventListener('resize', () => {
             camera.aspect = window.innerWidth / window.innerHeight;
             camera.updateProjectionMatrix();
-            renderer.setSize(window.innerWidth, window.innerHeight);
+            renderer.setSize(window.innerWidth, window.innerHeight, false);
         });
 
         // --- LOCAL STORAGE STATE MANAGEMENT & MARKETPLACE CONTROLLERS ---
