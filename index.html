@@ -41,6 +41,7 @@
             height: 100vh;
             z-index: 0;
             pointer-events: none;
+            display: block;
         }
 
         /* UI Container */
@@ -793,71 +794,229 @@
         scene.add(shipGroup);
 
         function createShipMesh(color, textLabel) {
+            // Large, high-contrast cargo ship designed to remain unmistakable at the
+            // fixed camera distance. The ship's length runs along local Z so lookAt()
+            // naturally points the bow in the sailing direction.
             const ship = new THREE.Group();
+            ship.scale.set(1.8, 1.8, 1.8);
 
-            // Ship Hull
-            const hullGeo = new THREE.ConeGeometry(0.8, 2.4, 4);
-            hullGeo.rotateX(Math.PI / 2);
-            hullGeo.scale(1, 0.6, 1);
             const hullMat = new THREE.MeshStandardMaterial({
                 color: color,
-                roughness: 0.4,
-                metalness: 0.6,
-                flatShading: true
+                roughness: 0.3,
+                metalness: 0.45,
+                emissive: color,
+                emissiveIntensity: 0.10
             });
-            const hull = new THREE.Mesh(hullGeo, hullMat);
-            hull.position.y = 0.2;
+
+            const darkMat = new THREE.MeshStandardMaterial({
+                color: 0x172033,
+                roughness: 0.32,
+                metalness: 0.5
+            });
+
+            const deckMat = new THREE.MeshStandardMaterial({
+                color: 0xe5e7eb,
+                roughness: 0.42,
+                metalness: 0.12
+            });
+
+            const glassMat = new THREE.MeshStandardMaterial({
+                color: 0x38bdf8,
+                emissive: 0x075985,
+                emissiveIntensity: 0.5,
+                roughness: 0.1,
+                metalness: 0.5
+            });
+
+            // Main hull: long and wide, clearly above the water.
+            const hull = new THREE.Mesh(
+                new THREE.BoxGeometry(1.45, 0.72, 4.6),
+                hullMat
+            );
+            hull.position.y = 0.45;
             ship.add(hull);
 
-            // Deck Cabin
-            const cabinGeo = new THREE.BoxGeometry(0.7, 0.5, 0.9);
-            const cabinMat = new THREE.MeshStandardMaterial({ color: 0x0f172a, roughness: 0.2 });
-            const cabin = new THREE.Mesh(cabinGeo, cabinMat);
-            cabin.position.set(0, 0.5, -0.2);
-            ship.add(cabin);
+            // Raised bow and pointed prow.
+            const bow = new THREE.Mesh(
+                new THREE.ConeGeometry(0.72, 1.55, 4),
+                hullMat
+            );
+            bow.rotation.x = Math.PI / 2;
+            bow.position.set(0, 0.45, 2.95);
+            bow.scale.y = 0.72;
+            ship.add(bow);
 
-            // Glowing Navigation Antenna / Beacon Light
-            const beaconGeo = new THREE.SphereGeometry(0.12, 8, 8);
-            const beaconMat = new THREE.MeshBasicMaterial({ color: 0x00f0ff });
-            const beacon = new THREE.Mesh(beaconGeo, beaconMat);
-            beacon.position.set(0, 0.9, -0.2);
+            // Black lower keel, making the waterline obvious.
+            const keel = new THREE.Mesh(
+                new THREE.BoxGeometry(1.15, 0.30, 3.9),
+                darkMat
+            );
+            keel.position.set(0, 0.12, 0);
+            ship.add(keel);
+
+            // Bright deck strip.
+            const deck = new THREE.Mesh(
+                new THREE.BoxGeometry(1.28, 0.14, 4.0),
+                deckMat
+            );
+            deck.position.set(0, 0.84, 0.15);
+            ship.add(deck);
+
+            // Rear cargo area.
+            const cargoBase = new THREE.Mesh(
+                new THREE.BoxGeometry(1.18, 0.35, 1.65),
+                darkMat
+            );
+            cargoBase.position.set(0, 1.05, -0.75);
+            ship.add(cargoBase);
+
+            // Stacked cargo containers with contrasting faces.
+            const cargoColors = [0x2563eb, 0xf97316, 0x22c55e, 0xa855f7];
+            [-0.45, 0.0, 0.45].forEach((xPos, i) => {
+                const container = new THREE.Mesh(
+                    new THREE.BoxGeometry(0.34, 0.52, 0.72),
+                    new THREE.MeshStandardMaterial({
+                        color: cargoColors[i % cargoColors.length],
+                        roughness: 0.38,
+                        metalness: 0.35
+                    })
+                );
+                container.position.set(xPos, 1.48, -0.72);
+                ship.add(container);
+            });
+
+            // Bridge / wheelhouse at the stern.
+            const bridge = new THREE.Mesh(
+                new THREE.BoxGeometry(1.05, 0.85, 0.82),
+                deckMat
+            );
+            bridge.position.set(0, 1.38, -1.55);
+            ship.add(bridge);
+
+            // Large blue windows facing both sides.
+            [-0.535, 0.535].forEach(xPos => {
+                const windows = new THREE.Mesh(
+                    new THREE.BoxGeometry(0.025, 0.34, 0.62),
+                    glassMat
+                );
+                windows.position.set(xPos, 1.48, -1.57);
+                ship.add(windows);
+            });
+
+            // Funnel / smokestack.
+            const funnel = new THREE.Mesh(
+                new THREE.CylinderGeometry(0.17, 0.22, 0.65, 12),
+                darkMat
+            );
+            funnel.position.set(0, 1.78, -0.95);
+            ship.add(funnel);
+
+            // Mast.
+            const mast = new THREE.Mesh(
+                new THREE.CylinderGeometry(0.055, 0.065, 1.15, 10),
+                darkMat
+            );
+            mast.position.set(0, 2.28, -1.55);
+            ship.add(mast);
+
+            // Crossbar / radar.
+            const radar = new THREE.Mesh(
+                new THREE.BoxGeometry(0.72, 0.06, 0.06),
+                darkMat
+            );
+            radar.position.set(0, 2.68, -1.55);
+            ship.add(radar);
+
+            // Visible navigation lights.
+            const redLight = new THREE.Mesh(
+                new THREE.SphereGeometry(0.12, 12, 12),
+                new THREE.MeshBasicMaterial({ color: 0xff2038 })
+            );
+            redLight.position.set(-0.78, 1.55, 1.9);
+            ship.add(redLight);
+
+            const greenLight = new THREE.Mesh(
+                new THREE.SphereGeometry(0.12, 12, 12),
+                new THREE.MeshBasicMaterial({ color: 0x21ff8a })
+            );
+            greenLight.position.set(0.78, 1.55, 1.9);
+            ship.add(greenLight);
+
+            // Warm mast beacon.
+            const beacon = new THREE.Mesh(
+                new THREE.SphereGeometry(0.13, 12, 12),
+                new THREE.MeshBasicMaterial({ color: 0xffe600 })
+            );
+            beacon.position.set(0, 2.78, -1.55);
             ship.add(beacon);
 
-            // Floating Hardware Component Banner / Sprite Label
-            const canvas = document.createElement('canvas');
-            canvas.width = 256;
-            canvas.height = 64;
-            const ctx = canvas.getContext('2d');
-            ctx.fillStyle = 'rgba(10, 20, 35, 0.9)';
-            ctx.fillRect(0, 0, 256, 64);
-            ctx.strokeStyle = '#00f0ff';
-            ctx.lineWidth = 3;
-            ctx.strokeRect(2, 2, 252, 60);
-            ctx.fillStyle = '#00f0ff';
-            ctx.font = 'Bold 18px Segoe UI, sans-serif';
-            ctx.textAlign = 'center';
-            ctx.textBaseline = 'middle';
-            ctx.fillText(textLabel, 128, 32);
+            // Red stern stripe.
+            const sternStripe = new THREE.Mesh(
+                new THREE.BoxGeometry(1.5, 0.48, 0.10),
+                new THREE.MeshBasicMaterial({ color: 0xff3344 })
+            );
+            sternStripe.position.set(0, 0.50, -2.32);
+            ship.add(sternStripe);
 
-            const texture = new THREE.CanvasTexture(canvas);
-            const spriteMat = new THREE.SpriteMaterial({ map: texture, transparent: true, opacity: 0.95 });
-            const sprite = new THREE.Sprite(spriteMat);
-            sprite.scale.set(2.4, 0.6, 1);
-            sprite.position.set(0, 1.7, 0);
-            ship.add(sprite);
+            // Large readable component-name plaque.
+            const labelCanvas = document.createElement("canvas");
+            labelCanvas.width = 700;
+            labelCanvas.height = 120;
+            const ctx = labelCanvas.getContext("2d");
+
+            ctx.clearRect(0, 0, labelCanvas.width, labelCanvas.height);
+            ctx.fillStyle = "rgba(2, 6, 23, 0.96)";
+            ctx.strokeStyle = "#00f0ff";
+            ctx.lineWidth = 5;
+
+            const lx = 5, ly = 5, lw = 690, lh = 110, lr = 18;
+            ctx.beginPath();
+            ctx.moveTo(lx + lr, ly);
+            ctx.lineTo(lx + lw - lr, ly);
+            ctx.quadraticCurveTo(lx + lw, ly, lx + lw, ly + lr);
+            ctx.lineTo(lx + lw, ly + lh - lr);
+            ctx.quadraticCurveTo(lx + lw, ly + lh, lx + lw - lr, ly + lh);
+            ctx.lineTo(lx + lr, ly + lh);
+            ctx.quadraticCurveTo(lx, ly + lh, lx, ly + lh - lr);
+            ctx.lineTo(lx, ly + lr);
+            ctx.quadraticCurveTo(lx, ly, lx + lr, ly);
+            ctx.closePath();
+            ctx.fill();
+            ctx.stroke();
+
+            ctx.fillStyle = "#ffffff";
+            ctx.font = "bold 36px Segoe UI, Arial, sans-serif";
+            ctx.textAlign = "center";
+            ctx.textBaseline = "middle";
+            ctx.fillText(String(textLabel).trim(), labelCanvas.width / 2, labelCanvas.height / 2);
+
+            const labelTexture = new THREE.CanvasTexture(labelCanvas);
+            labelTexture.minFilter = THREE.LinearFilter;
+
+            const labelSprite = new THREE.Sprite(
+                new THREE.SpriteMaterial({
+                    map: labelTexture,
+                    transparent: true,
+                    opacity: 1,
+                    depthTest: false
+                })
+            );
+            labelSprite.scale.set(4.9, 0.84, 1);
+            labelSprite.position.set(0, 3.65, 0);
+            ship.add(labelSprite);
 
             return ship;
         }
 
         const componentShips = [
-            { name: "💻 LAPTOP", color: 0x3b82f6 },
-            { name: "🔳 CPU SHIP", color: 0x10b981 },
-            { name: "📟 MOTHERBOARD", color: 0x8b5cf6 },
-            { name: "🎮 RTX GPU", color: 0xf59e0b },
-            { name: "⚡ IC CIRCUIT", color: 0xef4444 },
-            { name: "🎴 RAM VESSEL", color: 0x06b6d4 },
-            { name: "💾 SSD CARRIER", color: 0xec4899 },
-            { name: "📱 TABLET", color: 0x6366f1 }
+            { name: "LAPTOP", color: 0x3b82f6 },
+            { name: "CPU / PROCESSOR", color: 0x10b981 },
+            { name: "MOTHERBOARD", color: 0x8b5cf6 },
+            { name: "RTX GPU", color: 0xf59e0b },
+            { name: "INTEGRATED CIRCUIT", color: 0xef4444 },
+            { name: "RAM STICK", color: 0x06b6d4 },
+            { name: "SSD / HDD", color: 0xec4899 },
+            { name: "TABLET", color: 0x6366f1 }
         ];
 
         const activeShips = [];
@@ -866,9 +1025,16 @@
             const shipMesh = createShipMesh(item.color, item.name);
             shipGroup.add(shipMesh);
 
-            const radius = 8.5 + (idx % 3) * 3.2; // Orbit radii around Watchtower
-            const angle = (idx / componentShips.length) * Math.PI * 2;
-            const speed = 0.003 + (idx % 2) * 0.002;
+            // Ships use three clearly separated traffic lanes. Ships in the same
+            // lane keep the same speed and fixed phase spacing, so they never
+            // catch up to or pass through one another.
+            const lane = idx % 3;
+            const laneRadii = [10.0, 14.0, 18.0];
+            const laneCounts = [3, 3, 2];
+            const laneIndex = Math.floor(idx / 3);
+            const radius = laneRadii[lane];
+            const angle = (laneIndex / laneCounts[lane]) * Math.PI * 2 + lane * 0.35;
+            const speed = 0.0032 + lane * 0.00015;
 
             activeShips.push({
                 mesh: shipMesh,
@@ -886,20 +1052,14 @@
             mouseY = (e.clientY / window.innerHeight - 0.5) * 2;
         });
 
-        // Preset Camera Angles for Navigation Tabs
-        const cameraPresets = {
-            buy: { x: -7, y: 3, z: 22 },
-            purchases: { x: -4, y: 4, z: 18 },
-            sell: { x: -9, y: 1, z: 24 },
-            dashboard: { x: -5, y: 5, z: 16 },
-            assess: { x: -7, y: 2, z: 20 },
-            admin: { x: -2, y: 6, z: 15 }
-        };
+        // Fixed camera: changing UI tabs no longer moves the 3D harbor scene.
+        // Mouse parallax is still allowed, but the base camera position remains constant.
+        const FIXED_CAMERA = { x: -7, y: 3, z: 22 };
 
         function update3DCamera(tabName) {
-            if (cameraPresets[tabName]) {
-                targetCameraPos = cameraPresets[tabName];
-            }
+            // Intentionally do nothing.
+            // The harbor, ships and their positions remain visually locked while tabs change.
+            targetCameraPos = FIXED_CAMERA;
         }
 
         // Continuous Real-Time Animation Loop
@@ -938,7 +1098,7 @@
                 // Y water wave buoyant float motion
                 const waveY = Math.sin(targetX * 0.3 + elapsedTime * 1.5) * 0.18 + 
                               Math.cos(targetZ * 0.4 + elapsedTime * 1.2) * 0.18;
-                ship.mesh.position.y = -4.3 + waveY;
+                ship.mesh.position.y = 0.05 + waveY;
 
                 // Orient Ship facing tangential direction of movement
                 const nextAngle = ship.angle + 0.05;
@@ -946,8 +1106,8 @@
                 const nextZ = Math.sin(nextAngle) * ship.radius;
                 ship.mesh.lookAt(nextX, ship.mesh.position.y, nextZ);
 
-                // Gentle Pitch/Roll rocking on waves
-                ship.mesh.rotation.z += Math.sin(elapsedTime * ship.bobFreq) * 0.06;
+                // Keep the ship silhouette stable while it sails; vertical bobbing comes from the water motion above.
+                // This avoids the ship appearing to rotate into a flat shape at some camera angles.
             });
 
             // Smooth Camera Interpolation
@@ -1060,8 +1220,7 @@
         }
 
         function switchTab(tabName) {
-            update3DCamera(tabName);
-
+            // UI tab changes do not alter the 3D camera or ship positions.
             document.querySelectorAll('.section').forEach(sec => sec.classList.remove('active'));
             document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
             
